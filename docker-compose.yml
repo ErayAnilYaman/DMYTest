@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  dmytest.web:
+    image: ${DOCKER_REGISTRY-}dmytestweb
+    build:
+      context: .\DMYTest.Web
+      dockerfile: Dockerfile
