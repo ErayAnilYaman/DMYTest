@@ -15,22 +15,19 @@ namespace DMYTest.UI
             using (InternDBContext context = new InternDBContext())
             {
                 context.Database.CreateIfNotExists();
-                //var category = new Category()
-                //{
-                   
-                //    //Description = "Apple",
-                //    //ProductID = 1,
-                //    //ProductName = "Iphone",
-                //    //Stock = 15,
-                //    //UnitPrice = 150,
-                //    CategoryID = 1,
-                //    CategoryName = "Test"
-                   
+                var product = new Product()
+                {
+
+                    Description = "Apple",
+                    ProductID = 1,
+                    ProductName = "Iphone",
+                    Stock = 15,
+                    UnitPrice = 150,
+                    CategoryID = 2
+                    //CategoryName = "Test"
                     
-
-                //};
-                //context..Add(category);
-
+                };
+                context.Products.Add(product);
                 context.SaveChanges();
                
             }

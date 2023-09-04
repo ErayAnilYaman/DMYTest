@@ -1,0 +1,26 @@
+﻿@model List<DMYTest.Data.Models.Category>
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<table class="table table-bordered" >
+    <tr>
+        <th>Ad</th>
+        <th>Aciklama</th>
+        <th>Sil</th>
+        <th>Guncelle</th>
+
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CategoryName</td>
+            <td><a class="btn btn-danger" href="/AdminCategory/Delete/@item.CategoryID">Sil</a></td>  
+            <td>@Html.ActionLink("Sil","Delete",new {item.CategoryID },new { @class="btn btn-danger", onclick = "return confirm ('Silmek istiyor musunuz ?')"})</td> 
+            <td><a href="/AdminCategory/Update/@item.CategoryID">Guncelle</a></td>
+        </tr>
+        
+    }
+</table>

@@ -16,10 +16,10 @@ using DMYTest.Data.Models;
         public IDbSet<Order> Orders { get; set; }
         public IDbSet<Customer> Customers { get; set; }
         public IDbSet<Employee> Employees { get; set; }
-        public IDbSet<OperationClaim> OperationClaims { get; set; }
-        public IDbSet<UserOperationClaim> UserOperationClaims { get; set; }
         public IDbSet<ProductImage> ProductImages { get; set; }
         public IDbSet<Supplier> Suppliers { get; set; }
         public IDbSet<User> Users { get; set; }
+        public IDbSet<Sales> Sales { get; set; }
+        public IDbSet<Cart> Carts { get; set; }
     }
 }

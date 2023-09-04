@@ -51,22 +51,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\Base\IEntityRepositoryBase.cs" />
+    <Compile Include="Abstract\ICategoryDal.cs" />
+    <Compile Include="Abstract\IProductDal.cs" />
+    <Compile Include="Concrete\Base\EfEntityRepositoryBase.cs" />
+    <Compile Include="Concrete\CategoryRepository.cs" />
+    <Compile Include="Concrete\ProductRepository.cs" />
     <Compile Include="Context\InternDBContext.cs" />
     <Compile Include="Migrations\202309010833055_initial.cs" />
     <Compile Include="Migrations\202309010833055_initial.Designer.cs">
       <DependentUpon>202309010833055_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Abstract\IEntity.cs" />
+    <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Employee.cs" />
-    <Compile Include="Models\OperationClaim.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductImage.cs" />
+    <Compile Include="Models\Sales.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UserOperationClaim.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

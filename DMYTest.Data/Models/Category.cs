@@ -1,6 +1,8 @@
 ﻿namespace DMYTest.Data.Models
-{
+{ 
     #region Usings
+    using DMYTest.Data.Models.Abstract;
+   
 
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -8,7 +10,7 @@
     #endregion
 
 
-    public class Category
+    public class Category : IEntity
     {
         private ICollection<Product> products;
 
@@ -18,7 +20,10 @@
         }
         
         public int CategoryID { get; set; }
-
+        [Required(ErrorMessage ="Lutfen Doldurunuz")]
+        [Display(Name ="Kategori Adi")]
+        [StringLength(50,ErrorMessage ="karakter sinirini gectiniz")]
+        
         public string CategoryName { get; set; }
 
         public virtual ICollection<Product> Products

@@ -22,9 +22,20 @@ namespace DMYTest.Web
 
 
             routes.MapRoute(
-               name: "Default1",
-               url: "eray/Index/{id}",
-               defaults: new { controller = "Products", action = "Index", id = UrlParameter.Optional }
+               name: "Product.List",
+               url: "products/list/{id}",
+               defaults: new { controller = "Products", action = "List", id = UrlParameter.Optional }
+               );
+
+            routes.MapRoute(
+               name: "Product.Add",
+               url: "products/add/{id}",
+               defaults: new { controller = "Products", action = "Add", id = UrlParameter.Optional }
+               );
+            routes.MapRoute(
+               name: "Product.Edit",
+               url: "products/edit/{id}",
+               defaults: new { controller = "Products", action = "Edit", id = UrlParameter.Optional }
                );
 
         }

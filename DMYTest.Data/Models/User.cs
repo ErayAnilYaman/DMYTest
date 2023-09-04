@@ -1,43 +1,74 @@
 ﻿
 namespace DMYTest.Data.Models
 {
+    using DMYTest.Data.Models.Abstract;
     #region Usings
 
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Diagnostics;
 
     #endregion
 
-    public class User
+    public class User : IEntity
     {
-        private ICollection<UserOperationClaim> _userOperationClaim;
+        
         private ICollection<Supplier> _suppliers;
+        private ICollection<Cart> _carts;
         private ICollection<Employee> _employees;
+        private ICollection<Sales> _sales;
         public User()
         {
-            _userOperationClaim = new HashSet<UserOperationClaim>();
+            _sales = new HashSet<Sales>();
+            _carts = new HashSet<Cart>();
             _suppliers = new HashSet<Supplier>();
             _employees = new HashSet<Employee>();
         }
         public int ID { get; set; }
+
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Display(Name = "Adinizi Giriniz")]
+        [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
+
         public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Display(Name = "Soyadinizi Giriniz")]
+        [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
+
         public string LastName { get; set; }
+
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Display(Name = "Sirket Adi")]
+        [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
+        [EmailAddress(ErrorMessage ="Lutfen gecerli bir mail giriniz")]
+
         public string Email { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
+
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Display(Name = "Sifre")]
+        [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
+
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Display(Name = "Sifre Kontrolu")]
+        [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
+        [Compare("Password" ,ErrorMessage ="Sifreler uyusmuyor")]
+
+        public string RePassword { get; set; }
+
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Display(Name = "Durum")]
         public bool Status { get; set; }
 
-        public virtual ICollection<UserOperationClaim> UserOperationClaim 
-        { 
-            get 
-            { 
-                return _userOperationClaim; 
-            } 
-            set 
-            {
-                this._userOperationClaim = value;
-            }
-        }
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Display(Name = "Kullanici Rolu")]
+        [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
+
+        public string Role { get; set; }
+
+
         public virtual ICollection<Supplier> Suppliers 
         {
             get 
@@ -58,6 +89,28 @@ namespace DMYTest.Data.Models
             set 
             {
                 this._employees = value;
+            }
+        }
+        public virtual ICollection<Sales> Sales 
+        {
+            get 
+            {
+                return this._sales;
+            }
+            set 
+            {
+                this._sales = value;
+            }
+        }
+        public virtual ICollection<Cart> Carts 
+        {
+            get 
+            {
+                return this._carts;
+            }
+            set 
+            {
+                this._carts = value;
             }
         }
     }

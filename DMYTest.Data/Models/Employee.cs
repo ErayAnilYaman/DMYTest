@@ -1,13 +1,28 @@
 ﻿
+using DMYTest.Data.Models.Abstract;
+using System.ComponentModel.DataAnnotations;
+
 namespace DMYTest.Data.Models
 {
-    public class Employee
+    public class Employee : IEntity
     {
         public int EmployeeID { get; set; }
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Display(Name = "Kullanici")]
+
         public int UserID { get; set; }
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Display(Name = "Calisan Adi")]
+        [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
         public string EmployeeName { get; set; }
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Display(Name = "Is")]
+        [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
         public string Job { get; set; }
-        public int Salary { get; set; }
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Display(Name = "Maas")]
+        
+        public decimal Salary { get; set; }
         public virtual User User { get; set; }
     }
 }
