@@ -1,15 +1,18 @@
-﻿@model List<DMYTest.Data.Models.Category>
+﻿@model List<DMYTest.Data.Models.Product>
 @{
     ViewBag.Title = "Index";
 }
-<a class="btn btn-success" href="/AdminCategory/Create">Kategori Ekle</a>
+<a class="btn btn-success" href="/AdminProduct/Create">Urun Ekle</a>
 <br />
 <br />
 
 <table class="table table-bordered" id="table">
     <tr>
-        <th>Ad</th>
+        <th>Urun Adi</th>
         <th>Aciklama</th>
+        <th>Fiyat</th>
+        <th>Stok Adedi</th>
+        <th>Kategorisi</th>
         <th>Sil</th>
         <th>Guncelle</th>
 
@@ -17,19 +20,21 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.CategoryName</td>
+            <td>@item.ProductName</td>
             <td>@item.Description</td>
-            @*<td><a href="/AdminCategory/Delete/@item.CategoryID" class="btn btn-danger" onclick="return ('Emin misiniz')">Sil</a></td>*@
-            <td><a class="btn btn-danger btnDelete" data-id="@item.CategoryID">Sil</a></td>
-            <td><a class="btn btn-warning" href="/AdminCategory/Update/@item.CategoryID">Guncelle</a></td>
-        </tr>
+            <td>@item.UnitPrice</td>
+            <td>@item.Stock</td>
+            <td>@item.Categories.CategoryName</td>
+            <td><a class="btn btn-danger btnDelete" data-id="@item.ProductID">Sil</a></td>
+            <td><a class="btn btn-warning" href="/AdminProduct/Update/@item.ProductID">Guncelle</a></td>
 
+        </tr>
     }
 </table>
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 
-<script type="text/javascript" >
+<script type="text/javascript">
     $(function () {
         $("#table").on("click", ".btnDelete", function () {
 
@@ -41,20 +46,22 @@
                     $.ajax(
                         {
                             type: "GET",
-                            url: "/AdminCategory/Delete/" + id,
+                            url: "/AdminProduct/Delete/" + id,
                             success: function () {
                                 btn.parent().parent().remove(); // btn.parent().parent() yerine btn.closest("tr") kullanımı
                             }
                         });
-                } else {
-                    bootbox("Hata Oluştu");
+                } else if(result === false){
+                    bootbox.alert("Urun Silinmedi");
+                }else {
+                    bootbox.alert("Hata Oluştu");
                 }
             });
 
-                
-            });
+
         });
-    
+    });
+
 
 
 

@@ -8,7 +8,7 @@ using DMYTest.Data.Context;
 using DMYTest.Data.Models;
 
     #endregion
-    public  class ProductRepository : EfEntityRepositoryBase<InternDBContext , Product> , IProductDal
+    public  class ProductRepository : EfEntityRepositoryBase<Product> , IProductDal
     {
 
 

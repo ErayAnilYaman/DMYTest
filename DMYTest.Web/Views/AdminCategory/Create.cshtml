@@ -1,0 +1,29 @@
+﻿@model DMYTest.Data.Models.Category
+@{
+    ViewBag.Title = "Create";
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true , "" ,new  { @class = "btn btn-danger"})
+                <div class="form-group">
+                    <label>Kategori Adi</label>
+                    <input type="text" class="form-control" name="CategoryName"/>
+                    @Html.ValidationMessageFor(x=>x.CategoryName ,"", new {@style="color:red" })
+                </div>
+                <br />
+                <div class="form-group">
+                    <label>Aciklamasi</label>
+                    <input type="text" class="form-control" name="Description"/>
+                    @Html.ValidationMessageFor(x => x.Description, "", new { @style = "color:red" })
+                </div>
+                <br />
+                <button class="btn btn-success" type="submit">Ekle</button>
+            </form>
+        </div>
+    </div>
+</div>

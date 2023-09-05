@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5219F583-00FC-4A59-8B48-54FD1D5A2C0C}</ProjectGuid>
+    <ProjectGuid>{9D0EF792-EC27-44AC-8FC0-D3C9026A5090}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Business</RootNamespace>
-    <AssemblyName>Business</AssemblyName>
+    <RootNamespace>DMYTest.Business</RootNamespace>
+    <AssemblyName>DMYTest.Business</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,22 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IProductService.cs" />
-    <Compile Include="Manager\ProductManager.cs" />
+    <Compile Include="Abstract\ICategoryService.cs" />
+    <Compile Include="Manager\CategoryManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EFBase\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DMYTest.Data\DMYTest.Data.csproj">
-      <Project>{d2c1e409-fa1a-481f-8424-0d63c3813518}</Project>
-      <Name>DMYTest.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DMYTest.UI\DMYTest.UI.csproj">
-      <Project>{6873d525-4641-4483-ac10-df5a7231e28d}</Project>
-      <Name>DMYTest.UI</Name>
-    </ProjectReference>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

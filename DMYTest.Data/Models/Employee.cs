@@ -1,9 +1,13 @@
 ﻿
-using DMYTest.Data.Models.Abstract;
-using System.ComponentModel.DataAnnotations;
 
 namespace DMYTest.Data.Models
 {
+
+    #region Usings
+using DMYTest.Data.Models.Abstract;
+using System.ComponentModel.DataAnnotations;
+
+    #endregion
     public class Employee : IEntity
     {
         public int EmployeeID { get; set; }

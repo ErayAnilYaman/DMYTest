@@ -20,24 +20,12 @@ namespace DMYTest.Web
                 defaults: new { controller = "Home", action = "Contact", id = UrlParameter.Optional }
             );
 
-
             routes.MapRoute(
-               name: "Product.List",
-               url: "products/list/{id}",
-               defaults: new { controller = "Products", action = "List", id = UrlParameter.Optional }
-               );
-
-            routes.MapRoute(
-               name: "Product.Add",
-               url: "products/add/{id}",
-               defaults: new { controller = "Products", action = "Add", id = UrlParameter.Optional }
-               );
-            routes.MapRoute(
-               name: "Product.Edit",
-               url: "products/edit/{id}",
-               defaults: new { controller = "Products", action = "Edit", id = UrlParameter.Optional }
-               );
-
+                name: "AdminCategory.Delete",
+                url: "AdminCategory/Delete/{id}",
+                defaults: new { controller = "AdminCategory", action = "Delete", id = UrlParameter.Optional }
+            );
+            
         }
     }
 }

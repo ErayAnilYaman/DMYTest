@@ -1,8 +1,8 @@
 ﻿namespace DMYTest.Data.Models
 {
-    using DMYTest.Data.Models.Abstract;
+    
     #region Usings
-    using System;
+    using System;using DMYTest.Data.Models.Abstract;
     using System.ComponentModel.DataAnnotations;
     #endregion
 

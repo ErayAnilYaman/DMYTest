@@ -8,7 +8,7 @@ using DMYTest.Data.Context;
 using DMYTest.Data.Models;
 
     #endregion
-    public class CategoryRepository  :EfEntityRepositoryBase<InternDBContext,Category>, ICategoryDal
+    public class CategoryRepository  :EfEntityRepositoryBase<Category>, ICategoryDal
     {
 
     }

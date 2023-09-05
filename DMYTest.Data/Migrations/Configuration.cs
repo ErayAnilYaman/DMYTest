@@ -17,13 +17,7 @@ namespace DMYTest.Data.Migrations
 
         protected override void Seed(InternDBContext context)
         {
-            context.Categories.AddOrUpdate(pName => pName.CategoryName, new Category
-            {
-                CategoryName="Test",
-                
-                
-
-            });
+            
         }
     }
 }
