@@ -3,14 +3,34 @@
     ViewBag.Title = "Create";
 }
 
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .select-dropdown {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        padding: 12px 16px;
+        z-index: 1;
+    }
+
+    .dropdown:hover .select-dropdown {
+        display: block;
+    }
+</style>
+
 
 <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-
 
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "btn btn-danger" })
                 <div class="form-group">
@@ -26,21 +46,20 @@
                 </div>
                 <br />
                 <div class="form-group">
-                    <label>Aciklamasi</label>
-                    <input type="text" class="form-control" name="Stock" />
+                    <label>Stok Adedi</label>
+                    <input type="number" class="form-control" name="Stock" />
                     @Html.ValidationMessageFor(x => x.Stock, "", new { @style = "color:red" })
                 </div>
                 <br />
                 <div class="form-group">
-                    <label>Aciklamasi</label>
-                    <input type="text" class="form-control" name="UnitPrice" />
+                    <label>Fiyat</label>
+                    <input type="number" class="form-control" name="UnitPrice" />
                     @Html.ValidationMessageFor(x => x.UnitPrice, "", new { @style = "color:red" })
                 </div>
                 <br />
                 <div class="form-group">
-                    <label>Aciklamasi</label>
-                    <input type="text" class="form-control" name="CategoryName" />
-                    @Html.ValidationMessageFor(x => x.Categories.CategoryName, "", new { @style = "color:red" })
+                    <label>Kategori</label>
+                    @Html.DropDownListFor(x=>x.CategoryID,(List<SelectListItem>)ViewBag.ctgr, new {@class ="form-control"})
                 </div>
                 <br />
                 <button class="btn btn-success" type="submit">Ekle</button>

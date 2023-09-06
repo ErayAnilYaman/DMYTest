@@ -54,8 +54,10 @@
     <Compile Include="Abstract\Base\IEntityRepositoryBase.cs" />
     <Compile Include="Abstract\ICategoryDal.cs" />
     <Compile Include="Abstract\IProductDal.cs" />
+    <Compile Include="Abstract\IProductImageDal.cs" />
     <Compile Include="Concrete\Base\EfEntityRepositoryBase.cs" />
     <Compile Include="Concrete\CategoryRepository.cs" />
+    <Compile Include="Concrete\ProductImageRepository.cs" />
     <Compile Include="Concrete\ProductRepository.cs" />
     <Compile Include="Context\InternDBContext.cs" />
     <Compile Include="Migrations\202309010833055_initial.cs" />

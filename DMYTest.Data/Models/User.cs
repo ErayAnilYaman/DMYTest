@@ -25,15 +25,18 @@ using DMYTest.Data.Models.Abstract;
         }
         public int ID { get; set; }
 
+
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Adinizi Giriniz")]
         [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
         public string FirstName { get; set; }
 
+
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Soyadinizi Giriniz")]
         [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
         public string LastName { get; set; }
+
 
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Sirket Adi")]
@@ -41,10 +44,12 @@ using DMYTest.Data.Models.Abstract;
         [EmailAddress(ErrorMessage ="Lutfen gecerli bir mail giriniz")]
         public string Email { get; set; }
 
+
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Sifre")]
         [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
         public string Password { get; set; }
+
 
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Sifre Kontrolu")]
@@ -52,14 +57,15 @@ using DMYTest.Data.Models.Abstract;
         [Compare("Password" ,ErrorMessage ="Sifreler uyusmuyor")]
         public string RePassword { get; set; }
 
+
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Durum")]
         public bool Status { get; set; }
 
+
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Kullanici Rolu")]
         [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
-
         public string Role { get; set; }
 
 

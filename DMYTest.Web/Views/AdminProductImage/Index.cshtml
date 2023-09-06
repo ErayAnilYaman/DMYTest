@@ -1,0 +1,68 @@
+﻿
+@using PagedList;
+@using PagedList.Mvc;
+
+@model PagedList.IPagedList<DMYTest.Data.Models.ProductImage>
+
+@{
+    ViewBag.Title = "Index";
+}
+<a class="btn btn-success" href="/AdminProductImage/Create">Urun Resmi Ekle</a>
+<br />
+<br />
+
+<table class="table table-bordered" id="table">
+    <tr>
+        <th>Urun Adi</th>
+        <th>Aciklama</th>
+        <th>Resim</th>
+        <th>Yuklenme Tarihi</th>
+        <th>Sil</th>
+        <th>Guncelle</th>
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Product.ProductName</td>
+            <td>@item.Product.Description</td>
+            <td><img src="~/Content/Image/@item.ImagePath" width="80" height="80"/></td>
+            <td>@item.Date</td>
+            <td><a class="btn btn-danger btnDelete" data-id="@item.ProductImageID">Sil</a></td>
+            <td><a class="btn btn-warning" href="/AdminProductImage/Update/@item.ProductImageID">Guncelle</a></td>
+        </tr>
+    }
+</table>
+@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber }), PagedListRenderOptions.Classic)
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#table").on("click", ".btnDelete", function () {
+
+            var btn = $(this);
+            bootbox.confirm("Resimi silmek istediginize emin misiniz?", function (result) {
+
+                if (result) {
+                    var id = btn.data("id");
+                    $.ajax(
+                        {
+                            type: "GET",
+                            url: "/AdminProductImage/Delete/" + id,
+                            success: function () {
+                                btn.parent().parent().remove();
+                            }
+                        });
+                } else if (result === false) {
+                    bootbox.alert("Resim Silinmedi");
+                } else {
+                    bootbox.alert("Hata Oluştu");
+                }
+            });
+
+
+        });
+    });
+
+</script>

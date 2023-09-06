@@ -1,4 +1,9 @@
-﻿@model List<DMYTest.Data.Models.Product>
+﻿
+@using PagedList;
+@using PagedList.Mvc;
+
+@model PagedList.IPagedList<DMYTest.Data.Models.Product>
+
 @{
     ViewBag.Title = "Index";
 }
@@ -7,7 +12,7 @@
 <br />
 
 <table class="table table-bordered" id="table">
-    <tr>
+    <tr> 
         <th>Urun Adi</th>
         <th>Aciklama</th>
         <th>Fiyat</th>
@@ -27,10 +32,10 @@
             <td>@item.Categories.CategoryName</td>
             <td><a class="btn btn-danger btnDelete" data-id="@item.ProductID">Sil</a></td>
             <td><a class="btn btn-warning" href="/AdminProduct/Update/@item.ProductID">Guncelle</a></td>
-
         </tr>
     }
 </table>
+@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber }), PagedListRenderOptions.Classic)
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 
@@ -48,12 +53,12 @@
                             type: "GET",
                             url: "/AdminProduct/Delete/" + id,
                             success: function () {
-                                btn.parent().parent().remove(); // btn.parent().parent() yerine btn.closest("tr") kullanımı
+                                btn.parent().parent().remove();
                             }
                         });
-                } else if(result === false){
+                } else if (result === false) {
                     bootbox.alert("Urun Silinmedi");
-                }else {
+                } else {
                     bootbox.alert("Hata Oluştu");
                 }
             });
@@ -61,11 +66,5 @@
 
         });
     });
-
-
-
-
-
-
 
 </script>

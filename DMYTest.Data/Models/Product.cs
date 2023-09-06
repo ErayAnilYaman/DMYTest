@@ -75,6 +75,6 @@ namespace DMYTest.Data.Models
             {
                 this._productImages = value;
             }
-}
+        }
     }
 }

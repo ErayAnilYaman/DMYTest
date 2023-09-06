@@ -66,7 +66,7 @@ namespace DMYTest.Data.Migrations
                         ProductImageID = c.Int(nullable: false, identity: true),
                         ProductID = c.Int(nullable: false),
                         ImagePath = c.String(),
-                        Date = c.DateTime(nullable: false),
+                        Date = c.Time(nullable: false),
                     })
                 .PrimaryKey(t => t.ProductImageID)
                 .ForeignKey("dbo.Products", t => t.ProductID, cascadeDelete: true)

@@ -19,7 +19,6 @@ namespace DMYTest.Data.Models
         [Display(Name = "Resim")]
         [StringLength(150, ErrorMessage = "karakter sinirini gectiniz")]
         public string ImagePath { get; set; }
-        [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Tarih")]
         public DateTime Date { get; set; }
         public virtual Product Product { get; set; }

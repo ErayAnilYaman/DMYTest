@@ -46,15 +46,16 @@
                                 btn.parent().parent().remove(); // btn.parent().parent() yerine btn.closest("tr") kullanımı
                             }
                         });
+                } else if (result === false) {
+                    bootbox.alert("Kategori Silinmedi");
                 } else {
-                    bootbox("Hata Oluştu");
+                    bootbox.alert("Hata Oluştu");
                 }
             });
 
-                
-            });
+
         });
-    
+    });
 
 
 
