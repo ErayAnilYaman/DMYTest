@@ -3,21 +3,22 @@
 
 namespace DMYTest.Data.Models
 {
-    
+   
+
     #region Usings
-    using System.Collections;
+    using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;using DMYTest.Data.Models.Abstract;
+    using System.ComponentModel.DataAnnotations;
+    using DMYTest.Data.Models.Abstract;
     #endregion
     public class Product : IEntity
     {
         private ICollection<Order> _orders;
-        private ICollection<ProductImage> _productImages;
-
+        private ICollection<Image> _images;
         public Product()
         {
             _orders = new HashSet<Order>();
-            _productImages = new HashSet<ProductImage>();
+            _images = new HashSet<Image>();
         }
 
         public int ProductID { get; set; }
@@ -39,6 +40,9 @@ namespace DMYTest.Data.Models
         [Display(Name = "Urun Fiyati")]
         public decimal UnitPrice { get; set; }
 
+        
+        [Display(Name ="Tarih")]
+        public DateTime Date { get; set; }
 
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Stok Adedi")]
@@ -65,16 +69,6 @@ namespace DMYTest.Data.Models
             }
         }
 
-        public virtual ICollection<ProductImage> ProductImages
-        {
-            get 
-            { 
-                return _productImages; 
-            }
-            set
-            {
-                this._productImages = value;
-            }
-        }
+        public virtual ICollection<Image> Images { get { return _images; }set { this._images = value; }  }
     }
 }

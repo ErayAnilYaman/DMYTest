@@ -136,7 +136,6 @@
     <Compile Include="Controllers\AdminCategoryController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdminProductController.cs" />
-    <Compile Include="Controllers\AdminProductImageController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -903,11 +902,11 @@
     <Content Include="Views\AdminProduct\Create.cshtml" />
     <Content Include="Views\AdminProduct\Update.cshtml" />
     <Content Include="Views\Shared\Layout.cshtml" />
-    <Content Include="Views\AdminProductImage\Index.cshtml" />
-    <Content Include="Views\AdminProductImage\Create.cshtml" />
+    <Content Include="Views\AdminProduct\ImageUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Image\Default\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

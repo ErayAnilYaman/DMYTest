@@ -1,6 +1,7 @@
 ﻿@model DMYTest.Data.Models.Product
 @{
     ViewBag.Title = "Create";
+    
 }
 
 <style>
@@ -58,8 +59,16 @@
                 </div>
                 <br />
                 <div class="form-group">
+                    <label>Resim</label>
+                    <input type="file" class="form-control" name="File" />
+                    @ViewBag.img
+                </div>
+                
+                
+                <br />
+                <div class="form-group">
                     <label>Kategori</label>
-                    @Html.DropDownListFor(x=>x.CategoryID,(List<SelectListItem>)ViewBag.ctgr, new {@class ="form-control"})
+                    @Html.DropDownListFor(x => x.CategoryID, (List<SelectListItem>)ViewBag.ctgr, new { @class = "form-control" })
                 </div>
                 <br />
                 <button class="btn btn-success" type="submit">Ekle</button>

@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 
 namespace DMYTest.Data.Concrete
 {
-    public class ProductImageRepository : EfEntityRepositoryBase<ProductImage>  , IProductImageDal
+    public class ImageRepository :EfEntityRepositoryBase<Image>,IImageDal
     {
-
 
     }
 }

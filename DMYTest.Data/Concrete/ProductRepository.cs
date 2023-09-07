@@ -10,7 +10,6 @@ using DMYTest.Data.Models;
     #endregion
     public  class ProductRepository : EfEntityRepositoryBase<Product> , IProductDal
     {
-
-
+        
     }
 }

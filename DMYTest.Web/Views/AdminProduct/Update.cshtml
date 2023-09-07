@@ -1,9 +1,7 @@
 ﻿@model DMYTest.Data.Models.Product
 @{
     ViewBag.Title = "Update";
-    ViewBag.Id = Model.ProductID;
     Model.UnitPrice = ViewBag.Price;
-   
 }
 
 <div class="container">
@@ -13,11 +11,16 @@
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "btn btn-danger" })
                 <div class="form-group">
+                    <a class="btn btn-primary" href="/adminproduct/imageupdate/@ViewBag.ProductID.ToString()">Resim Ekle-Guncelle</a>
+                </div>
+                <br />
+                <div class="form-group">
                     <label>Urun Adi</label>
                     <input type="text" class="form-control" name="ProductName" value="@Model.ProductName" />
                     @Html.ValidationMessageFor(x => x.ProductName, "", new { @style = "color:red" })
                 </div>
                 <br />
+
                 <div class="form-group">
                     <label>Urun Aciklamasi</label>
                     <input type="text" class="form-control" name="Description" value="@Model.Description" />
@@ -41,7 +44,6 @@
                     @Html.DropDownListFor(x=>x.CategoryID , (List<SelectListItem>)ViewBag.ctgr, new {@class ="form-control"})
                 </div>
                 <br />
-
 
                 <div class="form-group" style="display:none;">
                     @Html.LabelFor(model => model.ProductID)

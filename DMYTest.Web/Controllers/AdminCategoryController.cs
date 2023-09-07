@@ -29,7 +29,6 @@ namespace DMYTest.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 categoryRepository.Add(category);
                 return RedirectToAction("Index");
             }

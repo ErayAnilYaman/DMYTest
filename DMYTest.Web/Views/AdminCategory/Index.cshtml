@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Index";
 }
-<a class="btn btn-success" href="/AdminCategory/Create">Kategori Ekle</a>
+<a class="btn btn-success" href="/admincategory/create">Kategori Ekle</a>
 <br />
 <br />
 
@@ -19,9 +19,9 @@
         <tr>
             <td>@item.CategoryName</td>
             <td>@item.Description</td>
-            @*<td><a href="/AdminCategory/Delete/@item.CategoryID" class="btn btn-danger" onclick="return ('Emin misiniz')">Sil</a></td>*@
+            @*<td><a href="/admincategory/delete/@item.CategoryID" class="btn btn-danger" onclick="return ('Emin misiniz')">Sil</a></td>*@
             <td><a class="btn btn-danger btnDelete" data-id="@item.CategoryID">Sil</a></td>
-            <td><a class="btn btn-warning" href="/AdminCategory/Update/@item.CategoryID">Guncelle</a></td>
+            <td><a class="btn btn-warning" href="/admincategory/update/@item.CategoryID">Guncelle</a></td>
         </tr>
 
     }
@@ -41,7 +41,7 @@
                     $.ajax(
                         {
                             type: "GET",
-                            url: "/AdminCategory/Delete/" + id,
+                            url: "/admincategory/delete/" + id,
                             success: function () {
                                 btn.parent().parent().remove(); // btn.parent().parent() yerine btn.closest("tr") kullanımı
                             }
@@ -57,9 +57,5 @@
         });
     });
 
-
-
-
-
-
+    
 </script>

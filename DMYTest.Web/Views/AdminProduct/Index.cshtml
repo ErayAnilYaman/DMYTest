@@ -7,32 +7,48 @@
 @{
     ViewBag.Title = "Index";
 }
-<a class="btn btn-success" href="/AdminProduct/Create">Urun Ekle</a>
+<a class="btn btn-success" href="/adminproduct/create">Urun Ekle</a>
 <br />
 <br />
 
 <table class="table table-bordered" id="table">
-    <tr> 
+    <tr>
         <th>Urun Adi</th>
         <th>Aciklama</th>
         <th>Fiyat</th>
         <th>Stok Adedi</th>
         <th>Kategorisi</th>
+        <th>Resim</th>
         <th>Sil</th>
         <th>Guncelle</th>
 
     </tr>
     @foreach (var item in Model)
     {
-        <tr>
-            <td>@item.ProductName</td>
-            <td>@item.Description</td>
-            <td>@item.UnitPrice</td>
-            <td>@item.Stock</td>
-            <td>@item.Categories.CategoryName</td>
-            <td><a class="btn btn-danger btnDelete" data-id="@item.ProductID">Sil</a></td>
-            <td><a class="btn btn-warning" href="/AdminProduct/Update/@item.ProductID">Guncelle</a></td>
-        </tr>
+    <tr>
+        <td>@item.ProductName</td>
+        <td>@item.Description</td>
+        <td>@item.UnitPrice</td>
+        <td>@item.Stock</td>
+        <td>@item.Categories.CategoryName</td>
+        <td>
+            @if (item.Images.Where(i => i.ProductID == item.ProductID).Any())
+            {
+                foreach (var image in item.Images.Where(i => i.ProductID == item.ProductID).ToList())
+                {
+                    <img src="~/Content/Image/@image.ImagePath" width="80" height="60" />
+                }
+            }
+            else
+            {
+                <img src="~/Content/Image/Default/default-image_1080.png" width="80" height="60">
+            }
+
+        </td>
+        <td><a class="btn btn-danger btnDelete" data-id="@item.ProductID">Sil</a></td>
+        <td><a class="btn btn-warning" href="/adminproduct/update/@item.ProductID">Guncelle</a></td>
+
+    </tr>
     }
 </table>
 @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber }), PagedListRenderOptions.Classic)
@@ -51,7 +67,7 @@
                     $.ajax(
                         {
                             type: "GET",
-                            url: "/AdminProduct/Delete/" + id,
+                            url: "/adminproduct/delete/" + id,
                             success: function () {
                                 btn.parent().parent().remove();
                             }

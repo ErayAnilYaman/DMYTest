@@ -53,16 +53,20 @@
   <ItemGroup>
     <Compile Include="Abstract\Base\IEntityRepositoryBase.cs" />
     <Compile Include="Abstract\ICategoryDal.cs" />
+    <Compile Include="Abstract\IImageDal.cs" />
     <Compile Include="Abstract\IProductDal.cs" />
-    <Compile Include="Abstract\IProductImageDal.cs" />
     <Compile Include="Concrete\Base\EfEntityRepositoryBase.cs" />
     <Compile Include="Concrete\CategoryRepository.cs" />
-    <Compile Include="Concrete\ProductImageRepository.cs" />
+    <Compile Include="Concrete\ImageRepository.cs" />
     <Compile Include="Concrete\ProductRepository.cs" />
     <Compile Include="Context\InternDBContext.cs" />
     <Compile Include="Migrations\202309010833055_initial.cs" />
     <Compile Include="Migrations\202309010833055_initial.Designer.cs">
       <DependentUpon>202309010833055_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202309070934201_Products.cs" />
+    <Compile Include="Migrations\202309070934201_Products.Designer.cs">
+      <DependentUpon>202309070934201_Products.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Abstract\IEntity.cs" />
@@ -70,9 +74,9 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\Image.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Product.cs" />
-    <Compile Include="Models\ProductImage.cs" />
     <Compile Include="Models\Sales.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\User.cs" />
@@ -88,6 +92,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202309010833055_initial.resx">
       <DependentUpon>202309010833055_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202309070934201_Products.resx">
+      <DependentUpon>202309070934201_Products.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

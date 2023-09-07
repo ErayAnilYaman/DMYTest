@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace DMYTest.Data.Abstract
 {
-    public interface IProductImageDal : IEntityRepositoryBase<ProductImage>
+    public interface IImageDal : IEntityRepositoryBase<Image>
     {
-
+        
     }
 }
