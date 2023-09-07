@@ -35,7 +35,6 @@
             }).ToList();
             ViewBag.ctgr = value;
             return View();
-
         }
 
         [HttpPost]
@@ -117,29 +116,40 @@
             productRepository.Update(productToUpdate);
             return RedirectToAction("Index");
         }
-        public ActionResult ImageUpdate(int productId)
+
+
+        public ActionResult ImageUpdate(int id)
         {
-            var productToUpdate = productRepository.GetById(productId);
-            var value = (from i in context.Images.Where(i => i.ProductID == productId).ToList()
+            var productToUpdate = productRepository.GetById(id);
+            var value = (from i in context.Images.Where(i => i.ProductID == id).ToList()
                          select new SelectListItem {
                              Value = i.ImageID.ToString(),
                              Text = i.ImagePath
                          });
             ViewBag.img = value;
-            ViewBag.ProductID = productId;
+            ViewBag.ProductID = id;
             if (productToUpdate == null)
             {
                 ModelState.AddModelError("", "Bir hata olustu");
                 return HttpNotFound();
             }
-            return View(productToUpdate);
+            return View(imageRepository.List().SingleOrDefault(i=>i.ProductID == id));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ImageUpdate(Image image)
+        public ActionResult ImageUpdate(Image image,HttpPostedFileBase file)
         {
             image.Date = DateTime.Now;
+            ViewBag.img = file.FileName.ToString();
+            string path = Path.Combine("~/Content/Image/" + file.FileName);
+            file.SaveAs(Server.MapPath(path));
+            image.ImagePath = file.FileName.ToString();
+
+            image.ProductID = ViewBag.ProductID;
+
+
             string[] imagePathExtension = image.ImagePath.Split('.');
+
             if (imagePathExtension[1] != "png" || imagePathExtension[1] != "jpeg")
             {
                 ModelState.AddModelError("", "Resim .png veya .jpeg dosya uzantisinda olmali");
@@ -151,7 +161,7 @@
                 ModelState.AddModelError("","Resmi eksiksiz bicimde girdiginize emin misiniz");
                 return View();
             }
-            imageRepository.Add(image);
+            imageRepository.Update(image);
             return RedirectToAction("imageupdate");
 
         }
