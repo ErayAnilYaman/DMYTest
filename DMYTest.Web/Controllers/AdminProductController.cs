@@ -12,6 +12,8 @@
     using System.Web;
     using System.IO;
     using System;
+    using DMYTest.Web.Constants;
+    using System.Data.Entity;
     #endregion
     public class AdminProductController : Controller
     {
@@ -98,26 +100,47 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update(Product product)
+        public ActionResult Update(Product product , HttpPostedFileBase file)
         {
-            var productToUpdate = productRepository.GetById(product.ProductID);
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Urun Bilgileri Urun kosullarini karsilamiyor");
-                return View(productToUpdate);
+                var productToUpdate = productRepository.GetById(product.ProductID);
+                string path = Path.Combine("~/Content/Image/" + file.FileName);
+                file.SaveAs(Server.MapPath(path));
+                
+                var imageToUpdate = context.Images.SingleOrDefault(i => i.ProductID == product.ProductID);
+
+                context.Images.Remove(imageToUpdate);
+                context.SaveChanges();
+
+                imageToUpdate.Date = DateTime.Now;
+                imageToUpdate.ImagePath = file.FileName.ToString();
+                imageToUpdate.ProductID = product.ProductID;
+                
+                context.Images.Add(imageToUpdate);
+                context.SaveChanges();
+
+                ViewBag.img = file.FileName.ToString();
+                if (!CheckIfImageCountMax(product.ProductID))
+                {
+                    ModelState.AddModelError("", "Resim sayi siniri 5 tir bu sinir gecilemez");
+                    return View();
+                }
+                
+                productToUpdate.Date = DateTime.Now;
+                productToUpdate.ProductName = product.ProductName;
+                productToUpdate.Stock = product.Stock;
+                productToUpdate.UnitPrice = product.UnitPrice;
+                productToUpdate.CategoryID = product.CategoryID;
+                productToUpdate.Description = product.Description;
+                
+                productRepository.Update(productToUpdate);
+                return RedirectToAction("Index");
             }
-
-            productToUpdate.ProductName = product.ProductName;
-            productToUpdate.UnitPrice = product.UnitPrice;
-            productToUpdate.Stock = product.Stock;
-            productToUpdate.Description = product.Description;
-            productToUpdate.CategoryID = product.CategoryID;
-           
-            productRepository.Update(productToUpdate);
-            return RedirectToAction("Index");
+            ModelState.AddModelError("", "Bir Hata Olustu");
+            return View(product);
         }
-
-
+        
         public ActionResult ImageUpdate(int id)
         {
             var productToUpdate = productRepository.GetById(id);
@@ -135,6 +158,7 @@
             }
             return View(imageRepository.List().SingleOrDefault(i=>i.ProductID == id));
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ImageUpdate(Image image,HttpPostedFileBase file)

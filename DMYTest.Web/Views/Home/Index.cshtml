@@ -90,8 +90,11 @@
                                 <div class="single-products">
                                     <div class="productinfo text-center">
 
-
-                                        <h2>@item.UnitPrice</h2>
+                                        @foreach (var i in item.Images.Where(i=>i.ProductID == item.ProductID))
+                                        {
+                                            <img src="~/Content/Image/@i.ImagePath">
+                                        }
+                                        <h2>@item.UnitPrice TL</h2>
                                         <p>@item.ProductName</p>
                                         <a href="/Product/Details/@item.ProductID" class="btn btn-default add-to-cart">Ürün Detay</a>
                                     </div>
