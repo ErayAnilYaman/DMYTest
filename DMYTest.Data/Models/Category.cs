@@ -24,13 +24,13 @@
 
         [Required(ErrorMessage ="Lutfen Doldurunuz")]
         [Display(Name ="Kategori Adi")]
-        [StringLength(50,ErrorMessage ="karakter sinirini gectiniz")]
+        [StringLength(200,ErrorMessage ="karakter sinirini gectiniz")]
         public string CategoryName { get; set; }
 
 
         [Required(ErrorMessage ="Lutfen Doldurunuz")]
         [Display(Name ="Aciklama")]
-        [StringLength(100,ErrorMessage ="Karakter sinirini gectiniz")]
+        [StringLength(200,ErrorMessage ="Karakter sinirini gectiniz")]
         public string Description { get; set; }
 
 

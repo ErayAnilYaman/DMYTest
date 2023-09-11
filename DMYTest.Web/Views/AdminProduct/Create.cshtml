@@ -68,7 +68,7 @@
                 <br />
                 <div class="form-group">
                     <label>Kategori</label>
-                    @Html.DropDownListFor(x => x.CategoryID, (List<SelectListItem>)ViewBag.ctgr, new { @class = "form-control" })
+                    @Html.DropDownListFor(x => x.CategoryID, (List<SelectListItem>)ViewData["ctgr"], new { @class = "form-control" })
                 </div>
                 <br />
                 <button class="btn btn-success" type="submit">Ekle</button>

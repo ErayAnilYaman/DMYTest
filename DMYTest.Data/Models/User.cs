@@ -16,9 +16,11 @@ using DMYTest.Data.Models.Abstract;
         private ICollection<Cart> _carts;
         private ICollection<Employee> _employees;
         private ICollection<Sales> _sales;
+        private ICollection<Comment> _comments;
         public User()
         {
             _sales = new HashSet<Sales>();
+            _comments = new HashSet<Comment>();
             _carts = new HashSet<Cart>();
             _suppliers = new HashSet<Supplier>();
             _employees = new HashSet<Employee>();
@@ -36,6 +38,12 @@ using DMYTest.Data.Models.Abstract;
         [Display(Name = "Soyadinizi Giriniz")]
         [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
         public string LastName { get; set; }
+
+
+        [Required(ErrorMessage ="Lutfen Doldurunuz")]
+        [Display(Name = "Kullanici Adinizi Giriniz")]
+        [StringLength(50, ErrorMessage = "Karakter sinirini gectiniz")]
+        public string UserName { get; set; }
 
 
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
@@ -58,12 +66,11 @@ using DMYTest.Data.Models.Abstract;
         public string RePassword { get; set; }
 
 
-        [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Durum")]
         public bool Status { get; set; }
 
 
-        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        
         [Display(Name = "Kullanici Rolu")]
         [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
         public string Role { get; set; }
@@ -80,6 +87,7 @@ using DMYTest.Data.Models.Abstract;
                 this._suppliers = value;
             }
         }
+        public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Employee> Employees 
         {
             get 

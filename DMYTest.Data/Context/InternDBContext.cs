@@ -21,5 +21,6 @@ using DMYTest.Data.Models;
         public IDbSet<User> Users { get; set; }
         public IDbSet<Sales> Sales { get; set; }
         public IDbSet<Cart> Carts { get; set; }
+        public IDbSet<Comment> Comments { get; set; }
     }
 }

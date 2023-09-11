@@ -15,6 +15,7 @@
         // GET: Home
         
         ProductRepository productRepository = new ProductRepository();
+
         public ActionResult Index(int pageNumber = 1)
         {
             return View(productRepository.List().ToPagedList(pageNumber ,3));

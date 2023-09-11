@@ -30,7 +30,7 @@
         <td>@item.Description</td>
         <td>@item.UnitPrice</td>
         <td>@item.Stock</td>
-        <td>@item.Categories.CategoryName</td>
+        <td>@item.Category.CategoryName</td>
         <td>
             @if (item.Images.Where(i => i.ProductID == item.ProductID).Any())
             {

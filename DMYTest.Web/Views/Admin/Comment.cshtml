@@ -1,0 +1,33 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<DMYTest.Data.Models.Comment>
+@{
+    ViewBag.Title = "Comment";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<table class="table table-bordered">
+    <tr>
+        <th>Icerik</th>
+        <th>Urun Bilgisi</th>
+        <th>Kullanici</th>
+        <th>Tarih</th>
+        <th>Sil</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>@item.Contents</td>
+        <td>@item.Product.ProductName</td>
+        <td>@item.User.UserName</td>
+        <td>@item.Date</td>
+        <td>@Html.ActionLink("Sil","Delete",new { item.ProductID} , new {@class="btn btn-danger" , onclick ="return confirm ('Silmek Isityor musunuz')" })</td>
+
+
+
+    </tr>
+    }
+</table>
+
+
+

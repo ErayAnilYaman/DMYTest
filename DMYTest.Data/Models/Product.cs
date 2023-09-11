@@ -15,9 +15,11 @@ namespace DMYTest.Data.Models
     {
         private ICollection<Order> _orders;
         private ICollection<Image> _images;
+        private ICollection<Comment> _comments;
         public Product()
         {
             _orders = new HashSet<Order>();
+            _comments = new HashSet<Comment>();
             _images = new HashSet<Image>();
         }
 
@@ -26,13 +28,13 @@ namespace DMYTest.Data.Models
 
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Urun Adi")]
-        [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
+        [StringLength(75, ErrorMessage = "karakter sinirini gectiniz")]
         public string ProductName { get; set; }
 
 
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Urun Aciklamasi")]
-        [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
+        [StringLength(150, ErrorMessage = "karakter sinirini gectiniz")]
         public string Description { get; set; }
 
 
@@ -44,6 +46,7 @@ namespace DMYTest.Data.Models
         [Display(Name ="Tarih")]
         public DateTime Date { get; set; }
 
+
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Stok Adedi")]
         public int Stock { get; set; }
@@ -54,8 +57,13 @@ namespace DMYTest.Data.Models
         public int CategoryID { get; set; }
 
 
+        [Required(ErrorMessage ="Lutfen bos birakmayiniz")]
+        [Display(Name ="Populer mi")]
+        public bool Popular { get; set; }
 
-        public virtual Category Categories { get; set; }
+
+
+        public virtual Category Category { get; set; }
         
         public virtual ICollection<Order> Orders
         {
@@ -70,5 +78,6 @@ namespace DMYTest.Data.Models
         }
 
         public virtual ICollection<Image> Images { get { return _images; }set { this._images = value; }  }
+        public virtual ICollection<Comment> Comments { get {return _comments; } set {this._comments = value; } }
     }
 }

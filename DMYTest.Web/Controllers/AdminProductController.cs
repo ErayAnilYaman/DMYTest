@@ -29,13 +29,15 @@
 
         public ActionResult Create()
         {
-            List<SelectListItem> value = (from i in context.Categories.ToList() 
+            List<SelectListItem> items;
+            items = (from i in context.Categories.ToList() 
             select new SelectListItem
             {
                 Text = i.CategoryName,
                 Value = i.CategoryID.ToString()
             }).ToList();
-            ViewBag.ctgr = value;
+
+            ViewBag.ctgr = items;
             return View();
         }
 
@@ -61,6 +63,7 @@
                     ModelState.AddModelError("", "Resim sayi siniri 5 tir bu sinir gecilemez");
                     return View();
                 }
+                
                 product.Date = DateTime.Now;
                 productRepository.Add(product);
                 return RedirectToAction("Index");
@@ -88,7 +91,6 @@
                          }).ToList();
             ViewBag.ctgr = value;
             ViewBag.ProductID = id;
-            ViewBag.Price = productToUpdate.UnitPrice;
             if (productToUpdate == null)
             {
                 ModelState.AddModelError("", "Bir hata olustu");
