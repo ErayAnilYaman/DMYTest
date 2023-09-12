@@ -169,6 +169,8 @@
     <Content Include="Content\Image\indir %281%29.jfif" />
     <Content Include="Content\Image\indir %282%29.jfif" />
     <Content Include="Content\Image\indir.jfif" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="eshop\images\home\logout.png" />
     <Content Include="Content\jquery-jvectormap-1.2.2.css" />
     <Content Include="Content\jquery-ui-1.10.4.min.css" />
@@ -764,6 +766,8 @@
     <Content Include="Scripts\bootstrap-wysiwyg.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\toastr.scss" />
+    <Content Include="Content\toastr.less" />
     <None Include="Dockerfile" />
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>
@@ -894,6 +898,8 @@
     <Content Include="Scripts\sliders.js" />
     <Content Include="Scripts\sparkline-chart.js" />
     <Content Include="Scripts\sparklines.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\xcharts.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

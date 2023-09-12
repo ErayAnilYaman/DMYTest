@@ -1,12 +1,15 @@
 ﻿
 namespace DMYTest.Web.Controllers
 {
+    using Antlr.Runtime;
     #region Usings
-using DMYTest.Data.Context;
+    using DMYTest.Data.Context;
 using DMYTest.Data.Models;
 using System;
-using System.Linq;
-using System.Web.Mvc;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
 
     #endregion
     public class CartController : Controller
@@ -78,7 +81,6 @@ using System.Web.Mvc;
                         return RedirectToAction("Index", "Cart");
                     }
                     
-
                 }
             }
             ModelState.AddModelError("", "Urun Eklemek icin once giris yapmalisiniz");
@@ -153,6 +155,34 @@ using System.Web.Mvc;
             }
             return RedirectToAction("login", "account");
         }
+        
+        
+
+        [HttpPost]
+        public JsonResult UpdateCart(int cartID, int newQuantity, decimal newPrice)
+        {
+            try
+            {
+                
+                var cart = context.Carts.FirstOrDefault(c => c.CartID == cartID);
+                var product = context.Products.First(p => p.ProductID == cart.ProductID);
+                if (cart != null)
+                {
+                    cart.Quantity = newQuantity;
+                    cart.Price = cart.Quantity * product.UnitPrice;
+                    context.SaveChanges(); // Değişiklikleri kaydet
+                }
+
+                return Json(new { success = true, message = "Sepet güncellendi",newPrice = newPrice });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        
+
     }
-    
+
 }

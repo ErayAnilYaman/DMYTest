@@ -5,7 +5,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/Layout.cshtml";
 }
-
+<link href="~/Content/toastr.css" rel="stylesheet" />
 
 <h2>@Session["Ad"]  @Session["Soyad"]</h2>
 
@@ -13,53 +13,45 @@
 <table class="table table-bordered" id="table">
     <thead>
         <tr>
-
             <th>Ürün Bilgisi</th>
             <th>Adet</th>
-            <th>Fiyat</th>
+            <th>Birim Fiyatı</th>
             <th>Tarih</th>
             <th>Resim</th>
             <th>Sil</th>
+            <th>Toplam Tutar</th>
             <th>Satın Al</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-
-            <td>@item.Product.ProductName</td>
-
-            <td>
-                <div>
-                    @Html.ActionLink("-", "decrease", new { id = item.CartID }, new { @class = "btn btn-info btn-sm azalt" })
-                </div>
-                <div>
-
-
-                    @Html.TextBoxFor(x => item.Quantity, new { @class = "txt", data_id = item.CartID })
-
-                </div>
-                <div>
-                    @Html.ActionLink("+", "increase", new { id = item.CartID }, new { @class = "btn btn-info btn-sm arttir" })
-                </div>
-            </td>
-            <td>@item.Price</td>
-
-            <td>@Convert.ToDateTime(item.Date).ToString("dd/MM/yyyy")</td>
-            @foreach (var i in item.Product.Images.Where(i => i.ProductID == item.ProductID).Select(X => X.ImagePath).ToList())
-            {
-                <td><img src="~/Content/Image/@i" width="90" height="90" /></td>
-
-            }
-            <td><a href="/cart/delete/@item.CartID" class="btn btn-danger" onclick="return ('Emin misiniz')">Sil</a></td>
-
-            <td><a href="/sales/buy/@item.CartID" class="btn btn-success">Satın Al</a></td>
-        </tr>
+            <tr class="operation">
+                <td>@item.Product.ProductName</td>
+                <td>
+                    <div class="update-quantity">
+                        <button class="btnIncrease">+</button>
+                        <span class="item-quantity">@item.Quantity</span>
+                        <button class="btnDecrease">-</button>
+                    </div>
+                </td>
+                <td class="unit-price">@item.Product.UnitPrice</td>
+                <td>@Convert.ToDateTime(item.Date).ToString("dd/MM/yyyy")</td>
+                <td>
+                    @foreach (var i in item.Product.Images.Where(i => i.ProductID == item.ProductID).Select(X => X.ImagePath).ToList())
+                    {
+                        <img src="~/Content/Image/@i" width="90" height="90" />
+                    }
+                </td>
+                <td><a href="/cart/delete/@item.CartID" class="btn btn-danger" onclick="return confirm('Emin misiniz')">Sil</a></td>
+                <td>    <span class="item-price">@item.Price</span> </td>
+                <td><a href="/sales/buy/@item.CartID" class="btn btn-success">Satın Al</a></td>
+            </tr>
         }
     </tbody>
 </table>
-<div class="container"> @ViewBag.Cost</div>
+
+<div class="container"> </div>
 <br />
 <div class="container form-group">
     <a href="/sales/buyall" class="btn btn-success form-control">Tümünü Satın Al</a>
@@ -69,90 +61,72 @@
     <a href="/cart/deleteall" class="btn btn-danger form-control">Hepsini Sil</a>
 </div>
 
-
 <style>
-    .txt {
-        line-height: 18px;
-        /*padding: 0 4px 10px 4px;*/
-        width: 50px !important;
-        height: 32px;
-        font-size: 14px;
-        text-align: center;
-        border: solid 1px #ccc;
-        margin-left: 23px;
+    .update-quantity {
+        display: flex;
+        align-items: center;
     }
 
-    .arttir {
-        display: block;
-        cursor: pointer;
-        border: solid 1px #ccc;
-        /*text-align: center;
+        .update-quantity button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
 
-    font-size: 18px;*/
-        position: absolute;
-        margin-top: -32px;
-        margin-left: 75px;
-    }
-
-    .azalt {
-        display: block;
-        border: solid 1px #ccc;
-        cursor: pointer;
-        position: absolute;
-        margin-right: 90px;
-    }
+            .update-quantity button:hover {
+                background-color: #0056b3;
+            }
 </style>
 
-
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-<script>
-    $(function () {
-
-        $('.txt').on('change', function () {
-            var miktar = $(this).val();
-            var sepetid = $(this).attr('data-id');
-            $.ajax({
-                url: '/Cart/DinamikMiktar',
-                data: { id: sepetid, miktari: miktar },
-                success: function (res) {
-
-                    document.location.reload();
-                }
-
-
-            });
-
-        });
-    });
-</script>
-
-
+<script src="~/Scripts/toastr.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
 <script type="text/javascript">
-    $(function () {
-        $("#table").on("click", ".btnDelete", function () {
+    var cartData = [];
 
-            var btn = $(this);
-            bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
+    $(document).ready(function () {
+        $("#table").on("click", ".btnIncrease", function () {
+            var quantityElement = $(this).siblings(".item-quantity");
+            var priceElement = $(this).closest("tr").find(".item-price");
+            var currentQuantity = parseInt(quantityElement.text());
+            var newQuantity = currentQuantity + 1;
+            quantityElement.text(newQuantity);
+            updatePrice(priceElement, newQuantity);
+        });
 
-                if (result) {
-                    var id = btn.data("id");
-                    $.ajax(
-                        {
-                            type: "GET",
-                            url: "/adminproduct/delete/" + id,
-                            success: function () {
-                                btn.parent().parent().remove();
-                            }
-                        });
-                } else if (result === false) {
-                    bootbox.alert("Urun Silinmedi");
-                } else {
-                    bootbox.alert("Hata Oluştu");
-                }
-            });
-
-
+        $("#table").on("click", ".btnDecrease", function () {
+            var quantityElement = $(this).siblings(".item-quantity");
+            var priceElement = $(this).closest("tr").find(".item-price");
+            var currentQuantity = parseInt(quantityElement.text());
+            if (currentQuantity > 1) {
+                var newQuantity = currentQuantity - 1;
+                quantityElement.text(newQuantity);
+                updatePrice(priceElement, newQuantity);
+            }
         });
     });
+
+    function updatePrice(priceElement, newQuantity) {
+        var unitPrice = parseInt(priceElement.data(".unit-price")); // Bu örnekte, bir veri özelliği kullanıyoruz
+        var newPrice = unitPrice * newQuantity;
+        priceElement.text(newPrice.toFixed(2)); // İki ondalık basamaklı olarak formatlayabilirsiniz
+
+        // Ajax çağrısı ile sunucuya güncelleme bilgisini gönderin
+        var cartID = priceElement.closest("tr").find(".btn-danger").attr("href").split('/').pop();
+        $.ajax({
+            url: "/cart/updatecart", // Sunucu tarafında fiyatı güncellemek için bir yol belirtmelisiniz
+            type: "POST",
+            data: { cartID: cartID, newPrice: newPrice },
+            success: function (data) {
+                toastr.success("Fiyat güncellendi");
+            },
+            error: function () {
+                toastr.error("Hata");
+            }
+        });
+    }
 
 </script>
