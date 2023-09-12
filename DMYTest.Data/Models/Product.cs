@@ -16,11 +16,13 @@ namespace DMYTest.Data.Models
         private ICollection<Order> _orders;
         private ICollection<Image> _images;
         private ICollection<Comment> _comments;
+        private ICollection<Cart> _carts;
         public Product()
         {
             _orders = new HashSet<Order>();
             _comments = new HashSet<Comment>();
             _images = new HashSet<Image>();
+            _carts = new HashSet<Cart>();
         }
 
         public int ProductID { get; set; }
@@ -76,7 +78,7 @@ namespace DMYTest.Data.Models
                 this._orders = value;
             }
         }
-
+        public virtual ICollection<Cart> Carts { get {return _carts; } set {this._carts = value; } }
         public virtual ICollection<Image> Images { get { return _images; }set { this._images = value; }  }
         public virtual ICollection<Comment> Comments { get {return _comments; } set {this._comments = value; } }
     }

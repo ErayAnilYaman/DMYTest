@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<table class="table table-bordered">
+<table class="table table-bordered" id="table">
     <tr>
         <th>Icerik</th>
         <th>Urun Bilgisi</th>
@@ -19,9 +19,9 @@
     <tr>
         <td>@item.Contents</td>
         <td>@item.Product.ProductName</td>
-        <td>@item.User.UserName</td>
+        <td>@item.User.FirstName @item.User.LastName</td>
         <td>@item.Date</td>
-        <td>@Html.ActionLink("Sil","Delete",new { item.ProductID} , new {@class="btn btn-danger" , onclick ="return confirm ('Silmek Isityor musunuz')" })</td>
+        <td><a class="btn btn-danger btnDelete" data-id="@item.ID">Sil</a></td>
 
 
 
@@ -31,3 +31,34 @@
 
 
 
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#table").on("click", ".btnDelete", function () {
+
+            var btn = $(this);
+            bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
+
+                if (result) {
+                    var id = btn.data("id");
+                    $.ajax(
+                        {
+                            type: "GET",
+                            url: "/admin/delete/" + id,
+                            success: function () {
+                                btn.parent().parent().remove();
+                            }
+                        });
+                } else if (result === false) {
+                    bootbox.alert("Urun Silinmedi");
+                } else {
+                    bootbox.alert("Hata Oluştu");
+                }
+            });
+
+
+        });
+    });
+
+</script>

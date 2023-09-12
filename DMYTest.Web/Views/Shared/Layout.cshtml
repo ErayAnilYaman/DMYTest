@@ -69,7 +69,7 @@
                                 @if (User.Identity.IsAuthenticated)
                                 {
                                     <li><a href=""><img src="~/eshop/images/home/user.png" width="22" height="22"/> @Session["Ad"] @Session["Soyad"] </a></li>
-                                    <li><a href="/Account/LogOut"><img src="~/eshop/images/home/logout.png" width="15" height="15"/> Çıkış Yap</a></li>
+                                    <li><a href="/account/logout"><img src="~/eshop/images/home/logout.png" width="15" height="15"/> Çıkış Yap</a></li>
                                     <li><a href="/Cart/Index"><img src="~/eshop/images/home/shopping-cart.png" width="22" height="22" /><label style="color:red"></label> Sepetim</a></li>
                                     <li><a href="/Sales/Index"><i class="fa fa-dollar"></i> Satışlarım</a></li>
 
@@ -94,7 +94,10 @@
 
 
 
-
+                                @if (User.Identity.IsAuthenticated)
+                                {
+		                            <li><a href="/Cart/Index"><img src="~/Content/Image/Basket/cart.png" height="30" width="30"/><label style="color:red">@{Html.RenderAction("TotalCount", "Cart");}</label></a></li>
+	                            }
 
 
 

@@ -60,7 +60,7 @@ using System.Web.Security;
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
-            return RedirectToAction("index","home");
+            return RedirectToAction("login","account");
         }
     }
 }

@@ -19,7 +19,15 @@ namespace DMYTest.Web.Controllers
         {
             return View(db.Comments.ToList().ToPagedList(page , 3));
         }
+        public ActionResult Delete(int id)
+        {
+            var commentToDelete = db.Comments.Where(x => x.ID == id).FirstOrDefault();
+            db.Comments.Remove(commentToDelete);
+            db.SaveChanges();
+            return RedirectToAction("Comment");
 
+
+        }
 
     }
 }

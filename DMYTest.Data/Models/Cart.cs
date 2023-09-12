@@ -1,11 +1,12 @@
 ﻿
 namespace DMYTest.Data.Models
 {
+    using DMYTest.Data.Models.Abstract;
     #region Usings
-using System;
+    using System;
 using System.ComponentModel.DataAnnotations;
     #endregion
-    public class Cart
+    public class Cart : IEntity
     {
         public int CartID { get; set; }
 
@@ -40,8 +41,8 @@ using System.ComponentModel.DataAnnotations;
         [Display(Name = "Kullanici")]
         public int UserID { get; set; }
 
-        
 
+        public virtual Product Product { get; set; }
         public virtual User User { get; set; }
 
     }

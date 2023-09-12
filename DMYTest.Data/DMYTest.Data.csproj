@@ -55,10 +55,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\Base\IEntityRepositoryBase.cs" />
+    <Compile Include="Abstract\ICartDal.cs" />
     <Compile Include="Abstract\ICategoryDal.cs" />
     <Compile Include="Abstract\IImageDal.cs" />
     <Compile Include="Abstract\IProductDal.cs" />
     <Compile Include="Concrete\Base\EfEntityRepositoryBase.cs" />
+    <Compile Include="Concrete\CartRepository.cs" />
     <Compile Include="Concrete\CategoryRepository.cs" />
     <Compile Include="Concrete\ImageRepository.cs" />
     <Compile Include="Concrete\ProductRepository.cs" />

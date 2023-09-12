@@ -1,0 +1,82 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<DMYTest.Data.Models.Cart>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<table class="table table-bordered" id="table">
+    <tr>
+        <th>Urun Adi</th>
+        <th>Kategorisi</th>
+        <th>Sepetteki Sayisi</th>
+        <th>Urun Birim Fiyati</th>
+        <th>Musteri</th>
+        <th>Resim</th>
+        <th>Toplam Ucret</th>
+        <th>Sil</th>
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Product.ProductName</td>
+            <td>@item.Product.Category.CategoryName</td>
+            <td>@item.Quantity</td>
+            <td>@item.Product.UnitPrice</td>
+            <td>@item.User.Email    ::     @item.User.FirstName @item.User.LastName</td>
+            <td>
+                @if (item.Product.Images.Where(i => i.ProductID == item.ProductID).Any())
+                {
+                    foreach (var image in item.Product.Images.Where(i => i.ProductID == item.ProductID).ToList())
+                    {
+                        <img src="~/Content/Image/@image.ImagePath" width="80" height="60" />
+                    }
+                }
+                else
+                {
+                    <img src="~/Content/Image/Default/default-image_1080.png" width="80" height="60">
+                }
+
+            </td>
+            <td>@(item.Product.UnitPrice * item.Quantity) TL</td>
+            <td><a class="btn btn-danger btnDelete" data-id="@item.CartID">Sil</a></td>
+
+        </tr>
+    }
+</table>
+@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber }), PagedListRenderOptions.Classic)
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#table").on("click", ".btnDelete", function () {
+
+            var btn = $(this);
+            bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
+
+                if (result) {
+                    var id = btn.data("id");
+                    $.ajax(
+                        {
+                            type: "GET",
+                            url: "/admincart/delete/" + id,
+                            success: function () {
+                                btn.parent().parent().remove();
+                            }
+                        });
+                } else if (result === false) {
+                    bootbox.alert("Urun Silinmedi");
+                } else {
+                    bootbox.alert("Hata Oluştu");
+                }
+            });
+
+
+        });
+    });
+
+</script>

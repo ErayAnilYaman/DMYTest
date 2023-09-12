@@ -135,9 +135,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Constants\ImagePath.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminCartController.cs" />
     <Compile Include="Controllers\AdminCategoryController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdminProductController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
@@ -161,6 +163,7 @@
     <Content Include="Content\fullcalendar.css" />
     <Content Include="Content\Image\0c373326-7c64-43ce-b041-761f5f0316c0_size780x780_quality60_cropCenter.jpg" />
     <Content Include="Content\Image\61bK6PMOC3L._AC_UF1000,1000_QL80_.jpg" />
+    <Content Include="Content\Image\Basket\cart.png" />
     <Content Include="Content\Image\d793b350d7ed4635870e1b8bbce08dd2.png" />
     <Content Include="Content\Image\format_webp.png" />
     <Content Include="Content\Image\indir %281%29.jfif" />
@@ -919,6 +922,9 @@
     <Content Include="Views\Product\ProductDetails.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Admin\Comment.cshtml" />
+    <Content Include="Views\Cart\Index.cshtml" />
+    <Content Include="Views\Cart\TotalCount.cshtml" />
+    <Content Include="Views\AdminCart\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
