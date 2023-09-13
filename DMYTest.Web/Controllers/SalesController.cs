@@ -37,13 +37,13 @@ using PagedList;
             return View(model);
         }
         [HttpPost]
-        public ActionResult Buy2(Sales sales)
+        public ActionResult BuyPost(Cart cart)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var model = context.Carts.FirstOrDefault(x => x.CartID == sales.SalesID);
+                    var model = context.Carts.FirstOrDefault(x => x.CartID ==cart.CartID);
                     var sale = new Sales
                     {
                         Date = DateTime.Now,
@@ -64,7 +64,6 @@ using PagedList;
             {
                 ViewBag.progress = "Satin alma islemi basarisiz";
                 ModelState.AddModelError("", ex);
-                throw;
             }
             return View("progress");
 

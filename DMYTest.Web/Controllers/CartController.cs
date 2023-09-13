@@ -34,7 +34,6 @@ using System;
                     else if (kid!=null)
                     {
                         price = context.Carts.Where(x => x.UserID == kid.UserID).Sum(x => x.Product.UnitPrice * x.Quantity);
-                        ViewBag.Cost = "Toplam Tutar =" + price + " TL";
                     }
                     return View(model);
                 }

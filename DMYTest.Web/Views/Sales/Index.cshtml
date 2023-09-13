@@ -31,7 +31,7 @@
             <td>@item.Price</td>
             @foreach (var i in item.Product.Images.Where(i => i.ProductID == item.ProductID).ToList())
             {
-                <td><img src="~/Content/Image/@i.ImagePath"></td>
+                <td><img src="~/Content/Image/@i.ImagePath" width="80" height="80"></td>
             }
 
             <td>@Convert.ToDateTime(item.Date).ToString("dd/MM/yyyy")</td>

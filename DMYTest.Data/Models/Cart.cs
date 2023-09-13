@@ -11,33 +11,33 @@ using System.ComponentModel.DataAnnotations;
         public int CartID { get; set; }
 
 
-        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Required(ErrorMessage = "Lutfen pro Doldurunuz")]
         [Display(Name = "Urun")]
         public int ProductID { get; set; }
 
 
-        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Required(ErrorMessage = "Lutfen qua Doldurunuz")]
         [Display(Name = "Miktar")]
         public int Quantity { get; set; }
 
 
-        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Required(ErrorMessage = "Lutfen price Doldurunuz")]
         [Display(Name = "Fiyat")]
         public decimal Price { get; set; }
 
 
-        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Required(ErrorMessage = "Lutfen date Doldurunuz")]
         [Display(Name = "Tarih")]
         public DateTime Date { get; set; }
 
 
-        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Required(ErrorMessage = "Lutfen image Doldurunuz")]
         [Display(Name = "Resim")]
         [StringLength(500, ErrorMessage = "karakter sinirini gectiniz")]
         public string Image { get; set; }
 
 
-        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Required(ErrorMessage = "Lutfen user Doldurunuz")]
         [Display(Name = "Kullanici")]
         public int UserID { get; set; }
 
