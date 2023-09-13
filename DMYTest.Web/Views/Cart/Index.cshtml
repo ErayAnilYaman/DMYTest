@@ -44,7 +44,7 @@
                     }
                 </td>
                 <td><a href="/cart/delete/@item.CartID" class="btn btn-danger" onclick="return confirm('Emin misiniz')">Sil</a></td>
-                <td>    <span class="item-price">@item.Price</span> </td>
+                <td>    <span class="item-price">@item.Price</span> TL</td>
                 <td><a href="/sales/buy/@item.CartID" class="btn btn-success">Satın Al</a></td>
             </tr>
         }
@@ -91,42 +91,45 @@
         $("#table").on("click", ".btnIncrease", function () {
             var quantityElement = $(this).siblings(".item-quantity");
             var priceElement = $(this).closest("tr").find(".item-price");
+            var unitPriceElement = $(this).closest("tr").find(".unit-price"); 
+            
             var currentQuantity = parseInt(quantityElement.text());
             var newQuantity = currentQuantity + 1;
             quantityElement.text(newQuantity);
-            updatePrice(priceElement, newQuantity);
+            updatePrice(priceElement, newQuantity , unitPriceElement);
         });
 
         $("#table").on("click", ".btnDecrease", function () {
             var quantityElement = $(this).siblings(".item-quantity");
-            var priceElement = $(this).closest("tr").find(".item-price");
+            var priceElement = $(this).closest("tr").find(".item-price"); 
+            var unitPriceElement = $(this).closest("tr").find(".unit-price"); 
+
             var currentQuantity = parseInt(quantityElement.text());
+            
             if (currentQuantity > 1) {
                 var newQuantity = currentQuantity - 1;
                 quantityElement.text(newQuantity);
-                updatePrice(priceElement, newQuantity);
+                updatePrice(priceElement, newQuantity , unitPriceElement);
             }
         });
     });
 
-    function updatePrice(priceElement, newQuantity) {
-        var unitPrice = parseInt(priceElement.data(".unit-price")); // Bu örnekte, bir veri özelliği kullanıyoruz
-        var newPrice = unitPrice * newQuantity;
-        priceElement.text(newPrice.toFixed(2)); // İki ondalık basamaklı olarak formatlayabilirsiniz
-
-        // Ajax çağrısı ile sunucuya güncelleme bilgisini gönderin
+    function updatePrice(priceElement, newQuantity, unitPriceElement) {
+        var currentPrice = parseInt(priceElement.text());
+        var unitPrice = parseInt(unitPriceElement.text()); 
         var cartID = priceElement.closest("tr").find(".btn-danger").attr("href").split('/').pop();
+        var money = ",00"
         $.ajax({
-            url: "/cart/updatecart", // Sunucu tarafında fiyatı güncellemek için bir yol belirtmelisiniz
+            url: "/cart/updatecart",
             type: "POST",
-            data: { cartID: cartID, newPrice: newPrice },
+            data: { cartID: cartID, newQuantity: newQuantity, currentPrice: currentPrice },
             success: function (data) {
                 toastr.success("Fiyat güncellendi");
+                priceElement.text(data.currentPrice + money);
             },
             error: function () {
                 toastr.error("Hata");
             }
         });
     }
-
 </script>

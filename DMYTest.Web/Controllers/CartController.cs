@@ -101,32 +101,7 @@ using System;
             }
             return PartialView();
         }
-        public ActionResult Decrease(int id)
-        {
-            var model = context.Carts.Find(id);
-            var product = context.Products.FirstOrDefault(P => P.ProductID == model.ProductID);
-            if (model.Quantity ==1)
-            {
-                context.Carts.Remove(model);
-                context.SaveChanges();
-            }
-            model.Quantity--;
-            model.Price = product.UnitPrice* model.Quantity;
-            context.SaveChanges();
-            return RedirectToAction("Index");
-        }
-        public ActionResult Increase(int id)
-        {
-            var model = context.Carts.Find(id);
-            var product = context.Products.FirstOrDefault(P => P.ProductID == model.ProductID);
-
-            model.Quantity++;
-            model.Price = product.UnitPrice * model.Quantity;
-
-            context.SaveChanges();
-            return RedirectToAction("Index");
-
-        }
+        
         public ActionResult Delete(int ID)
         {
             var user = context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
@@ -159,7 +134,7 @@ using System;
         
 
         [HttpPost]
-        public JsonResult UpdateCart(int cartID, int newQuantity, decimal newPrice)
+        public JsonResult UpdateCart(int cartID, int newQuantity, decimal currentPrice)
         {
             try
             {
@@ -170,10 +145,12 @@ using System;
                 {
                     cart.Quantity = newQuantity;
                     cart.Price = cart.Quantity * product.UnitPrice;
+
                     context.SaveChanges(); // Değişiklikleri kaydet
+                    currentPrice = cart.Price;
                 }
 
-                return Json(new { success = true, message = "Sepet güncellendi",newPrice = newPrice });
+                return Json(new { success = true, message = "Sepet güncellendi",newQuantity = newQuantity ,currentPrice = currentPrice });
             }
             catch (Exception ex)
             {
