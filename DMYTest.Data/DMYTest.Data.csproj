@@ -65,6 +65,7 @@
     <Compile Include="Concrete\ImageRepository.cs" />
     <Compile Include="Concrete\ProductRepository.cs" />
     <Compile Include="Context\InternDBContext.cs" />
+    <Compile Include="Encryption\HashingHelper.cs" />
     <Compile Include="Migrations\202309110600382_Initial.cs" />
     <Compile Include="Migrations\202309110600382_Initial.Designer.cs">
       <DependentUpon>202309110600382_Initial.cs</DependentUpon>
@@ -98,8 +99,6 @@
       <DependentUpon>202309110600382_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Encryption\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

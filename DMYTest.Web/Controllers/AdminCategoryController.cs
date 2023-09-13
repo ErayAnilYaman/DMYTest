@@ -1,19 +1,18 @@
-﻿using DMYTest.Data.Abstract;
-using DMYTest.Data.Concrete;
-using DMYTest.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
+﻿
 namespace DMYTest.Web.Controllers
 {
+    #region MyRegion
+using DMYTest.Data.Concrete;
+using DMYTest.Data.Context;
+using DMYTest.Data.Models;
+using System.Web.Mvc;
+
+    #endregion
     public class AdminCategoryController : Controller
     {
         // GET: AdminCategory
         CategoryRepository categoryRepository = new CategoryRepository();
-
+        InternDBContext db = new InternDBContext();
 
         public ActionResult Index()
         {

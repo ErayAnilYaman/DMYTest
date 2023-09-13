@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
+﻿
 namespace DMYTest.Web.Models
 {
+    #region Usings
+using System;
+
+    #endregion
     public class Sales
     {
         public int SalesID { get; set; }
