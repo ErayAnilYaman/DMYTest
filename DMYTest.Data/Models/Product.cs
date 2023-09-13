@@ -9,6 +9,7 @@ namespace DMYTest.Data.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Runtime.InteropServices;
     using DMYTest.Data.Models.Abstract;
     #endregion
     public class Product : IEntity
@@ -17,12 +18,14 @@ namespace DMYTest.Data.Models
         private ICollection<Image> _images;
         private ICollection<Comment> _comments;
         private ICollection<Cart> _carts;
+        private ICollection<Sales> _sales;
         public Product()
         {
             _orders = new HashSet<Order>();
             _comments = new HashSet<Comment>();
             _images = new HashSet<Image>();
             _carts = new HashSet<Cart>();
+            _sales = new HashSet<Sales>();
         }
 
         public int ProductID { get; set; }
@@ -66,20 +69,16 @@ namespace DMYTest.Data.Models
 
 
         public virtual Category Category { get; set; }
+
         
-        public virtual ICollection<Order> Orders
-        {
-            get
-            {
-                return _orders;
-            }
-            set
-            {
-                this._orders = value;
-            }
-        }
+        public virtual ICollection<Order> Orders{get{return _orders;}set{this._orders = value;}}
+
         public virtual ICollection<Cart> Carts { get {return _carts; } set {this._carts = value; } }
+
+        public virtual ICollection<Sales> Sales { get { return _sales; } set { this._sales = value; } }
+
         public virtual ICollection<Image> Images { get { return _images; }set { this._images = value; }  }
+
         public virtual ICollection<Comment> Comments { get {return _comments; } set {this._comments = value; } }
     }
 }

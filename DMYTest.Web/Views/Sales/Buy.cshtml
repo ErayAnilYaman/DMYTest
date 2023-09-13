@@ -1,0 +1,43 @@
+﻿@model DMYTest.Data.Models.Cart
+@{
+    ViewBag.Title = "Buy";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+
+<div class="modal-header">
+    <h2>Satin Al</h2>
+</div>
+
+<div class="container">
+    @using (Html.BeginForm("Buy2", "Sales", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    @Html.HiddenFor(c => c.CartID)
+
+                    <div class="form-group">
+                        Kullanici Adi Soyadi :@Session["Ad"] @Session["Soyad"]
+                    </div>
+                    <div class="form-group">
+                        Urun Bilgisi :@Html.DisplayFor(c => c.Product.ProductName, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        Adet :@Html.DisplayFor(c => c.Quantity , new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        
+                    <img src="~/Content/Image/@Html.DisplayFor(C=>C.Image == Model.Product.Images.First(i=>i.ProductID == Model.ProductID).ImagePath , new {@class ="form-control"})" width="80" height="80" />
+                        
+                    </div>
+                    <div class="form-group">
+                        Fiyat :@Html.DisplayFor(c => c.Price, new { @class = "form-control" })
+                    </div>
+
+                </div>
+                <div class="modal-footer" style="float:right;">
+                    <button id="submit" class="btn btn-success">Satin Al</button>
+                    <a href="/cart/index/" class="btn btn-dark">Iptal</a>
+                </div>            
+                     
+      }
+</div>

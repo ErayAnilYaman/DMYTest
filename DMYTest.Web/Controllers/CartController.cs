@@ -52,22 +52,20 @@ using System;
                 var user = context.Users.FirstOrDefault(U => U.Email == User.Identity.Name);
                 var product = context.Products.Find(id);
                 var modal = context.Carts.Where(c => c.UserID == user.ID).ToList();
-                var cart = context.Carts.FirstOrDefault(X => X.UserID == user.ID);
-                var cartIfExists = context.Carts.FirstOrDefault(X => X.ProductID == product.ProductID);
+                var basketIfExists = modal.FirstOrDefault(m => m.ProductID == product.ProductID);
                 if (user!=null)
                 {
-                    if (cartIfExists!=null)
+                    if (basketIfExists!=null)
                     {
-                        cart.Quantity++;
-                        cart.Price = product.UnitPrice * cart.Quantity;
+                        basketIfExists.Quantity++;
+                        basketIfExists.Price = product.UnitPrice * basketIfExists.Quantity;
                         context.SaveChanges();
                         return RedirectToAction("Index", "Cart");
-
                     }
                     else
                     {
                         var s = new Cart
-                            {
+                        {
                             UserID = user.ID,
                             Date = DateTime.Now,
                             Image = product.Images.FirstOrDefault(i => i.ProductID == product.ProductID).ImagePath,
@@ -81,6 +79,11 @@ using System;
                         return RedirectToAction("Index", "Cart");
                     }
                     
+                }
+                else
+                {
+                    ModelState.AddModelError("","Urun ekleme yetkiniz bulunmamaktadir lutfen dogru hesaba giris  yapiniz");
+                    return View("login", "account");
                 }
             }
             ModelState.AddModelError("", "Urun Eklemek icin once giris yapmalisiniz");
