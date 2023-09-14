@@ -25,6 +25,7 @@ using System;
                 var user = context.Users.FirstOrDefault(x => x.Email == username);
                 var model = context.Carts.Where(x => x.UserID == user.ID).ToList();
                 var kid = context.Carts.FirstOrDefault(x => x.UserID == user.ID);
+                ViewBag.userID = user.ID;
                 if (model !=null)
                 {
                     if (kid == null)
@@ -132,41 +133,7 @@ using System;
             }
             return RedirectToAction("login", "account");
         }
-        [HttpPost]
-        public ActionResult BuyAll()
-        {
-            if (User.Identity.IsAuthenticated && ModelState.IsValid)
-            {
-                var username = User.Identity.Name;
-                var user = context.Users.FirstOrDefault(U => U.Email == username);
-                var model = context.Carts.Where(X => X.UserID == user.ID).ToList();
-                if (model != null)
-                {
-                    foreach (var item in model)
-                    {
-                        var sale = new Sales
-                        {
-                            Date = DateTime.Now,
-                            Image = item.Image,
-                            Price = item.Price,
-                            ProductID = item.ProductID,
-                            Quantity = item.Quantity,
-                            UserID = user.ID,
-
-                        };
-                        context.Sales.Add(sale);
-                        context.SaveChanges();
-                    }
-                    ViewBag.progress = "Islem Basarili";
-                    return RedirectToAction("index", "home");
-                }
-
-            }
-            ModelState.AddModelError("", "Islem basarisiz");
-            return View();
-        }
-
-
+        
 
         [HttpPost]
         public JsonResult UpdateCart(int cartID, int newQuantity, decimal currentPrice)

@@ -37,7 +37,6 @@ using PagedList;
         public ActionResult Buy(int id)
         {
             var model = context.Carts.FirstOrDefault(C=>C.CartID == id);
-            ViewBag.CartID = id; 
             return View(model);
         }
 
@@ -77,28 +76,47 @@ using PagedList;
             return View("progress");
 
         }
-
-        public ActionResult BuyAll(decimal? cost)
+        public ActionResult BuyAll(int id)
         {
-            if (User.Identity.IsAuthenticated)
+            var model = context.Carts.Where(C => C.UserID == id).ToList();
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult BuyAll(List<Cart> carts)
+        {
+            if (User.Identity.IsAuthenticated && ModelState.IsValid)
             {
                 var username = User.Identity.Name;
                 var user = context.Users.FirstOrDefault(U => U.Email == username);
                 var model = context.Carts.Where(X => X.UserID == user.ID).ToList();
-                var kid = context.Carts.FirstOrDefault(X => X.UserID == user.ID);
-                if (model!=null)
+                if (model != null)
                 {
-                    cost = model.Sum(x => x.Product.UnitPrice * x.Quantity);
+                    foreach (var item in model)
+                    {
+                        var sale = new Sales
+                        {
+                            Date = DateTime.Now,
+                            Image = item.Image,
+                            Price = item.Price,
+                            ProductID = item.ProductID,
+                            Quantity = item.Quantity,
+                            UserID = user.ID,
 
-                    ViewBag.cost = "Toplam Tutar ~ " + cost + " TL";
-                    return View(model);
+                        };
+                        context.Carts.Remove(item);
+                        context.Sales.Add(sale);
+                        context.SaveChanges();
+                    }
+                    ViewBag.progress = "Islem Basarili";
+                    return RedirectToAction("index", "home");
                 }
-                ViewBag.cost = "Sepetinizde Urun Bulunmamaktadir";
-                return View(model);
 
             }
-            return HttpNotFound();
+            ModelState.AddModelError("", "Islem basarisiz");
+            return View();
         }
-        
+
+
+
     }
 }

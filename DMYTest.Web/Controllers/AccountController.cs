@@ -48,16 +48,7 @@ using System.Web.Security;
             return View("login");
         }
 
-        private bool CheckUserExists(User user, out string message)
-        {
-            if (user != null)
-            {
-                message = "";
-                return true;    
-            }
-            message = "Kullanici Bulunamadi";
-            return false;
-        }
+        
 
         public ActionResult Register()
         {
@@ -107,6 +98,17 @@ using System.Web.Security;
         {
             FormsAuthentication.SignOut();
             return RedirectToAction("login","account");
+        }
+
+        private bool CheckUserExists(User user, out string message)
+        {
+            if (user != null)
+            {
+                message = "";
+                return true;
+            }
+            message = "Kullanici Bulunamadi";
+            return false;
         }
     }
 }

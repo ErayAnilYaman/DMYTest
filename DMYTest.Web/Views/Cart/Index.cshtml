@@ -54,7 +54,7 @@
 <div class="container"> </div>
 <br />
 <div class="container form-group">
-    <a href="/sales/buyall" class="btn btn-success form-control">Tümünü Satın Al</a>
+    <a href="/sales/buyall/@ViewBag.userID" class="btn btn-success form-control">Tümünü Satın Al</a>
 </div>
 
 <div class="container form-group">
@@ -98,6 +98,7 @@
             quantityElement.text(newQuantity);
             updatePrice(priceElement, newQuantity , unitPriceElement);
         });
+        
 
         $("#table").on("click", ".btnDecrease", function () {
             var quantityElement = $(this).siblings(".item-quantity");
@@ -113,6 +114,43 @@
             }
         });
     });
+    function increaseQuantity(priceElement, newQuantity, unitPriceElement) {
+        var currentPrice = parseInt(priceElement.text());
+        var unitPrice = parseInt(unitPriceElement.text());
+        var cartID = priceElement.closest("tr").find(".btn-danger").attr("href").split('/').pop();
+        var money = ",00"
+        $.ajax({
+            url: "/cart/updatecart",
+            type: "POST",
+            data: { cartID: cartID, newQuantity: newQuantity, currentPrice: currentPrice },
+            success: function (data) {
+
+                priceElement.text(data.currentPrice + money);
+            },
+            error: function () {
+                toastr.error("Hata");
+            }
+        });
+    }
+
+    function decreaseQuantity(priceElement, newQuantity, unitPriceElement) {
+        var currentPrice = parseInt(priceElement.text());
+        var unitPrice = parseInt(unitPriceElement.text());
+        var cartID = priceElement.closest("tr").find(".btn-danger").attr("href").split('/').pop();
+        var money = ",00"
+        $.ajax({
+            url: "/cart/updatecart",
+            type: "POST",
+            data: { cartID: cartID, newQuantity: newQuantity, currentPrice: currentPrice },
+            success: function (data) {
+
+                priceElement.text(data.currentPrice + money);
+            },
+            error: function () {
+                toastr.error("Hata");
+            }
+        });
+    }
 
     function updatePrice(priceElement, newQuantity, unitPriceElement) {
         var currentPrice = parseInt(priceElement.text());
