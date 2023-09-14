@@ -177,10 +177,9 @@ using System;
 
                     context.SaveChanges();
                     currentPrice = cartToUpdate.Price;
-
+                    return Json(new { success = true, message = "Sepet Guncellendi", currentQuantity = currentQuantity, currentPrice = currentPrice });
                 }
-                return Json(new { success = true,  message = "Sepet Guncellendi" ,currentQuantity = currentQuantity, currentPrice = currentPrice });
-
+                return Json(new { success = false, error = "Stok Adedi kadar urunu sepete ekleyebilirsiniz !!" });
 
             }
             catch (Exception e)

@@ -117,16 +117,14 @@
         $("#table").on("click", ".btnIncrease", function () {
             var quantityElement = document.getElementById('item-quantity');
             var priceElement = document.getElementById('item-price');
-            
-           
-
             increaseQuantity(priceElement, quantityElement);
+
         });
         
         
     });
     function increaseQuantity(priceElement, quantityElement) {
-        var currentPrice = parseFloat(priceElement.innerText);
+        var currentPrice = parseInt(priceElement.innerText);
         var currentQuantity = parseInt(quantityElement.innerText);
         var totalPriceElement = document.getElementById('item-total-price');
         var cartID = parseInt(document.getElementById('item-cartID').getAttribute('href').split('/').pop());
@@ -136,12 +134,12 @@
             type: "POST",
             data: { cartID: cartID, currentQuantity: currentQuantity, currentPrice: currentPrice },
             success: function (data) {
-
-                priceElement.innerText = currentPrice + money;
-                quantityElement.innerText = currentQuantity;
+                priceElement.innerText = data.currentPrice + money;
+                quantityElement.innerText = data.currentQuantity;
+                totalPriceElement.innerText = data.currentPrice + money;
             },
             error: function () {
-                toastr.error("Stok Adedi sinirini gectiniz");
+                toastr.error(data.error);
             }
         });
     }
