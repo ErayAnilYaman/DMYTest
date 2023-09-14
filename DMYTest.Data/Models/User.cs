@@ -54,16 +54,14 @@ using DMYTest.Data.Models.Abstract;
 
 
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
-        [Display(Name = "Sifre")]
-        [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
-        public string Password { get; set; }
+        [Display(Name = "Password Hash")]
+        public byte[] PasswordHash { get; set; }
 
 
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
-        [Display(Name = "Sifre Kontrolu")]
-        [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
-        [Compare("Password" ,ErrorMessage ="Sifreler uyusmuyor")]
-        public string RePassword { get; set; }
+        [Display(Name = "Password Salt")]
+        public byte[] PasswordSalt { get; set; }
+
 
 
         [Display(Name = "Durum")]

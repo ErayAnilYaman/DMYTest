@@ -1,5 +1,6 @@
-﻿@model DMYTest.Web.Models.UserToLogin
+﻿@model DMYTest.Web.Models.UserToRegister
 @{
+    ViewBag.Title = "Register";
     Layout = null;
 }
 
@@ -30,32 +31,41 @@
 </head><!--/head-->
 
 <body>
-    
-    
+
+
     <section id="form">
         <!--form-->
         <div class="container">
             <div class="row">
-                <div class="col-sm-4 col-sm-offset-1">
-                    <div class="login-form">
-                        <!--login form-->
-                        <h2>Hesabina giris yap</h2>
-                        <form action="/account/login" method="post">
-                            <input type="email" placeholder="Email adresiniz" name="Email" />
+                
+                <div class="col-sm-4">
+                    <div class="signup-form">
+                        <!--sign up form-->
+                        <h2>Kayit olabilirsiniz</h2>
+                        <form action="/account/register" method="post">
+                            <input type="text" placeholder="Adiniz" name="FirstName" />
+                            @Html.ValidationMessageFor(x => x.FirstName, "", new { @style = "color:red" })
+
+                            <input type="text" placeholder="Soyadiniz" name="LastName" />
+                            @Html.ValidationMessageFor(x => x.LastName, "", new { @style = "color:red" })
+
+                            <input type="text" placeholder="Kullanici Adi" name="UserName" />
+                            @Html.ValidationMessageFor(x => x.UserName, "", new { @style = "color:red" })
+
+                            <input type="email" placeholder="Email Adresiniz" name="Email" />
                             @Html.ValidationMessageFor(x => x.Email, "", new { @style = "color:red" })
 
-                            <input type="password" placeholder="Sifreniz" name="Password" />
+                            <input type="password" placeholder="Sifre" name="Password" />
                             @Html.ValidationMessageFor(x => x.Password, "", new { @style = "color:red" })
 
-                            <span>
-                                <input type="checkbox" class="checkbox">
-                                Keep me signed in
-                            </span>
-                            <button type="submit" class="btn btn-default">Giris Yap</button>
+                            <input type="password" placeholder="Sifre Tekrari" name="RePassword" />
+                            @Html.ValidationMessageFor(x => x.RePassword, "", new { @style = "color:red" })
+
+
+                            <button type="submit" class="btn btn-default">Signup</button>
                         </form>
-                    </div><!--/login form-->
+                    </div><!--/sign up form-->
                 </div>
-                
             </div>
         </div>
     </section><!--/form-->

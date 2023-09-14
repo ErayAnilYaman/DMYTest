@@ -124,7 +124,7 @@
             type: "POST",
             data: { cartID: cartID, newQuantity: newQuantity, currentPrice: currentPrice },
             success: function (data) {
-                toastr.success("Fiyat güncellendi");
+
                 priceElement.text(data.currentPrice + money);
             },
             error: function () {

@@ -12,6 +12,9 @@ using PagedList;
     using DMYTest.Data.Context;
     using DMYTest.Data.Models;
     using System.ComponentModel;
+    using System.Data.SqlClient;
+    using System.Data.Entity.Core;
+    using System.Security.Cryptography.X509Certificates;
     #endregion
     public class SalesController : Controller
     {
@@ -30,12 +33,14 @@ using PagedList;
             }
             return View("login","account");
         }
+
         public ActionResult Buy(int id)
         {
             var model = context.Carts.FirstOrDefault(C=>C.CartID == id);
             ViewBag.CartID = id; 
             return View(model);
         }
+
         [HttpPost]
         public ActionResult BuyPost(Cart cart)
         {
@@ -43,6 +48,7 @@ using PagedList;
             {
                 if (ModelState.IsValid)
                 {
+
                     var model = context.Carts.FirstOrDefault(x => x.CartID ==cart.CartID);
                     var sale = new Sales
                     {
@@ -51,22 +57,48 @@ using PagedList;
                         Price = model.Price,
                         ProductID = model.ProductID,
                         Quantity = model.Quantity,
-                        UserID = model.User.ID,  
+                        UserID = model.User.ID,
 
                     };
                     context.Carts.Remove(model);
                     context.Sales.Add(sale);
                     context.SaveChanges();
+                    
                     ViewBag.progress = "Satin alma islemi basarili bir sekilde gerceklesmistir";
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                ViewBag.progress = "Satin alma islemi basarisiz";
-                ModelState.AddModelError("", ex);
+                ViewBag.progress = ex.Message;
+                ModelState.AddModelError("", ex.Message);
+                return View("progress");
+
             }
             return View("progress");
 
         }
+
+        public ActionResult BuyAll(decimal? cost)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var username = User.Identity.Name;
+                var user = context.Users.FirstOrDefault(U => U.Email == username);
+                var model = context.Carts.Where(X => X.UserID == user.ID).ToList();
+                var kid = context.Carts.FirstOrDefault(X => X.UserID == user.ID);
+                if (model!=null)
+                {
+                    cost = model.Sum(x => x.Product.UnitPrice * x.Quantity);
+
+                    ViewBag.cost = "Toplam Tutar ~ " + cost + " TL";
+                    return View(model);
+                }
+                ViewBag.cost = "Sepetinizde Urun Bulunmamaktadir";
+                return View(model);
+
+            }
+            return HttpNotFound();
+        }
+        
     }
 }

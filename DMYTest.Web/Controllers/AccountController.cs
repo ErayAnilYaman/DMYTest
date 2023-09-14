@@ -3,8 +3,11 @@ namespace DMYTest.Web.Controllers
 {
     #region Usings
 using DMYTest.Data.Context;
-using DMYTest.Data.Models;
-using System.Linq;
+    using DMYTest.Data.Encryption;
+    using DMYTest.Data.Models;
+    using DMYTest.Web.Models;
+    using System;
+    using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -12,47 +15,90 @@ using System.Web.Security;
     public class AccountController : Controller
     {
         // GET: Account
-        InternDBContext context = new InternDBContext();
+        InternDBContext db = new InternDBContext();
         public ActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult Login(User user)
+        public ActionResult Login(UserToLogin userToLogin)
         {
-            var informations = context.Users.FirstOrDefault(x => x.Email == user.Email && x.Password == user.Password);
-            if (informations != null)
+            
+            var user = db.Users.FirstOrDefault(U => U.Email == userToLogin.Email);
+
+            if (!CheckUserExists(user, out string message))
             {
-                FormsAuthentication.SetAuthCookie(informations.Email, false);
-                Session["Mail"] = informations.Email.ToString();
-                Session["Ad"] = informations.FirstName.ToString();
-                Session["Soyad"] = informations.LastName.ToString();
-                Session["UserName"] = informations.UserName.ToString();
-                Session["userid"] = informations.ID.ToString();
-                return RedirectToActionPermanent("index", "home");
+                ModelState.AddModelError("", message);
+                return View("register","account");
+            }
+            if (HashingHelper.VerifyPassword(userToLogin.Password, user.PasswordHash , user.PasswordSalt))
+            {
+                
+                 FormsAuthentication.SetAuthCookie(user.Email, false);
+                 Session["Mail"] = user.Email.ToString();
+                 Session["Ad"] = user.FirstName.ToString();
+                 Session["Soyad"] = user.LastName.ToString();
+                 Session["UserName"] = user.UserName.ToString();
+                 Session["userid"] = user.ID.ToString();
+                 return RedirectToActionPermanent("index", "home");
 
             }
-            ViewBag.Error = "Mail veya sifreniz hatali";
+            ModelState.AddModelError("", "Parola Hatasi");
+            return View("login");
+        }
 
-            return View(user);
+        private bool CheckUserExists(User user, out string message)
+        {
+            if (user != null)
+            {
+                message = "";
+                return true;    
+            }
+            message = "Kullanici Bulunamadi";
+            return false;
+        }
+
+        public ActionResult Register()
+        {
+            return View();
         }
         [HttpPost]
-        public ActionResult Register(User data)
+        public ActionResult Register(UserToRegister userToRegister)
         {
-            data.Role = "user";
-            data.Status = true;
-            var errors = ModelState.Values.SelectMany(v=>v.Errors);
+            byte[] passwordHash, passwordSalt;
+
+            HashingHelper.HashPassword(userToRegister.Password, out passwordHash, out passwordSalt);
+
+            var data = new User
+            {
+                Role = "user",
+                FirstName = userToRegister.FirstName,
+                LastName = userToRegister.LastName,
+                Email = userToRegister.Email,
+                UserName = userToRegister.UserName,
+                Status = true,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+            };
+
 
             if (ModelState.IsValid)
             {
-                context.Users.Add(data);
-                context.SaveChanges();
+                db.Users.Add(data);
+                db.SaveChanges();
                 return RedirectToActionPermanent("login");
             }
-            ModelState.AddModelError("", "Lutfen bilgileri kuralina gore giriniz");
-            
-            return View("Login",data);
+
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+
+            foreach (var error in errors.ToList())
+            {
+                ModelState.AddModelError("", error.ErrorMessage);
+
+            }
+
+            return View("index","home");
         }
 
 
