@@ -10,6 +10,7 @@ using System;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using System.Web.Services.Description;
 
     #endregion
     public class CartController : Controller
@@ -160,8 +161,37 @@ using System;
             }
         }
 
-        
 
+        [HttpPost]
+        public JsonResult IncreaseQuantity(int cartID , int currentQuantity , decimal currentPrice)
+        {
+
+            try
+            {
+                var cartToUpdate = context.Carts.FirstOrDefault(C => C.CartID == cartID);
+                var product = context.Products.FirstOrDefault(P => P.ProductID == cartToUpdate.ProductID);
+                if (currentQuantity < product.Stock)
+                {
+                    currentQuantity++;
+                    cartToUpdate.Price = currentQuantity * product.UnitPrice;
+
+                    context.SaveChanges();
+                    currentPrice = cartToUpdate.Price;
+
+                }
+                return Json(new { success = true,  message = "Sepet Guncellendi" ,currentQuantity = currentQuantity, currentPrice = currentPrice });
+
+
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, error = "Hata" });
+                
+            }
+           
+        }
+
+        
     }
 
 }

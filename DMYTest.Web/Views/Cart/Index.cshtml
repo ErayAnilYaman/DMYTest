@@ -31,7 +31,7 @@
                 <td>
                     <div class="update-quantity">
                         <button class="btnIncrease">+</button>
-                        <span class="item-quantity">@item.Quantity</span>
+                        <span id="item-quantity">@item.Quantity</span>
                         <button class="btnDecrease">-</button>
                     </div>
                 </td>
@@ -43,11 +43,12 @@
                         <img src="~/Content/Image/@i" width="90" height="90" />
                     }
                 </td>
-                <td><a href="/cart/delete/@item.CartID" class="btn btn-danger" onclick="return confirm('Emin misiniz')">Sil</a></td>
-                <td>    <span class="item-price">@item.Price</span> TL</td>
+                <td><a href="/cart/delete/@item.CartID" class="btn btn-danger" id="item-cartID" onclick="return confirm('Emin misiniz')">Sil</a></td>
+                <td>    <span id="item-price">@item.Price</span> TL</td>
                 <td><a href="/sales/buy/@item.CartID" class="btn btn-success">Satın Al</a></td>
             </tr>
         }
+        <p>Toplam Tutar :<span id="item-total-price">@Model.Sum(m=>m.Quantity * m.Product.UnitPrice)</span></p>
     </tbody>
 </table>
 
@@ -84,90 +85,102 @@
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script src="~/Scripts/toastr.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
+
 <script type="text/javascript">
     var cartData = [];
+    //$("#table").on("click", ".btnIncrease", function () {
+        //    var quantityElement = $(this).siblings(".item-quantity");
+        //    var priceElement = $(this).closest("tr").find(".item-price");
+        //    var unitPriceElement = $(this).closest("tr").find(".unit-price");
 
+        //    var currentQuantity = parseInt(quantityElement.text());
+        //    var newQuantity = currentQuantity + 1;
+        //    quantityElement.text(newQuantity);
+        //    updatePrice(priceElement, newQuantity , unitPriceElement);
+        //});
+        //$("#table").on("click", ".btnDecrease", function () {
+        //    var quantityElement = $(this).siblings(".item-quantity");
+        //    var priceElement = $(this).closest("tr").find(".item-price");
+        //    var unitPriceElement = $(this).closest("tr").find(".unit-price");
+
+        //    var currentQuantity = parseInt(quantityElement.text());
+
+        //    if (currentQuantity > 1) {
+        //        var newQuantity = currentQuantity - 1;
+        //        quantityElement.text(newQuantity);
+        //        updatePrice(priceElement, newQuantity, unitPriceElement);
+        //    }
+        //});
     $(document).ready(function () {
-        $("#table").on("click", ".btnIncrease", function () {
-            var quantityElement = $(this).siblings(".item-quantity");
-            var priceElement = $(this).closest("tr").find(".item-price");
-            var unitPriceElement = $(this).closest("tr").find(".unit-price"); 
-            
-            var currentQuantity = parseInt(quantityElement.text());
-            var newQuantity = currentQuantity + 1;
-            quantityElement.text(newQuantity);
-            updatePrice(priceElement, newQuantity , unitPriceElement);
-        });
         
 
-        $("#table").on("click", ".btnDecrease", function () {
-            var quantityElement = $(this).siblings(".item-quantity");
-            var priceElement = $(this).closest("tr").find(".item-price"); 
-            var unitPriceElement = $(this).closest("tr").find(".unit-price"); 
-
-            var currentQuantity = parseInt(quantityElement.text());
+        $("#table").on("click", ".btnIncrease", function () {
+            var quantityElement = document.getElementById('item-quantity');
+            var priceElement = document.getElementById('item-price');
             
-            if (currentQuantity > 1) {
-                var newQuantity = currentQuantity - 1;
-                quantityElement.text(newQuantity);
-                updatePrice(priceElement, newQuantity , unitPriceElement);
-            }
+           
+
+            increaseQuantity(priceElement, quantityElement);
         });
+        
+        
     });
-    function increaseQuantity(priceElement, newQuantity, unitPriceElement) {
-        var currentPrice = parseInt(priceElement.text());
-        var unitPrice = parseInt(unitPriceElement.text());
-        var cartID = priceElement.closest("tr").find(".btn-danger").attr("href").split('/').pop();
+    function increaseQuantity(priceElement, quantityElement) {
+        var currentPrice = parseFloat(priceElement.innerText);
+        var currentQuantity = parseInt(quantityElement.innerText);
+        var totalPriceElement = document.getElementById('item-total-price');
+        var cartID = parseInt(document.getElementById('item-cartID').getAttribute('href').split('/').pop());
         var money = ",00"
         $.ajax({
-            url: "/cart/updatecart",
+            url: "/cart/IncreaseQuantity",
             type: "POST",
-            data: { cartID: cartID, newQuantity: newQuantity, currentPrice: currentPrice },
+            data: { cartID: cartID, currentQuantity: currentQuantity, currentPrice: currentPrice },
             success: function (data) {
 
-                priceElement.text(data.currentPrice + money);
+                priceElement.innerText = currentPrice + money;
+                quantityElement.innerText = currentQuantity;
             },
             error: function () {
-                toastr.error("Hata");
+                toastr.error("Stok Adedi sinirini gectiniz");
             }
         });
     }
 
-    function decreaseQuantity(priceElement, newQuantity, unitPriceElement) {
-        var currentPrice = parseInt(priceElement.text());
-        var unitPrice = parseInt(unitPriceElement.text());
-        var cartID = priceElement.closest("tr").find(".btn-danger").attr("href").split('/').pop();
-        var money = ",00"
-        $.ajax({
-            url: "/cart/updatecart",
-            type: "POST",
-            data: { cartID: cartID, newQuantity: newQuantity, currentPrice: currentPrice },
-            success: function (data) {
+    //function decreaseQuantity(priceElement, newQuantity, unitPriceElement) {
+    //    var currentPrice = parseInt(priceElement.text());
+    //    var unitPrice = parseInt(unitPriceElement.text());
+    //    var cartID = priceElement.closest("tr").find(".btn-danger").attr("href").split('/').pop();
+    //    var money = ",00"
+    //    $.ajax({
+    //        url: "/cart/updatecart",
+    //        type: "POST",
+    //        data: { cartID: cartID, newQuantity: newQuantity, currentPrice: currentPrice },
+    //        success: function (data) {
 
-                priceElement.text(data.currentPrice + money);
-            },
-            error: function () {
-                toastr.error("Hata");
-            }
-        });
-    }
+    //            priceElement.text(data.currentPrice + money);
+    //        },
+    //        error: function () {
+    //            toastr.error("Hata");
+    //        }
+    //    });
+    //}
 
-    function updatePrice(priceElement, newQuantity, unitPriceElement) {
-        var currentPrice = parseInt(priceElement.text());
-        var unitPrice = parseInt(unitPriceElement.text()); 
-        var cartID = priceElement.closest("tr").find(".btn-danger").attr("href").split('/').pop();
-        var money = ",00"
-        $.ajax({
-            url: "/cart/updatecart",
-            type: "POST",
-            data: { cartID: cartID, newQuantity: newQuantity, currentPrice: currentPrice },
-            success: function (data) {
+    //function updatePrice(priceElement, newQuantity, unitPriceElement) {
+    //    var currentPrice = parseInt(priceElement.text());
+    //    var unitPrice = parseInt(unitPriceElement.text()); 
+    //    var cartID = priceElement.closest("tr").find(".btn-danger").attr("href").split('/').pop();
+    //    var money = ",00"
+    //    $.ajax({
+    //        url: "/cart/updatecart",
+    //        type: "POST",
+    //        data: { cartID: cartID, newQuantity: newQuantity, currentPrice: currentPrice },
+    //        success: function (data) {
 
-                priceElement.text(data.currentPrice + money);
-            },
-            error: function () {
-                toastr.error("Hata");
-            }
-        });
-    }
+    //            priceElement.text(data.currentPrice + money);
+    //        },
+    //        error: function () {
+    //            toastr.error("Hata");
+    //        }
+    //    });
+    //}
 </script>
