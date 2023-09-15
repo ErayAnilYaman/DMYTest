@@ -155,6 +155,7 @@
     <Compile Include="Models\UserToLogin.cs" />
     <Compile Include="Models\UserToRegister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RazorView\RazorViewToString.cs" />
     <Compile Include="Roles\AdminRoleProvider.cs" />
   </ItemGroup>
   <ItemGroup>

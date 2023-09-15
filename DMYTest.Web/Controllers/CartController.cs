@@ -5,12 +5,16 @@ namespace DMYTest.Web.Controllers
     #region Usings
     using DMYTest.Data.Context;
 using DMYTest.Data.Models;
-using System;
+    using DMYTest.Web.RazorView;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Services.Description;
+    using System.Web.UI;
+    using System.Web.UI.WebControls;
 
     #endregion
     public class CartController : Controller
@@ -163,33 +167,77 @@ using System;
 
 
         [HttpPost]
-        public JsonResult IncreaseQuantity(int cartID , int currentQuantity , decimal currentPrice)
+        public JsonResult IncreaseQuantity(int cartID)
         {
-
-            try
+            if (User.Identity.IsAuthenticated)
             {
-                var cartToUpdate = context.Carts.FirstOrDefault(C => C.CartID == cartID);
-                var product = context.Products.FirstOrDefault(P => P.ProductID == cartToUpdate.ProductID);
-                if (currentQuantity < product.Stock)
+                try
                 {
-                    currentQuantity++;
-                    cartToUpdate.Price = currentQuantity * product.UnitPrice;
+                    var cartToUpdate = context.Carts.Find(cartID);
+                    var product = context.Products.FirstOrDefault(P => P.ProductID == cartToUpdate.ProductID);
+                    if (cartToUpdate.Quantity < product.Stock)
+                    {
+                        cartToUpdate.Quantity++;
+                        cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
+                        context.SaveChanges();
 
+                        return Json(new { success = true, message = "Sepet Guncellendi", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price });
+                    }
+                    cartToUpdate.Quantity = product.Stock;
+                    cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
                     context.SaveChanges();
-                    currentPrice = cartToUpdate.Price;
-                    return Json(new { success = true, message = "Sepet Guncellendi", currentQuantity = currentQuantity, currentPrice = currentPrice });
-                }
-                return Json(new { success = false, error = "Stok Adedi kadar urunu sepete ekleyebilirsiniz !!" });
+                    return Json(new { success = true, message = "Maksimum stok Adedi kadar urunu sepete ekleyebilirsiniz !!" ,currentQuantity = cartToUpdate.Quantity,currentPrice = cartToUpdate.Price  });
 
-            }
-            catch (Exception e)
-            {
-                return Json(new { success = false, error = "Hata" });
+                }
+                catch (Exception e)
+                {
+                    return Json(new { success = false, message = "Hata" });
                 
+                }
             }
+            return Json(new { success = false, message = "Oturumunuz kapali lutfen oturum aciniz" });
+            
            
         }
 
+        public JsonResult DecreaseQuantity(int cartID)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                try
+                {
+                    var cartToUpdate = context.Carts.Find(cartID);
+                    var product = context.Products.FirstOrDefault(P=>P.ProductID == cartToUpdate.ProductID);
+
+                    if(cartToUpdate.Quantity>1)
+                    {
+                        cartToUpdate.Quantity--;
+                        cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
+                        context.SaveChanges();
+                        return Json(new { success = true, message = "Sepet Guncellendi" , currentQuantity = cartToUpdate.Quantity , currentPrice = cartToUpdate.Price   });
+                    }
+                    else
+                    {
+                        var username = User.Identity.Name;
+                        var user = context.Users.FirstOrDefault(u=>u.Email == username);
+                        var carts = context.Carts.Where(C=>C.UserID == user.ID).ToList();
+                        context.Carts.Remove(cartToUpdate);
+                        context.SaveChanges();
+                        
+                        
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    return Json(new { success = false, message = "Unexpected Error :" + e.Source });
+                
+                }
+             }
+            return Json(new { success = false, message = "Oturumunuz kapali lutfen giris yap kismindan oturumunuzu aciniz" });
+            
+            
+        }
         
     }
 
