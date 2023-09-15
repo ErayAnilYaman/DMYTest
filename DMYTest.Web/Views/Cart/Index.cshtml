@@ -9,7 +9,6 @@
 
 <h2 hidden>@Session["Ad"]  @Session["Soyad"]</h2>
 
-
 @if (Model.Count > 0)
 {
     <h3>Sepetim</h3>
@@ -33,12 +32,12 @@
                     <td>@item.Product.ProductName</td>
                     <td>
                         <div class="update-quantity">
-                            <button class="btnIncrease" id="@item.CartID">+</button>
-                            <span id="item-quantity">@item.Quantity</span>
-                            <button class="btnDecrease" id="@item.CartID">-</button>
+                            <button class="btnIncrease" data-cartid="@item.CartID">+</button>
+                            <span id="item-quantity" data-cartid="@item.CartID">@item.Quantity</span>
+                            <button class="btnDecrease" data-cartid="@item.CartID">-</button>
                         </div>
                     </td>
-                    <td class="unit-price">@item.Product.UnitPrice</td>
+                    <td class="unit-price" data-cartid="@item.CartID">@item.Product.UnitPrice</td>
                     <td>@Convert.ToDateTime(item.Date).ToString("dd/MM/yyyy")</td>
                     <td>
                         @foreach (var i in item.Product.Images.Where(i => i.ProductID == item.ProductID).Select(X => X.ImagePath).ToList())
@@ -47,11 +46,11 @@
                         }
                     </td>
                     <td><a href="/cart/delete/@item.CartID" class="btn btn-danger" id="item-cartID" onclick="return confirm('Emin misiniz')">Sil</a></td>
-                    <td>    <span id="item-price">@item.Price</span> TL</td>
+                    <td>    <span id="item-price" data-cartid="@item.CartID" >@item.Price</span> TL</td>
                     <td><a href="/sales/buy/@item.CartID" class="btn btn-success">Satın Al</a></td>
                 </tr>
             }
-            <p>Toplam Tutar :<span id="item-total-price">@Model.Sum(m => m.Quantity * m.Product.UnitPrice)</span> TL</p>
+            <p>Toplam Tutar :<span id="item-total-price" >@Model.Sum(m => m.Quantity * m.Product.UnitPrice)</span> TL</p>
         </tbody>
     </table>
 
@@ -66,10 +65,10 @@
     </div>
 }
 else
-            {
-                <h2>Sepetinizde urun bulunamadi.</h2>
-            }
- 
+{
+    <h2>Sepetinizde urun bulunamadi.</h2>
+}
+
 
 <style>
     .update-quantity {
@@ -99,48 +98,96 @@ else
 
     $(document).ready(function () {
         //var cartID = parseInt(document.getElementByClassName('btnIncrease').getAttribute('id');
-        
-        $("#table").on("click", ".btnIncrease", function () {
-            var quantityElement = document.getElementById('item-quantity');
-            var priceElement = document.getElementById('item-price');
-            increaseQuantity(priceElement, quantityElement);
+        var operationElements = document.querySelectorAll('operation');
+        var totalPriceElement = document.getElementById('item-total-price');
+        /////////////////////////////////////////////////////////////////////
+        // DENEME 2
+        //operationElements.forEach(function (element) {
+        //    element.addEventListener('click', '.btnIncrease',function () {
+        //        var cartID = element.parent().parent('.update-quantity').parent('btnIncrease').getAttribute('data-cartid');
+        //        var priceElement = element.parent().parent('#item-price');
+        //        var quantityElement = element.parent().parent('.update-quantity').parent('item-quantity');
+        //        increaseQuantity(cartID, priceElement, quantityElement , totalPriceElement);
 
-        });
+        //    })
+        //})
 
-        $("#table").on("click", ".btnDecrease", function () {
-            var quantityElement = document.getElementById('item-quantity');
-            var priceElement = document.getElementById('item-price');
-            decreaseQuantity(priceElement, quantityElement);
+        //////////////////////////////////////////////////////////////////////
+        // DENEME 1
+        // parentNode yerine parent kullanicaz bunu da daha ust parenttan baslatarak yapicaz.
+        //$('.btnIncrease').on('click', function () {
+        //    var cartID = $(this).data('cartid');
+        //    var parentElement = $(this).parentNode;
+        //    var grandParentElement = parentElement.parentNode;
+        //    var priceElement = grandParentElement.find('.unit-price');
+        //    var quantityElement = grandParentElement.find('#item-quantity');
+        //    var totalPriceElement = document.getElementById('item-total-price');
 
-        });
+        //    increaseQuantity(cartID, priceElement, quantityElement, totalPriceElement);
+        //});
+        ////////////////////////////////////////////////////////////////////
 
+
+        //$('.btnIncrease').on('click', function () {
+        //    var cartID = $(this).data('cartid');
+        //    var priceElement = $(this).closest('tr').find('.unit-price');
+        //    var quantityElement = $(this).closest('tr').find('#item-quantity');
+        //    var totalPriceElement = document.getElementById('item-total-price');
+
+        //    increaseQuantity(cartID, priceElement, quantityElement , totalPriceElement);
+        //});
+
+        /////////////////////////////////////////////////////////////////////////////
+        //           DENEME BASARISIZ
+        //    var increaseButtons = document.querySelectorAll('.btnIncrease');
+        //    var decreaseButtons = document.querySelectorAll('.btnDecrease');
+        //    increaseButtons.forEach(function (button) {
+        //        button.addEventListener('click', function () {
+        //            // Veri özniteliklerini kullanarak cartID ve mevcut miktarı al
+        //            //var cartID = this.getAttribute('data-cartid');
+        //            //var quantityElement = document.querySelector('#item-quantity[data-cartid="' + cartID + '"]');
+        //            //var priceElement = document.querySelector('#item-price[data-cartid="' + cartID + '"]');
+        //            //var totalPriceElement = document.getElementById('item-total-price');
+        //            // Miktarı ve birim fiyatı güncelle
+        //            increaseQuantity(cartID , quantityElement , priceElement , totalPriceElement);
+
+        //        });
+        //    });
+
+        //});
+        ///////////////////////////////////////////////////////////////////////////
+        $('.btnIncrease').on('click', function () {
+            var cartID = $(this).data('cartid');
+            
+            increaseQuantity(cartID );
+        })
 
     });
-    function increaseQuantity(priceElement, quantityElement) {
-        var totalPriceElement = document.getElementById('item-total-price');
-        var elements = document.getElementsByClassName('btnIncrease');
+    function increaseQuantity(cartID) {
         var money = ",00";
+        var quantityElement = document.querySelector('#item-quantity[data-cartid="' + cartID + '"]');
+        var priceElement = document.querySelector('#item-price[data-cartid="' + cartID + '"]');
+        var totalPriceElement = document.getElementById('item-total-price');
         $.ajax({
             url: "/cart/IncreaseQuantity",
             type: "POST",
             data: { cartID: cartID },
             success: function (data) {
                 priceElement.innerText = data.currentPrice + money;
-                quantityElement.innerText = data.currentQuantity;
-                totalPriceElement.innerText = data.currentPrice + money;
+                quantityElement.innerText= data.currentQuantity;
+                totalPriceElement.innerText = data.totalPrice + money;
                 toastr.info(data.message);
             },
             error: function () {
 
-                taostr.error(data.error)
+                toastr.error("dasdas");
             }
         });
     }
 
-    function decreaseQuantity(priceElement, quantityElement) {
-        var totalPriceElement = document.getElementById('item-total-price');
-        var cartID = parseInt(document.getElementById('item-cartID').getAttribute('href').split('/').pop());
-        var money = ",00"
+    function decreaseQuantity(cartID,priceElement, quantityElement , totalPriceElement) {
+        var money = ",00";
+
         $.ajax({
             url: "/cart/decreasequantity",
             type: "POST",
@@ -156,7 +203,7 @@ else
                 priceElement.innerText = data.currentPrice + money;
                 quantityElement.innerText = data.currentQuantity;
                 totalPriceElement.innerText = data.currentPrice + money;
-                taostr.error(data.error)
+                taostr.error(data.error);
             }
         });
 

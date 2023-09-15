@@ -167,26 +167,33 @@ using DMYTest.Data.Models;
 
 
         [HttpPost]
-        public JsonResult IncreaseQuantity(int cartID)
+        public JsonResult IncreaseQuantity(int cartID )
         {
             if (User.Identity.IsAuthenticated)
             {
                 try
                 {
+                    var user= context.Users.FirstOrDefault(U=>U.Email == User.Identity.Name);
                     var cartToUpdate = context.Carts.Find(cartID);
                     var product = context.Products.FirstOrDefault(P => P.ProductID == cartToUpdate.ProductID);
                     if (cartToUpdate.Quantity < product.Stock)
                     {
                         cartToUpdate.Quantity++;
-                        cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
-                        context.SaveChanges();
 
-                        return Json(new { success = true, message = "Sepet Guncellendi", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price });
+                        cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
+
+                        context.SaveChanges();
+                        var totalPrice = context.Carts.Where(U => U.UserID == user.ID).ToList().Sum(U => U.Quantity * product.UnitPrice);
+
+
+                        return Json(new { success = true, message = "Sepet Guncellendi", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price , totalPrice = totalPrice});
                     }
                     cartToUpdate.Quantity = product.Stock;
                     cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
                     context.SaveChanges();
-                    return Json(new { success = true, message = "Maksimum stok Adedi kadar urunu sepete ekleyebilirsiniz !!" ,currentQuantity = cartToUpdate.Quantity,currentPrice = cartToUpdate.Price  });
+                    var totalPriceCart = context.Carts.Where(U => U.UserID == user.ID).ToList().Sum(U => U.Quantity * product.UnitPrice);
+                    
+                    return Json(new { success = true, message = "Maksimum stok Adedi kadar urunu sepete ekleyebilirsiniz !!" ,currentQuantity = cartToUpdate.Quantity,currentPrice =cartToUpdate.Price , totalPrice =totalPriceCart });
 
                 }
                 catch (Exception e)
@@ -218,13 +225,12 @@ using DMYTest.Data.Models;
                     }
                     else
                     {
+
                         var username = User.Identity.Name;
                         var user = context.Users.FirstOrDefault(u=>u.Email == username);
                         var carts = context.Carts.Where(C=>C.UserID == user.ID).ToList();
                         context.Carts.Remove(cartToUpdate);
                         context.SaveChanges();
-                        
-                        
 
                     }
                 }
