@@ -139,61 +139,35 @@ using DMYTest.Data.Models;
             return RedirectToAction("login", "account");
         }
         
-
         [HttpPost]
-        public JsonResult UpdateCart(int cartID, int newQuantity, decimal currentPrice)
-        {
-            try
-            {
-                
-                var cart = context.Carts.FirstOrDefault(c => c.CartID == cartID);
-                var product = context.Products.First(p => p.ProductID == cart.ProductID);
-                if (cart != null)
-                {
-                    cart.Quantity = newQuantity;
-                    cart.Price = cart.Quantity * product.UnitPrice;
-
-                    context.SaveChanges(); // Değişiklikleri kaydet
-                    currentPrice = cart.Price;
-                }
-
-                return Json(new { success = true, message = "Sepet güncellendi",newQuantity = newQuantity ,currentPrice = currentPrice });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, error = ex.Message });
-            }
-        }
-
-
-        [HttpPost]
-        public JsonResult IncreaseQuantity(int cartID )
+        public JsonResult IncreaseQuantity(int cartID)
         {
             if (User.Identity.IsAuthenticated)
             {
                 try
                 {
+                    decimal totalPrice;
                     var user= context.Users.FirstOrDefault(U=>U.Email == User.Identity.Name);
                     var cartToUpdate = context.Carts.Find(cartID);
                     var product = context.Products.FirstOrDefault(P => P.ProductID == cartToUpdate.ProductID);
+                    var carts = context.Carts.Where(C => C.UserID == user.ID).ToList();
+
                     if (cartToUpdate.Quantity < product.Stock)
                     {
                         cartToUpdate.Quantity++;
-
                         cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
 
                         context.SaveChanges();
-                        var totalPrice = context.Carts.Where(U => U.UserID == user.ID).ToList().Sum(U => U.Quantity * product.UnitPrice);
-
-
+                        totalPrice = TotalPriceCalculator(carts);
+                        
                         return Json(new { success = true, message = "Sepet Guncellendi", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price , totalPrice = totalPrice});
                     }
                     cartToUpdate.Quantity = product.Stock;
                     cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
                     context.SaveChanges();
-                    var totalPriceCart = context.Carts.Where(U => U.UserID == user.ID).ToList().Sum(U => U.Quantity * product.UnitPrice);
-                    
-                    return Json(new { success = true, message = "Maksimum stok Adedi kadar urunu sepete ekleyebilirsiniz !!" ,currentQuantity = cartToUpdate.Quantity,currentPrice =cartToUpdate.Price , totalPrice =totalPriceCart });
+                    totalPrice = TotalPriceCalculator(carts);
+
+                    return Json(new { success = true, message = "Maksimum stok Adedi kadar urunu sepete ekleyebilirsiniz !!" ,currentQuantity = cartToUpdate.Quantity,currentPrice =cartToUpdate.Price , totalPrice =totalPrice });
 
                 }
                 catch (Exception e)
@@ -213,24 +187,26 @@ using DMYTest.Data.Models;
             {
                 try
                 {
+                    decimal totalPrice;
                     var cartToUpdate = context.Carts.Find(cartID);
+                    var user = context.Users.FirstOrDefault(U=>U.Email == User.Identity.Name);
                     var product = context.Products.FirstOrDefault(P=>P.ProductID == cartToUpdate.ProductID);
-
+                    var carts = context.Carts.Where(C=>C.UserID == user.ID).ToList();
                     if(cartToUpdate.Quantity>1)
                     {
                         cartToUpdate.Quantity--;
                         cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
                         context.SaveChanges();
-                        return Json(new { success = true, message = "Sepet Guncellendi" , currentQuantity = cartToUpdate.Quantity , currentPrice = cartToUpdate.Price   });
+                        totalPrice = TotalPriceCalculator(carts);
+                        return Json(new { success = true, message = "Sepet Guncellendi" , currentQuantity = cartToUpdate.Quantity , currentPrice = cartToUpdate.Price , totalPrice = totalPrice});
                     }
                     else
                     {
-
-                        var username = User.Identity.Name;
-                        var user = context.Users.FirstOrDefault(u=>u.Email == username);
-                        var carts = context.Carts.Where(C=>C.UserID == user.ID).ToList();
-                        context.Carts.Remove(cartToUpdate);
+                        cartToUpdate.Quantity = 1;
+                        cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
                         context.SaveChanges();
+                        totalPrice = TotalPriceCalculator(carts);
+                        return Json(new {success = true , message = "Urunun sepetteki adedi 0 olamaz!!", currentQuantity = cartToUpdate.Quantity , currentPrice = cartToUpdate.Price , totalPrice = totalPrice});
 
                     }
                 }
@@ -243,6 +219,15 @@ using DMYTest.Data.Models;
             return Json(new { success = false, message = "Oturumunuz kapali lutfen giris yap kismindan oturumunuzu aciniz" });
             
             
+        }
+        private decimal TotalPriceCalculator(List<Cart> carts ,decimal totalPrice = 0)
+        {
+
+            for (int i = 0; i < carts.Count; i++)
+            {
+                totalPrice += carts[i].Price;
+            }
+            return totalPrice;
         }
         
     }

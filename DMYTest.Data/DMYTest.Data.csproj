@@ -58,12 +58,16 @@
     <Compile Include="Abstract\ICartDal.cs" />
     <Compile Include="Abstract\ICategoryDal.cs" />
     <Compile Include="Abstract\IImageDal.cs" />
+    <Compile Include="Abstract\IOrderDal.cs" />
     <Compile Include="Abstract\IProductDal.cs" />
+    <Compile Include="Abstract\ISaleDal.cs" />
     <Compile Include="Concrete\Base\EfEntityRepositoryBase.cs" />
     <Compile Include="Concrete\CartRepository.cs" />
     <Compile Include="Concrete\CategoryRepository.cs" />
     <Compile Include="Concrete\ImageRepository.cs" />
+    <Compile Include="Concrete\OrderRepository.cs" />
     <Compile Include="Concrete\ProductRepository.cs" />
+    <Compile Include="Concrete\SaleRepository.cs" />
     <Compile Include="Context\InternDBContext.cs" />
     <Compile Include="Encryption\HashingHelper.cs" />
     <Compile Include="Migrations\202309110600382_Initial.cs" />

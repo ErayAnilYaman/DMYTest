@@ -1,0 +1,27 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<DMYTest.Data.Models.Product>
+@{
+    ViewBag.Title = "CriticalStock";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+<table class="table table-bordered">
+    <tr>
+        <th>Urun Bilgisi</th>
+        <th>Stok Sayisi</th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ProductName</td>
+            <td>@item.Stock</td>
+        </tr>
+    }
+</table>
+

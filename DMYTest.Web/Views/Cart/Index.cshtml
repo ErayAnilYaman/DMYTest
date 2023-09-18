@@ -97,69 +97,17 @@ else
 <script type="text/javascript">
 
     $(document).ready(function () {
-        //var cartID = parseInt(document.getElementByClassName('btnIncrease').getAttribute('id');
-        var operationElements = document.querySelectorAll('operation');
-        var totalPriceElement = document.getElementById('item-total-price');
-        /////////////////////////////////////////////////////////////////////
-        // DENEME 2
-        //operationElements.forEach(function (element) {
-        //    element.addEventListener('click', '.btnIncrease',function () {
-        //        var cartID = element.parent().parent('.update-quantity').parent('btnIncrease').getAttribute('data-cartid');
-        //        var priceElement = element.parent().parent('#item-price');
-        //        var quantityElement = element.parent().parent('.update-quantity').parent('item-quantity');
-        //        increaseQuantity(cartID, priceElement, quantityElement , totalPriceElement);
 
-        //    })
-        //})
-
-        //////////////////////////////////////////////////////////////////////
-        // DENEME 1
-        // parentNode yerine parent kullanicaz bunu da daha ust parenttan baslatarak yapicaz.
-        //$('.btnIncrease').on('click', function () {
-        //    var cartID = $(this).data('cartid');
-        //    var parentElement = $(this).parentNode;
-        //    var grandParentElement = parentElement.parentNode;
-        //    var priceElement = grandParentElement.find('.unit-price');
-        //    var quantityElement = grandParentElement.find('#item-quantity');
-        //    var totalPriceElement = document.getElementById('item-total-price');
-
-        //    increaseQuantity(cartID, priceElement, quantityElement, totalPriceElement);
-        //});
-        ////////////////////////////////////////////////////////////////////
-
-
-        //$('.btnIncrease').on('click', function () {
-        //    var cartID = $(this).data('cartid');
-        //    var priceElement = $(this).closest('tr').find('.unit-price');
-        //    var quantityElement = $(this).closest('tr').find('#item-quantity');
-        //    var totalPriceElement = document.getElementById('item-total-price');
-
-        //    increaseQuantity(cartID, priceElement, quantityElement , totalPriceElement);
-        //});
-
-        /////////////////////////////////////////////////////////////////////////////
-        //           DENEME BASARISIZ
-        //    var increaseButtons = document.querySelectorAll('.btnIncrease');
-        //    var decreaseButtons = document.querySelectorAll('.btnDecrease');
-        //    increaseButtons.forEach(function (button) {
-        //        button.addEventListener('click', function () {
-        //            // Veri özniteliklerini kullanarak cartID ve mevcut miktarı al
-        //            //var cartID = this.getAttribute('data-cartid');
-        //            //var quantityElement = document.querySelector('#item-quantity[data-cartid="' + cartID + '"]');
-        //            //var priceElement = document.querySelector('#item-price[data-cartid="' + cartID + '"]');
-        //            //var totalPriceElement = document.getElementById('item-total-price');
-        //            // Miktarı ve birim fiyatı güncelle
-        //            increaseQuantity(cartID , quantityElement , priceElement , totalPriceElement);
-
-        //        });
-        //    });
-
-        //});
-        ///////////////////////////////////////////////////////////////////////////
         $('.btnIncrease').on('click', function () {
             var cartID = $(this).data('cartid');
             
+            
             increaseQuantity(cartID );
+        })
+        $('.btnDecrease').on('click', function () {
+            var cartID = $(this).data('cartid');
+            
+            decreaseQuantity(cartID );
         })
 
     });
@@ -180,13 +128,16 @@ else
             },
             error: function () {
 
-                toastr.error("dasdas");
+                toastr.error("dadsa");
             }
         });
     }
 
-    function decreaseQuantity(cartID,priceElement, quantityElement , totalPriceElement) {
+    function decreaseQuantity(cartID) {
         var money = ",00";
+        var quantityElement = document.querySelector('#item-quantity[data-cartid="' + cartID + '"]');
+        var priceElement = document.querySelector('#item-price[data-cartid="' + cartID + '"]');
+        var totalPriceElement = document.getElementById('item-total-price');
 
         $.ajax({
             url: "/cart/decreasequantity",
@@ -195,7 +146,7 @@ else
             success: function (data) {
                 priceElement.innerText = data.currentPrice + money;
                 quantityElement.innerText = data.currentQuantity;
-                totalPriceElement.innerText = data.currentPrice + money;
+                totalPriceElement.innerText = data.totalPrice + money;
                 toastr.info(data.message);
             },
             error: function () {
@@ -203,7 +154,7 @@ else
                 priceElement.innerText = data.currentPrice + money;
                 quantityElement.innerText = data.currentQuantity;
                 totalPriceElement.innerText = data.currentPrice + money;
-                taostr.error(data.error);
+                taostr.error("DMKSD");
             }
         });
 

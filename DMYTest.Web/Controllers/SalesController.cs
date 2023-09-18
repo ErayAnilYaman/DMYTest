@@ -15,6 +15,7 @@ using PagedList;
     using System.Data.SqlClient;
     using System.Data.Entity.Core;
     using System.Security.Cryptography.X509Certificates;
+    using Microsoft.Ajax.Utilities;
     #endregion
     public class SalesController : Controller
     {
@@ -79,6 +80,7 @@ using PagedList;
         public ActionResult BuyAll(int id)
         {
             var model = context.Carts.Where(C => C.UserID == id).ToList();
+            ViewBag.Cost = context.Carts.Where(C => C.UserID == id).Sum(C => C.Price);
             return View(model);
         }
         [HttpPost]

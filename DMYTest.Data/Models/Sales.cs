@@ -1,8 +1,9 @@
 ﻿
 namespace DMYTest.Data.Models
 {
+    using DMYTest.Data.Models.Abstract;
     #region Usings
-using System;
+    using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 
     #endregion
-    public class Sales
+    public class Sales : IEntity
     {
         public int SalesID { get; set; }
 

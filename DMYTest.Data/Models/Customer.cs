@@ -10,11 +10,7 @@
 
     public class Customer : IEntity
     {
-        private ICollection<Order> _orders;
-        public Customer()
-        {
-            _orders = new HashSet<Order>();
-        }
+        
         
         public int CustomerID { get; set; }
 
@@ -37,6 +33,5 @@
         public string Phone { get; set; }
 
 
-        public virtual ICollection<Order> Orders { get { return _orders; } set { this._orders = value; } }
     }
 }

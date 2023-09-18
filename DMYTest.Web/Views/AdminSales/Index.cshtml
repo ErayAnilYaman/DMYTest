@@ -1,0 +1,151 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<DMYTest.Data.Models.Sales>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<link href="~/Content/toastr.css" rel="stylesheet" />
+
+<table class="table table-bordered" id="table">
+    <tr>
+        <th>Urun Adi</th>
+        <th>Musteri</th>
+        <th>Satin alim tarihi</th>
+        <th>Ucret</th>
+        <th>Satis Adedi</th>
+        <th>Resim</th>
+        <th>Sil</th>
+        <th>Guncelle</th>
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Product.ProductName</td>
+            <td>@item.User.UserName</td>
+            <td>
+                <span data-saleid="@item.SalesID">@Convert.ToDateTime(item.Date).ToString("dd/MM/yyyy")</span>
+                
+            </td>
+            <td><span id="item-price" data-saleid="@item.SalesID">@item.Price</span> </td>
+            <td>
+                <div class="update-quantity">
+                    <button class="btnIncrease" data-saleid="@item.SalesID">+</button>
+                    <span id="item-quantity" data-saleid="@item.SalesID">@item.Quantity</span>
+                    <button class="btnDecrease" data-saleid="@item.SalesID">-</button>
+                </div>
+            </td>
+
+            <td>
+                @if (item.Product.Images.Where(i => i.ProductID == item.ProductID).Any())
+                {
+                    foreach (var image in item.Product.Images.Where(i => i.ProductID == item.ProductID).ToList())
+                    {
+                        <img src="~/Content/Image/@image.ImagePath" width="80" height="60" />
+                    }
+                }
+                else
+                {
+                    <img src="~/Content/Image/Default/default-image_1080.png" width="80" height="60">
+                }
+
+            </td>
+            <td><a class="btn btn-danger btnDelete" data-id="@item.SalesID">Sil</a></td>
+            <td><a class="btn btn-warning" href="/adminproduct/update/@item.SalesID">Guncelle</a></td>
+
+        </tr>
+    }
+</table>
+@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber }), PagedListRenderOptions.Classic)
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.btnIncrease').on('click', function () {
+            var saleID = $(this).data('saleid');
+
+            increaseQuantity(saleID);
+        })
+        $('.btnDecrease').on('click', function () {
+            var saleID = $(this).data('saleid');
+
+            decreaseQuantity(saleID);
+        })
+
+    });
+    function increaseQuantity(saleID) {
+        var quantityElement = document.querySelector('#item-quantity[data-saleid="' + saleID + '"]');
+        var dateElement = document.querySelector('#item-date[data-saleid="' + saleID + '"]');
+        var priceElement = document.querySelector('#item-price[data-saleid="' + saleID + '"]');
+        $.ajax({
+            url: "/adminsales/increasequantity",
+            type: "POST",
+            data: { saleID: saleID },
+            success: (data) => {
+                quantityElement.innerText = data.newQuantity;
+                dateElement.innerText = data.newDate;
+                priceElement.innerText = data.newPrice;
+                toastr.success(data.message);
+            },
+            error: () => {
+
+                toastr.error("dasdasd");
+            }
+        })
+
+    }
+    function decreaseQuantity(saleID) {
+        var quantityElement = document.querySelector('#item-quantity[data-saleid="' + saleID + '"]');
+        var dateElement = document.querySelector('#item-date[data-saleid="' + saleID + '"]');
+        var priceElement = document.querySelector('#item-price[data-saleid="' + saleID + '"]');
+        $.ajax({
+            url: "/adminsales/decreasequantity",
+            type: "POST",
+            data: { saleID: saleID },
+            success  :function(data){
+                quantityElement.innerText= data.newQuantity;
+                dateElement.innerText= data.newDate;
+                priceElement.innerText= data.newPrice;
+                toastr.success(data.message);
+            },
+            error: function() {
+
+                toastr.error("dsasa");
+            }
+        })
+
+    }
+
+
+    //$(function () {
+    //    $("#table").on("click", ".btnDelete", function () {
+
+    //        var btn = $(this);
+    //        bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
+
+    //            if (result) {
+    //                var id = btn.data("id");
+    //                $.ajax(
+    //                    {
+    //                        type: "GET",
+    //                        url: "/adminsales/delete/" + id,
+    //                        success: function () {
+    //                            btn.parent().parent().remove();
+    //                        }
+    //                    });
+    //            } else if (result === false) {
+    //                bootbox.alert("Urun Silinmedi");
+    //            } else {
+    //                bootbox.alert("Hata Oluştu");
+    //            }
+    //        });
+
+
+    //    });
+    //});
+
+</script>

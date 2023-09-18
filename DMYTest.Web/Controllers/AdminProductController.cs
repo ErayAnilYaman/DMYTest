@@ -14,6 +14,7 @@
     using System;
     using DMYTest.Web.Constants;
     using System.Data.Entity;
+    using System.Runtime.InteropServices;
     #endregion
     public class AdminProductController : Controller
     {
@@ -190,6 +191,24 @@
             imageRepository.Update(image);
             return RedirectToAction("imageupdate");
 
+        }
+        public ActionResult CriticalStock()
+        {
+            var critical = context.Products.Where(P => P.Stock <= 25);
+            return View(critical);
+        }
+        
+        public PartialViewResult StockCount()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var count = context.Products.Where(X=>X.Stock <50).Count();
+                ViewBag.Count = count;
+                var decreasing = context.Products.Where(X => X.Stock == 50).Count();
+                ViewBag.Decreasing = decreasing;
+
+            }
+            return PartialView();
         }
 
         private bool CheckIfImageCountMax(int productId)

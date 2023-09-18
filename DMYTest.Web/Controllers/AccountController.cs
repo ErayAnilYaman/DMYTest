@@ -47,9 +47,7 @@ using System.Web.Security;
             ModelState.AddModelError("", "Parola Hatasi");
             return View("login");
         }
-
         
-
         public ActionResult Register()
         {
             return View();

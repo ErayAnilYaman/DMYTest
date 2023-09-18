@@ -138,6 +138,7 @@
     <Compile Include="Controllers\AdminCartController.cs" />
     <Compile Include="Controllers\AdminCategoryController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminOrderController.cs" />
     <Compile Include="Controllers\AdminProductController.cs" />
     <Compile Include="Controllers\AdminSalesController.cs" />
     <Compile Include="Controllers\CartController.cs" />
@@ -946,11 +947,14 @@
     <Content Include="Views\Sales\Buy.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Sales\BuyAll.cshtml" />
+    <Content Include="Views\AdminOrder\Index.cshtml" />
+    <Content Include="Views\AdminSales\Edit.cshtml" />
+    <Content Include="Views\AdminSales\Index.cshtml" />
+    <Content Include="Views\AdminProduct\StockCount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Image\Default\" />
-    <Folder Include="Views\AdminSales\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

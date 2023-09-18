@@ -13,21 +13,35 @@
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Urun")]
         public int ProductID { get; set; }
+
+
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Musteri")]
-        public int CustomerID { get; set; }
+        public int UserID { get; set; }
+
+
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Adres")]
         [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
         public string Address { get; set; }
+
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
+        [Display(Name = "Telefon Numarasi")]
+        [Phone]
+        public string Phone { get; set; }
+
+
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Siparis Tarihi")]
         public DateTime OrderDate { get; set; }
+
+
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Urun Iletildi mi")]
         public bool OrderReceived { get; set; }
 
+
         public virtual Product Product { get; set; }
-        public virtual Customer Customer { get; set; }
+        public virtual User User { get; set; }
     }
 }

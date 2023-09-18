@@ -17,6 +17,7 @@ using DMYTest.Data.Models.Abstract;
         private ICollection<Employee> _employees;
         private ICollection<Sales> _sales;
         private ICollection<Comment> _comments;
+        private ICollection<Order> _orders;
         public User()
         {
             _sales = new HashSet<Sales>();
@@ -24,6 +25,7 @@ using DMYTest.Data.Models.Abstract;
             _carts = new HashSet<Cart>();
             _suppliers = new HashSet<Supplier>();
             _employees = new HashSet<Employee>();
+            _orders = new HashSet<Order>();
         }
         public int ID { get; set; }
 
@@ -85,7 +87,7 @@ using DMYTest.Data.Models.Abstract;
                 this._suppliers = value;
             }
         }
-        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Comment> Comments { get { return _comments; } set { _comments = value; } }
         public virtual ICollection<Employee> Employees 
         {
             get 
@@ -119,5 +121,6 @@ using DMYTest.Data.Models.Abstract;
                 this._carts = value;
             }
         }
+        public virtual ICollection<Order> Orders{ get { return _orders;  } set { _orders = value; } }
     }
 }
