@@ -10,14 +10,14 @@ namespace DMYTest.Web.Controllers
     public class AdminController : Controller
     {
         InternDBContext db = new InternDBContext();
-        // GET: Admin
+
         public ActionResult Index()
         {
             return View();
         }
         public ActionResult Comment(int page = 1)
         {
-            return View(db.Comments.ToList().ToPagedList(page , 3));
+            return View(db.Comments.ToList().ToPagedList(page, 5));
         }
         public ActionResult Delete(int id)
         {

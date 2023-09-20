@@ -23,20 +23,20 @@
         ImageRepository imageRepository = new ImageRepository();
         InternDBContext context = new InternDBContext();
         // GET: AdminProduct
-        public ActionResult Index(int pageNumber=1)
-        { 
-            return View(productRepository.List().ToPagedList(pageNumber , 3));
+        public ActionResult Index(int pageNumber = 1)
+        {
+            return View(productRepository.List().ToPagedList(pageNumber, 3));
         }
-
+        #region Create
         public ActionResult Create()
         {
             List<SelectListItem> items;
-            items = (from i in context.Categories.ToList() 
-            select new SelectListItem
-            {
-                Text = i.CategoryName,
-                Value = i.CategoryID.ToString()
-            }).ToList();
+            items = (from i in context.Categories.ToList()
+                     select new SelectListItem
+                     {
+                         Text = i.CategoryName,
+                         Value = i.CategoryID.ToString()
+                     }).ToList();
 
             ViewBag.ctgr = items;
             return View();
@@ -44,7 +44,7 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Product product , HttpPostedFileBase file)
+        public ActionResult Create(Product product, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@
                     ModelState.AddModelError("", "Resim sayi siniri 5 tir bu sinir gecilemez");
                     return View();
                 }
-                
+
                 product.Date = DateTime.Now;
                 productRepository.Add(product);
                 return RedirectToAction("Index");
@@ -73,14 +73,16 @@
             return View(product);
 
         }
-        
+        #endregion
+
+
         public ActionResult Delete(int id)
         {
             var productToDelete = productRepository.GetById(id);
             productRepository.Delete(productToDelete);
             return RedirectToAction("Index");
         }
-
+        #region Update
         public ActionResult Update(int id)
         {
             var productToUpdate = productRepository.GetById(id);
@@ -103,14 +105,14 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update(Product product , HttpPostedFileBase file)
+        public ActionResult Update(Product product, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
                 var productToUpdate = productRepository.GetById(product.ProductID);
                 string path = Path.Combine("~/Content/Image/" + file.FileName);
                 file.SaveAs(Server.MapPath(path));
-                
+
                 var imageToUpdate = context.Images.SingleOrDefault(i => i.ProductID == product.ProductID);
 
                 context.Images.Remove(imageToUpdate);
@@ -119,7 +121,7 @@
                 imageToUpdate.Date = DateTime.Now;
                 imageToUpdate.ImagePath = file.FileName.ToString();
                 imageToUpdate.ProductID = product.ProductID;
-                
+
                 context.Images.Add(imageToUpdate);
                 context.SaveChanges();
 
@@ -129,26 +131,28 @@
                     ModelState.AddModelError("", "Resim sayi siniri 5 tir bu sinir gecilemez");
                     return View();
                 }
-                
+
                 productToUpdate.Date = DateTime.Now;
                 productToUpdate.ProductName = product.ProductName;
                 productToUpdate.Stock = product.Stock;
                 productToUpdate.UnitPrice = product.UnitPrice;
                 productToUpdate.CategoryID = product.CategoryID;
                 productToUpdate.Description = product.Description;
-                
+
                 productRepository.Update(productToUpdate);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Bir Hata Olustu");
             return View(product);
         }
-        
+        #endregion
+        #region ImageUpdate
         public ActionResult ImageUpdate(int id)
         {
             var productToUpdate = productRepository.GetById(id);
             var value = (from i in context.Images.Where(i => i.ProductID == id).ToList()
-                         select new SelectListItem {
+                         select new SelectListItem
+                         {
                              Value = i.ImageID.ToString(),
                              Text = i.ImagePath
                          });
@@ -159,12 +163,12 @@
                 ModelState.AddModelError("", "Bir hata olustu");
                 return HttpNotFound();
             }
-            return View(imageRepository.List().SingleOrDefault(i=>i.ProductID == id));
+            return View(imageRepository.List().SingleOrDefault(i => i.ProductID == id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ImageUpdate(Image image,HttpPostedFileBase file)
+        public ActionResult ImageUpdate(Image image, HttpPostedFileBase file)
         {
             image.Date = DateTime.Now;
             ViewBag.img = file.FileName.ToString();
@@ -185,31 +189,34 @@
             if (!ModelState.IsValid)
             {
 
-                ModelState.AddModelError("","Resmi eksiksiz bicimde girdiginize emin misiniz");
+                ModelState.AddModelError("", "Resmi eksiksiz bicimde girdiginize emin misiniz");
                 return View();
             }
             imageRepository.Update(image);
             return RedirectToAction("imageupdate");
 
         }
+        #endregion
+
+
         public ActionResult CriticalStock()
         {
             var critical = context.Products.Where(P => P.Stock <= 25);
             return View(critical);
         }
-        
-        public PartialViewResult StockCount()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                var count = context.Products.Where(X=>X.Stock <50).Count();
-                ViewBag.Count = count;
-                var decreasing = context.Products.Where(X => X.Stock == 50).Count();
-                ViewBag.Decreasing = decreasing;
 
-            }
-            return PartialView();
-        }
+        //public PartialViewResult StockCount()
+        //{
+        //    if (User.Identity.IsAuthenticated)
+        //    {
+        //        var count = context.Products.Where(X=>X.Stock <50).Count();
+        //        ViewBag.Count = count;
+        //        var decreasing = context.Products.Where(X => X.Stock == 50).Count();
+        //        ViewBag.Decreasing = decreasing;
+
+        //    }
+        //    return PartialView();
+        //}
 
         private bool CheckIfImageCountMax(int productId)
         {

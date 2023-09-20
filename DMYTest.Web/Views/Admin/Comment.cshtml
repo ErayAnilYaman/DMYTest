@@ -16,16 +16,13 @@
     </tr>
     @foreach (var item in Model)
     {
-    <tr>
-        <td>@item.Contents</td>
-        <td>@item.Product.ProductName</td>
-        <td>@item.User.FirstName @item.User.LastName</td>
-        <td>@item.Date</td>
-        <td><a class="btn btn-danger btnDelete" data-id="@item.ID">Sil</a></td>
-
-
-
-    </tr>
+        <tr>
+            <td>@item.Contents</td>
+            <td>@item.Product.ProductName</td>
+            <td>@item.User.FirstName @item.User.LastName</td>
+            <td>@item.Date</td>
+            <td><span class="btnDelete" data-id="@item.ID"><a class="btn btn-danger">Sil</a></span></td>
+        </tr>
     }
 </table>
 
@@ -34,31 +31,64 @@
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 
 <script type="text/javascript">
-    $(function () {
-        $("#table").on("click", ".btnDelete", function () {
 
+
+
+    $(document).ready(function () {
+        $('.btnDelete').on('click', function () {
             var btn = $(this);
-            bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
-
-                if (result) {
-                    var id = btn.data("id");
-                    $.ajax(
-                        {
-                            type: "GET",
-                            url: "/admin/delete/" + id,
-                            success: function () {
-                                btn.parent().parent().remove();
-                            }
-                        });
-                } else if (result === false) {
-                    bootbox.alert("Urun Silinmedi");
-                } else {
-                    bootbox.alert("Hata Oluştu");
-                }
-            });
-
-
+            deleteById(btn);
         });
+
     });
+    function deleteById(btn) {
+        var id = btn.data('id');
+
+        bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
+            if (result) {
+                $.ajax({
+                    type: "GET",
+                    url: "/admin/delete/" + id,
+                    success: () => {
+                        btn.parent().parent().remove();
+                        bootbox.success("Yorum Silindi!!");
+                    }
+                })
+            }
+            else if (result === false) {
+                bootbox.alert("Silinemedi");
+            }
+            else {
+                bootbox.alert("Silinmedi");
+            }
+        })
+    }
+
+    //$(function () {
+    //    $("#table").on("click", ".btnDelete", function () {
+
+
+    //        bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
+
+    //            if (result) {
+    //                $.ajax(
+    //                    {
+    //                        type: "GET",
+    //                        url: "/admin/delete/" + id,
+    //                        success: function () {
+    //                            btn.parent().parent().remove();
+    //                        }
+    //                    });
+    //            } else if (result === false) {
+    //                bootbox.alert("Urun Silinmedi");
+    //            } else {
+    //                bootbox.alert("Hata Oluştu");
+    //            }
+    //        });
+
+
+    //    });
+    //});
 
 </script>
+@Html.PagedListPager(Model, pageNumber => Url.Action("Comment", new { pageNumber }), PagedListRenderOptions.Classic)

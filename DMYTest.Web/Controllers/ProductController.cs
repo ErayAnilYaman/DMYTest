@@ -4,6 +4,7 @@
     using DMYTest.Data.Concrete;
     using DMYTest.Data.Context;
     using DMYTest.Data.Models;
+    using System;
     using System.Linq;
     using System.Web.Mvc;
     #endregion
@@ -25,23 +26,27 @@
             ViewBag.Comment = comment;
             return View(details);
         }
+        
         [HttpPost]
-        public ActionResult Comment(Comment comment)
+        public JsonResult AddComment(int productID ,string content)
         {
             if (User.Identity.IsAuthenticated)
             {
-                if (ModelState.IsValid)
+                var user = context.Users.FirstOrDefault(U=>U.Email == User.Identity.Name);
+                var comment = new Comment
                 {
-                    context.Comments.Add(comment);
-                    context.SaveChanges();
-                    return RedirectToAction("Index", "Home");
-                }
+                    Contents = content,
+                    Date = DateTime.Now,
+                    ProductID = productID,
+                    UserID = user.ID,
 
-                ModelState.AddModelError("", "Yorumu Eksiksiz bir sekilde giriniz");
-                return View();
+                };
+                context.Comments.Add(comment);
+                context.SaveChanges();
+                return Json(new { success = true, message = "Yorumunuz Eklendi", productID = comment.ProductID, content = comment.Contents, username = user.UserName, date = DateTime.Now.ToString(), commentID = comment.ID});
             }
-            ModelState.AddModelError("","Once uye olmaniz veya oturum acmaniz gerekiyor.");
-            return RedirectToAction("index","home");
+            return Json(new { success = false, message = "Yorum yapabilmek icin giris yapmalisiniz!" });
+            
         }
     }
 }
