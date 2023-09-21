@@ -46,11 +46,11 @@
                         }
                     </td>
                     <td><a href="/cart/delete/@item.CartID" class="btn btn-danger" id="item-cartID" onclick="return confirm('Emin misiniz')">Sil</a></td>
-                    <td>    <span id="item-price" data-cartid="@item.CartID" >@item.Price</span> TL</td>
+                    <td>    <span id="item-price" data-cartid="@item.CartID">@item.Price</span> TL</td>
                     <td><a href="/sales/buy/@item.CartID" class="btn btn-success">Satın Al</a></td>
                 </tr>
             }
-            <p>Toplam Tutar :<span id="item-total-price" >@Model.Sum(m => m.Quantity * m.Product.UnitPrice)</span> TL</p>
+            <p>Toplam Tutar :<span id="item-total-price">@Model.Sum(m => m.Quantity * m.Product.UnitPrice)</span> TL</p>
         </tbody>
     </table>
 
@@ -100,14 +100,14 @@ else
 
         $('.btnIncrease').on('click', function () {
             var cartID = $(this).data('cartid');
-            
-            
-            increaseQuantity(cartID );
+
+
+            increaseQuantity(cartID);
         })
         $('.btnDecrease').on('click', function () {
             var cartID = $(this).data('cartid');
-            
-            decreaseQuantity(cartID );
+
+            decreaseQuantity(cartID);
         })
 
     });
@@ -122,7 +122,7 @@ else
             data: { cartID: cartID },
             success: function (data) {
                 priceElement.innerText = data.currentPrice + money;
-                quantityElement.innerText= data.currentQuantity;
+                quantityElement.innerText = data.currentQuantity;
                 totalPriceElement.innerText = data.totalPrice + money;
                 toastr.info(data.message);
             },

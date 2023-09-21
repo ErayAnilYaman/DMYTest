@@ -16,12 +16,12 @@
         <th>Satis Adedi</th>
         <th>Resim</th>
         <th>Sil</th>
-        <th>Guncelle</th>
+        <th>Guncelle</th>  
 
     </tr>
     @foreach (var item in Model)
     {
-        <tr>
+        <tr id="sale-table" data-saleid="@item.SalesID">
             <td>@item.Product.ProductName</td>
             <td>@item.User.UserName</td>
             <td>
@@ -52,7 +52,7 @@
 
             </td>
             <td><a class="btn btn-danger btnDelete" data-id="@item.SalesID">Sil</a></td>
-            <td><a class="btn btn-warning" href="/adminproduct/update/@item.SalesID">Guncelle</a></td>
+            <td><a class="btn btn-warning btnAddOrder" href="/adminorder/add/@item.SalesID" data-saleid="@item.SalesID">Siparisi Ver</a></td>
 
         </tr>
     }
@@ -75,8 +75,13 @@
 
             decreaseQuantity(saleID);
         })
+        $('.btnAddOrder').on('click', function () {
+            var saleID = $(this).data('id');
+            takeOrder(saleID);
+        })
 
     });
+    
     function increaseQuantity(saleID) {
         var quantityElement = document.querySelector('#item-quantity[data-saleid="' + saleID + '"]');
         var dateElement = document.querySelector('#item-date[data-saleid="' + saleID + '"]');

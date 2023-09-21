@@ -21,6 +21,7 @@ namespace DMYTest.Web.Controllers
     {
         // GET: Cart
         InternDBContext context = new InternDBContext();
+
         public ActionResult Index(decimal? price)
         {
 

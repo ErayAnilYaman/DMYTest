@@ -15,6 +15,7 @@
     using DMYTest.Web.Constants;
     using System.Data.Entity;
     using System.Runtime.InteropServices;
+    using System.Web.Security;
     #endregion
     public class AdminProductController : Controller
     {
@@ -23,25 +24,33 @@
         ImageRepository imageRepository = new ImageRepository();
         InternDBContext context = new InternDBContext();
         // GET: AdminProduct
+        [Authorize(Roles = "admin")]
         public ActionResult Index(int pageNumber = 1)
         {
             return View(productRepository.List().ToPagedList(pageNumber, 3));
         }
         #region Create
+        [Authorize(Roles = "admin")]
         public ActionResult Create()
         {
-            List<SelectListItem> items;
-            items = (from i in context.Categories.ToList()
-                     select new SelectListItem
-                     {
-                         Text = i.CategoryName,
-                         Value = i.CategoryID.ToString()
-                     }).ToList();
+            
+            var user = context.Users.FirstOrDefault(U=>U.Email == User.Identity.Name);
+            if (true)
+            {
+                List<SelectListItem> items;
+                items = (from i in context.Categories.ToList()
+                         select new SelectListItem
+                         {
+                             Text = i.CategoryName,
+                             Value = i.CategoryID.ToString()
+                         }).ToList();
 
-            ViewBag.ctgr = items;
-            return View();
+                ViewBag.ctgr = items;
+                return View();
+            }
+            
         }
-
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Product product, HttpPostedFileBase file)
@@ -75,7 +84,7 @@
         }
         #endregion
 
-
+        [Authorize(Roles = "admin")]
         public ActionResult Delete(int id)
         {
             var productToDelete = productRepository.GetById(id);
@@ -83,6 +92,7 @@
             return RedirectToAction("Index");
         }
         #region Update
+        [Authorize(Roles = "admin")]
         public ActionResult Update(int id)
         {
             var productToUpdate = productRepository.GetById(id);
@@ -102,7 +112,7 @@
             return View(productToUpdate);
 
         }
-
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Update(Product product, HttpPostedFileBase file)
@@ -147,6 +157,7 @@
         }
         #endregion
         #region ImageUpdate
+        [Authorize(Roles = "admin")]
         public ActionResult ImageUpdate(int id)
         {
             var productToUpdate = productRepository.GetById(id);
@@ -165,7 +176,7 @@
             }
             return View(imageRepository.List().SingleOrDefault(i => i.ProductID == id));
         }
-
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ImageUpdate(Image image, HttpPostedFileBase file)
@@ -198,25 +209,51 @@
         }
         #endregion
 
+        #region Jquery
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public ActionResult IncreaseStock(int productID)
+        {
+            var product = context.Products.Find(productID);
+            if (product != null)
+            {
+                product.Stock++;
+                context.SaveChanges();
+                return Json(new { success = true, message = "Stok Arttirildi", newStock = product.Stock });
+            }
+            return Json(new { success = false, message = "Urun Bulunamadi" });
+        }
 
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public ActionResult DecreaseStock(int productID)
+        {
+            try
+            {
+                var product = context.Products.Find(productID);
+                if (product != null)
+                {
+                    product.Stock--;
+                    context.SaveChanges();
+                    return Json(new { success = true, message = "Urun Stogu dusuruldu!", newStock = product.Stock });
+                }
+                return Json(new { success = false, message = "Urun Bulunamadi!" });
+            }
+            catch (Exception e)
+            {
+                return Json(new {success = false , message = e.InnerException });
+                
+            }
+            
+        }
+        #endregion
+        [Authorize(Roles = "admin")]
         public ActionResult CriticalStock()
         {
             var critical = context.Products.Where(P => P.Stock <= 25);
             return View(critical);
         }
-
-        //public PartialViewResult StockCount()
-        //{
-        //    if (User.Identity.IsAuthenticated)
-        //    {
-        //        var count = context.Products.Where(X=>X.Stock <50).Count();
-        //        ViewBag.Count = count;
-        //        var decreasing = context.Products.Where(X => X.Stock == 50).Count();
-        //        ViewBag.Decreasing = decreasing;
-
-        //    }
-        //    return PartialView();
-        //}
 
         private bool CheckIfImageCountMax(int productId)
         {

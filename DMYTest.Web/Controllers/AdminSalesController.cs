@@ -11,16 +11,24 @@ namespace DMYTest.Web.Controllers
     using System;
     using DMYTest.Data.Context;
     using System.Linq;
+    using DMYTest.Data.Abstract;
     #endregion
     public class AdminSalesController : Controller
     {
         InternDBContext db = new InternDBContext();
+
         SaleRepository srepository = new SaleRepository();
+
+
+        [Authorize(Roles = "admin")]
         public ActionResult Index(int pageNumber = 1)
         {
             var listedResults = srepository.List();
             return View(listedResults.ToPagedList(pageNumber, 4));
         }
+
+
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
@@ -29,17 +37,21 @@ namespace DMYTest.Web.Controllers
             srepository.Delete(saleToDelete);
             return View("Index");
         }
+
+
         #region JsonResult
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public JsonResult IncreaseQuantity(int saleID)
         {
             try
             {
-                var sale = srepository.GetById(saleID);
+                var sale = db.Sales.Find(saleID);
                 var product = db.Products.FirstOrDefault(P => P.ProductID == sale.ProductID);
-                if (sale.Quantity < product.Stock)
+                if (product.Stock > 0)
                 {
                     sale.Quantity++;
+                    product.Stock--;
                     sale.Price = sale.Quantity * product.UnitPrice;
                     sale.Date = DateTime.Now;
                     db.SaveChanges();
@@ -54,23 +66,23 @@ namespace DMYTest.Web.Controllers
                 return Json(new { success = false, error = "Hata" });
             }
         }
-
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public JsonResult DecreaseQuantity(int saleID)
         {
             try
             {
-                var sale = srepository.GetById(saleID);
-                var user = db.Users.FirstOrDefault(U => U.Email == User.Identity.Name);
+                var sale = db.Sales.Find(saleID);
                 var product = db.Products.FirstOrDefault(P => P.ProductID == sale.ProductID);
                 if (sale.Quantity > 1)
                 {
-                    sale.Quantity = sale.Quantity - 1;
+                   
+                    sale.Quantity--;
+                    product.Stock++;
                     sale.Price = sale.Quantity * product.UnitPrice;
                     sale.Date = DateTime.Now;
                     db.SaveChanges();
-                    var newQuantity = sale.Quantity;
-
+                    
                     return Json(new { success = true, message = "Satis Guncellendi!!", newPrice = sale.Price, newQuantity = sale.Quantity, newDate = sale.Date });
                 }
 

@@ -1,5 +1,4 @@
-﻿
-@using PagedList;
+﻿@using PagedList;
 @using PagedList.Mvc;
 
 @model PagedList.IPagedList<DMYTest.Data.Models.Product>
@@ -8,6 +7,9 @@
     ViewBag.Title = "Index";
 
 }
+
+<link href="~/Content/toastr.css" rel="stylesheet" />
+
 <a class="btn btn-success" href="/adminproduct/create">Urun Ekle</a>
 <br />
 <br />
@@ -26,37 +28,122 @@
     </tr>
     @foreach (var item in Model)
     {
-    <tr>
-        <td>@item.ProductName</td>
-        <td>@item.Description</td>
-        <td>@item.UnitPrice</td>
-        <td>@item.Stock</td>
-        <td>@item.Category.CategoryName</td>
-        <td>
-            @if (item.Images.Where(i => i.ProductID == item.ProductID).Any())
-            {
-                foreach (var image in item.Images.Where(i => i.ProductID == item.ProductID).ToList())
+        <tr>
+            <td>@item.ProductName</td>
+            <td>@item.Description</td>
+            <td>@item.UnitPrice</td>
+            <td>
+                <div class="update-quantity">
+                    <button class="btnIncrease" data-id="@item.ProductID">+</button>
+                    <span id="item-quantity" data-id="@item.ProductID" >@item.Stock</span>
+                    <button class="btnDecrease" data-id="@item.ProductID">-</button>
+                </div>
+            </td>
+
+            <td>@item.Category.CategoryName</td>
+            <td>
+                @if (item.Images.Where(i => i.ProductID == item.ProductID).Any())
                 {
-                    <img src="~/Content/Image/@image.ImagePath" width="80" height="60" />
+                    foreach (var image in item.Images.Where(i => i.ProductID == item.ProductID).ToList())
+                    {
+                        <img src="~/Content/Image/@image.ImagePath" width="80" height="60" />
+                    }
                 }
-            }
-            else
-            {
-                <img src="~/Content/Image/Default/default-image_1080.png" width="80" height="60">
-            }
+                else
+                {
+                    <img src="~/Content/Image/Default/default-image_1080.png" width="80" height="60">
+                }
 
-        </td>
-        <td><a class="btn btn-danger btnDelete" data-id="@item.ProductID">Sil</a></td>
-        <td><a class="btn btn-warning" href="/adminproduct/update/@item.ProductID">Guncelle</a></td>
+            </td>
+            <td><a class="btn btn-danger btnDelete" data-id="@item.ProductID">Sil</a></td>
+            <td><a class="btn btn-warning" href="/adminproduct/update/@item.ProductID">Guncelle</a></td>
 
-    </tr>
+        </tr>
     }
 </table>
 @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber }), PagedListRenderOptions.Classic)
+<!-- #region style -->
+<style>
+    .update-quantity {
+        display: flex;
+        align-items: center;
+    }
+
+        .update-quantity button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+            .update-quantity button:hover {
+                background-color: #0056b3;
+            }
+</style>
+<!-- #endregion -->
+
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/toastr.js"></script>
 
+<!-- #region script -->
 <script type="text/javascript">
+    $(document).ready(function () {
+        $('.btnIncrease').on('click', function () {
+            var productID = $(this).data('id');
+            increase(productID);
+        })
+
+        $('.btnDecrease').on('click', function () {
+            var productID = $(this).data('id');
+            decrease(productID);
+        })
+    });
+    function increase(productID) {
+        var stockElement = document.querySelector('#item-quantity[data-id="' + productID + '"]');
+
+        $.ajax({
+            url: "/adminproduct/increasestock",
+            type: "POST",
+            data: { productID: productID },
+            success: function (data) {
+                if (data.success === true) {
+                    stockElement.innerText = data.newStock;
+                    toastr.success(data.message);
+                }
+                else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function () {
+                toastr.error("There is an error!!");
+            }
+
+        });
+    }
+    function decrease(productID) {
+        var stockElement = document.querySelector('#item-quantity[data-id="' + productID + '"]');
+        $.ajax({
+            url: "/adminproduct/decreasestock",
+            type: "POST",
+            data: { productID: productID },
+            success: function (data) {
+                if (data.success === true) {
+                    stockElement.innerText = data.newStock;
+                    toastr.success(data.message);
+                }
+                else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function () {
+                toastr.error("There is an error !!");
+            }
+        })
+    }
+
     $(function () {
         $("#table").on("click", ".btnDelete", function () {
 
@@ -71,6 +158,7 @@
                             url: "/adminproduct/delete/" + id,
                             success: function () {
                                 btn.parent().parent().remove();
+                                toastr.info("Urun silindi !");
                             }
                         });
                 } else if (result === false) {
@@ -85,3 +173,4 @@
     });
 
 </script>
+<!-- #endregion -->

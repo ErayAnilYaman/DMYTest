@@ -11,7 +11,10 @@ namespace DMYTest.Web.Controllers
     {
 
         // GET: AdminCart
+
         CartRepository cartRepository = new CartRepository();
+
+        [Authorize(Roles = "admin")]
         public ActionResult Index(int page = 1)
         {
             

@@ -14,14 +14,21 @@ using System.Web.Mvc;
         CategoryRepository categoryRepository = new CategoryRepository();
         InternDBContext db = new InternDBContext();
 
+        [Authorize(Roles = "admin")]
         public ActionResult Index()
         {
             return View(categoryRepository.List());
         }
+
+
+        [Authorize(Roles = "admin")]
         public ActionResult Create()
         {
             return View();
         }
+
+
+        [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Create(Category category)
@@ -35,7 +42,8 @@ using System.Web.Mvc;
             return View();
         }
 
-        
+
+        [Authorize(Roles = "admin")]
         public ActionResult Delete(int id)
         {
             var deleteEntity = categoryRepository.GetById(id);
@@ -44,6 +52,8 @@ using System.Web.Mvc;
             return RedirectToAction("Index");
         }
 
+
+        [Authorize(Roles = "admin")]
         public ActionResult Update(int id)
         {
             var categoryToUpdate = categoryRepository.GetById(id);
@@ -53,6 +63,9 @@ using System.Web.Mvc;
             }
             return View(categoryToUpdate);
         }
+
+
+        [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Update(Category category)

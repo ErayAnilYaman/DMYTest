@@ -12,19 +12,15 @@ namespace DMYTest.Web
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            
 
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Contact", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 
-            routes.MapRoute(
-                name: "AdminCategory.Delete",
-                url: "AdminCategory/Delete/{id}",
-                defaults: new { controller = "AdminCategory", action = "Delete", id = UrlParameter.Optional }
-            );
+           
             
         }
     }

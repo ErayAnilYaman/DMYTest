@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Index";
 }
+<link href="~/Content/toastr.css" rel="stylesheet" />
+
 <a class="btn btn-success" href="/admincategory/create">Kategori Ekle</a>
 <br />
 <br />
@@ -28,8 +30,8 @@
 </table>
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-
-<script type="text/javascript" >
+<script src="~/Scripts/toastr.js"></script>
+<script type="text/javascript">
     $(function () {
         $("#table").on("click", ".btnDelete", function () {
 
@@ -44,6 +46,7 @@
                             url: "/admincategory/delete/" + id,
                             success: function () {
                                 btn.parent().parent().remove(); // btn.parent().parent() yerine btn.closest("tr") kullanımı
+                                toastr.info("Kategori   Silindi");
                             }
                         });
                 } else if (result === false) {
@@ -57,5 +60,5 @@
         });
     });
 
-    
+
 </script>

@@ -10,15 +10,21 @@ namespace DMYTest.Web.Controllers
     public class AdminController : Controller
     {
         InternDBContext db = new InternDBContext();
-
+        [Authorize(Roles="admin")]
         public ActionResult Index()
         {
             return View();
         }
+
+
+        [Authorize(Roles = "admin")]
         public ActionResult Comment(int page = 1)
         {
             return View(db.Comments.ToList().ToPagedList(page, 5));
         }
+
+
+        [Authorize(Roles = "admin")]
         public ActionResult Delete(int id)
         {
             var commentToDelete = db.Comments.Where(x => x.ID == id).FirstOrDefault();

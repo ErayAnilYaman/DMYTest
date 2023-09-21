@@ -2,13 +2,13 @@
 namespace DMYTest.Web.Controllers
 {
     #region Usings
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using PagedList.Mvc;
-using PagedList;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+    using PagedList.Mvc;
+    using PagedList;
     using DMYTest.Data.Context;
     using DMYTest.Data.Models;
     using System.ComponentModel;
@@ -26,30 +26,35 @@ using PagedList;
             if (User.Identity.IsAuthenticated)
             {
                 var username = User.Identity.Name;
-                var user = context.Users.FirstOrDefault(x=>x.Email == username);
-                var model = context.Sales.Where(x => x.UserID == user.ID).ToList().ToPagedList(page,3);
+                var user = context.Users.FirstOrDefault(x => x.Email == username);
+                var model = context.Sales.Where(x => x.UserID == user.ID).ToList().ToPagedList(page, 3);
 
                 return View(model);
 
             }
-            return View("login","account");
+            return RedirectToAction("login", "account");
         }
-
+        #region Buy
         public ActionResult Buy(int id)
         {
-            var model = context.Carts.FirstOrDefault(C=>C.CartID == id);
-            return View(model);
-        }
+            if (User.Identity.IsAuthenticated)
+            {
+                var model = context.Carts.FirstOrDefault(C => C.CartID == id);
+                return View(model);
+            }
+            return HttpNotFound();
 
+        }
+        [Authorize]
         [HttpPost]
         public ActionResult BuyPost(Cart cart)
         {
             try
             {
-                if (ModelState.IsValid)
+                if (ModelState.IsValid && User.Identity.IsAuthenticated)
                 {
 
-                    var model = context.Carts.FirstOrDefault(x => x.CartID ==cart.CartID);
+                    var model = context.Carts.FirstOrDefault(x => x.CartID == cart.CartID);
                     var sale = new Sales
                     {
                         Date = DateTime.Now,
@@ -63,8 +68,12 @@ using PagedList;
                     context.Carts.Remove(model);
                     context.Sales.Add(sale);
                     context.SaveChanges();
-                    
+
                     ViewBag.progress = "Satin alma islemi basarili bir sekilde gerceklesmistir";
+                }
+                else
+                {
+                    return HttpNotFound();
                 }
             }
             catch (SqlException ex)
@@ -77,16 +86,27 @@ using PagedList;
             return View("progress");
 
         }
+        [Authorize]
         public ActionResult BuyAll(int id)
         {
-            var model = context.Carts.Where(C => C.UserID == id).ToList();
-            ViewBag.Cost = context.Carts.Where(C => C.UserID == id).Sum(C => C.Price);
-            return View(model);
+            if (User.Identity.IsAuthenticated)
+            {
+                var model = context.Carts.Where(C => C.UserID == id);
+                ViewBag.Cost = model.Sum(C => C.Price);
+                return View(model.ToList());
+            }
+            return HttpNotFound();
+
         }
+
         [HttpPost]
         public ActionResult BuyAll(List<Cart> carts)
         {
-            if (User.Identity.IsAuthenticated && ModelState.IsValid)
+            if (!User.Identity.IsAuthenticated)
+            {
+                return HttpNotFound();
+            }
+            if (ModelState.IsValid)
             {
                 var username = User.Identity.Name;
                 var user = context.Users.FirstOrDefault(U => U.Email == username);
@@ -117,6 +137,8 @@ using PagedList;
             ModelState.AddModelError("", "Islem basarisiz");
             return View();
         }
+        #endregion
+
 
 
 
