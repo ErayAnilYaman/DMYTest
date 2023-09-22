@@ -5,14 +5,24 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     #endregion
 
     public class Customer : IEntity
     {
-        
-        
-        public int CustomerID { get; set; }
+
+
+        private User _user;
+        public Customer()
+        {
+            _user = new User();
+        }
+
+        [Key]
+
+        [ForeignKey("User")]
+        public int UserID { get; set; }
 
 
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
@@ -27,11 +37,20 @@
         public string Address { get; set; }
 
 
+        [Required(ErrorMessage = "Lutfen Email Adres kismini doldurunuz!")]
+        [StringLength(75, ErrorMessage = "Karakter sinirini gectiniz maksimum 75 karakter girebilirsiniz!")]
+        [Display(Name = "Ofis Mail Adresi")]
+        [EmailAddress]
+        public string OfficeEmailAddress { get; set; }
+
+
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Telefon Numarasi")]
         [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
+        [Phone]
         public string Phone { get; set; }
 
+        public virtual User User { get; set; }
 
     }
 }

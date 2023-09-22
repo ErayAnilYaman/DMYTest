@@ -96,6 +96,28 @@ namespace DMYTest.Web.Controllers
 
 
         }
+        [Authorize(Roles = "admin")]
+        public ActionResult DeleteById(int id)
+        {
+            try
+            {
+                var sale = db.Sales.Find(id);
+                var quantityOfSale = sale.Quantity;
+                var product = db.Products.FirstOrDefault(p => p.ProductID == sale.ProductID);
+                if (sale != null && product != null)
+                {
+                    db.Sales.Remove(sale);
+                    product.Stock += sale.Quantity;
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Satis Silindi!" });
+                }
+                return Json(new { success = false, message = "Satis Bulunamadi" });
+            }
+            catch (Exception e )
+            {
+                return Json(new { success = false, message = e.Message });
+            }
+        }
         #endregion
 
 

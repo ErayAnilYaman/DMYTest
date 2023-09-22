@@ -52,7 +52,7 @@ using System.Web.Mvc;
             return RedirectToAction("Index");
         }
 
-
+        #region Update
         [Authorize(Roles = "admin")]
         public ActionResult Update(int id)
         {
@@ -82,6 +82,8 @@ using System.Web.Mvc;
             ModelState.AddModelError("", "Bir hata olustu");
             return View(category);
         }
+        #endregion
+
 
     }
 }

@@ -11,8 +11,8 @@
 
 @if (Model.Count > 0)
 {
-    <h3>Sepetim</h3>
-    <table class="table table-bordered" id="table">
+    
+    <table class="table table-bordered cart-table" id="cart-table">
         <thead>
             <tr>
                 <th>Ürün Bilgisi</th>
@@ -28,7 +28,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr class="operation">
+                <tr class="operation" id="tableChild" data-cartid="@item.CartID">
                     <td>@item.Product.ProductName</td>
                     <td>
                         <div class="update-quantity">
@@ -45,24 +45,25 @@
                             <img src="~/Content/Image/@i" width="90" height="90" />
                         }
                     </td>
-                    <td><a href="/cart/delete/@item.CartID" class="btn btn-danger" id="item-cartID" onclick="return confirm('Emin misiniz')">Sil</a></td>
+                    <td><span class="btn btn-danger btnDelete" id="btnDeleteById" data-cartid="@item.CartID">Sil</span></td>
                     <td>    <span id="item-price" data-cartid="@item.CartID">@item.Price</span> TL</td>
-                    <td><a href="/sales/buy/@item.CartID" class="btn btn-success">Satın Al</a></td>
+                    <td><a href="/customer/create/@item.CartID" class="btn btn-success">Satın Al</a></td>
                 </tr>
             }
-            <p>Toplam Tutar :<span id="item-total-price">@Model.Sum(m => m.Quantity * m.Product.UnitPrice)</span> TL</p>
+            <p id="total-price-element">Toplam Tutar :<span id="item-total-price">@Model.Sum(m => m.Quantity * m.Product.UnitPrice)</span> TL</p>
+            <h2 id="cart-message"></h2>
         </tbody>
     </table>
 
-    <div class="container"> </div>
-    <br />
-
-    <div class="container form-group">
-        <a href="/sales/buyall/@ViewBag.userID" class="btn btn-success form-control">Tümünü Satın Al</a>
+    <div id="action-methods">
+        <div class="container form-group">
+            <a href="/sales/buyall" class="btn btn-success form-control">Tümünü Satın Al</a>
+        </div>
+        <div class="container form-group">
+            <span class="btn btn-danger form-control btnDeleteAll">Hepsini Sil</span>
+        </div>
     </div>
-    <div class="container form-group">
-        <a href="/cart/deleteall" class="btn btn-danger form-control">Hepsini Sil</a>
-    </div>
+    
 }
 else
 {
@@ -94,6 +95,7 @@ else
 <script src="~/Scripts/toastr.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
 
+
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -101,13 +103,21 @@ else
         $('.btnIncrease').on('click', function () {
             var cartID = $(this).data('cartid');
 
-
             increaseQuantity(cartID);
         })
         $('.btnDecrease').on('click', function () {
             var cartID = $(this).data('cartid');
 
             decreaseQuantity(cartID);
+        })
+
+        $('.btnDelete').on('click', function () {
+            var cartID = $(this).data('cartid');
+
+            deleteById(cartID);
+        })
+        $('.btnDeleteAll').on('click', function () {
+            deleteAll();
         })
 
     });
@@ -157,9 +167,51 @@ else
                 taostr.error("DMKSD");
             }
         });
-
-
     }
+    function deleteById(cartID) {
+        var tableElement = document.querySelector('#tableChild[data-cartid="' + cartID + '"]');
+
+        $.ajax({
+            url: "/cart/deletebyid",
+            type: "POST",
+            data: { cartID: cartID },
+            success: function (data) {
+                if (data.success) {
+                    tableElement.remove();
+                    toastr.info(data.message);
+                }
+                else {
+                    toastr.error(data.message);
+                }
+            }
+
+        })
+    }
+    function deleteAll() {
+        var tableElement = document.querySelector('#cart-table');
+        var totalPriceElement = document.getElementById('total-price-element');
+        var cartMessageElement = document.getElementById('cart-message');
+        var actionMethodsElement = document.getElementById('action-methods');
+        $.ajax({
+            url: "/cart/deleteall",
+            type: "POST",
+            success: function (data) {
+                if (data.success) {
+                    tableElement.remove();
+                    totalPriceElement.remove();
+                    actionMethodsElement.remove();
+                    cartMessageElement.innerText = "Sepetinizde Urun Bulunamamistir!";
+                    toastr.info(data.message);
+
+                }
+                else {
+                    toastr.error(data.message);
+                }
+            }
+        })
+    }
+
+    
 
 
 </script>

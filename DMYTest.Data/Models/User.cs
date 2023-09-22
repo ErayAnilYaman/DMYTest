@@ -75,7 +75,9 @@ using DMYTest.Data.Models.Abstract;
         [StringLength(50, ErrorMessage = "karakter sinirini gectiniz")]
         public string Role { get; set; }
 
+        public virtual Customer Customer { get; set; }
 
+        
         public virtual ICollection<Supplier> Suppliers 
         {
             get 

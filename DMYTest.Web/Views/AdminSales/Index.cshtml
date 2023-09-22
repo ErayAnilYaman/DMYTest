@@ -51,7 +51,7 @@
                 }
 
             </td>
-            <td><a class="btn btn-danger btnDelete" data-id="@item.SalesID">Sil</a></td>
+            <td><span class="btn btn-danger btnDelete" id="btnDelete" data-id="@item.SalesID">Sil</span></td>
             <td><a class="btn btn-warning btnAddOrder" href="/adminorder/add/@item.SalesID" data-saleid="@item.SalesID">Siparisi Ver</a></td>
 
         </tr>
@@ -101,8 +101,8 @@
                 toastr.error("dasdasd");
             }
         })
-
     }
+
     function decreaseQuantity(saleID) {
         var quantityElement = document.querySelector('#item-quantity[data-saleid="' + saleID + '"]');
         var dateElement = document.querySelector('#item-date[data-saleid="' + saleID + '"]');
@@ -126,31 +126,37 @@
     }
 
 
-    //$(function () {
-    //    $("#table").on("click", ".btnDelete", function () {
+    $(function () {
+        $("#table").on("click", ".btnDelete", function () {
 
-    //        var btn = $(this);
-    //        bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
+            var btn = $(this);
+            bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
 
-    //            if (result) {
-    //                var id = btn.data("id");
-    //                $.ajax(
-    //                    {
-    //                        type: "GET",
-    //                        url: "/adminsales/delete/" + id,
-    //                        success: function () {
-    //                            btn.parent().parent().remove();
-    //                        }
-    //                    });
-    //            } else if (result === false) {
-    //                bootbox.alert("Urun Silinmedi");
-    //            } else {
-    //                bootbox.alert("Hata Oluştu");
-    //            }
-    //        });
+                if (result) {
+                    var id = btn.data("id");
+                    $.ajax(
+                        {
+                            type: "GET",
+                            url: "/adminsales/deletebyid/" + id,
+                            success: function (data) {
+                                if (data.success) {
+                                    btn.parent().parent().remove();
+                                    bootbox.alert(data.message);
+                                }
+                                else {
+                                    bootbox.alert(data.message);
+                                }
+                            }
+                        });
+                } else if (result === false) {
+                    bootbox.alert("Urun Silinmedi");
+                } else {
+                    bootbox.alert("Hata Oluştu");
+                }
+            });
 
 
-    //    });
-    //});
+        });
+    });
 
 </script>

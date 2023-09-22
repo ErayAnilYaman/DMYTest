@@ -6,6 +6,7 @@ namespace DMYTest.Web.Controllers
     using DMYTest.Data.Context;
     using DMYTest.Data.Models;
     using DMYTest.Web.RazorView;
+    using Microsoft.Ajax.Utilities;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -108,42 +109,49 @@ namespace DMYTest.Web.Controllers
                 {
                     ViewBag.count = "";
                 }
-
+                
             }
             return PartialView();
         }
         #region DeleteMethods
-        public ActionResult Delete(int ID)
-        {
-            var user = context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
-            if (User.Identity.IsAuthenticated && user != null)
-            {
-                var cartToDelete = context.Carts.Find(ID);
-                context.Carts.Remove(cartToDelete);
-                context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return RedirectToAction("login", "account");
 
-        }
-        public ActionResult DeleteAll()
+        [Authorize]
+        [HttpPost]
+        public JsonResult DeleteAll()
         {
-            var user = context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
-            if (User.Identity.IsAuthenticated && user != null)
+            
+            var user = context.Users.FirstOrDefault(U => U.Email== User.Identity.Name);
+            var carts = user.Carts.ToList();
+            if (user !=null && carts !=null)
             {
-                var baskets = context.Carts.Where(c => c.UserID == user.ID).ToList();
-                foreach (var item in baskets)
+                foreach (var cart in carts)
                 {
-                    context.Carts.Remove(item);
+                    context.Carts.Remove(cart);
                     context.SaveChanges();
                 }
-                return RedirectToAction("Index");
+                return Json(new { success = true , message = "Urunlerin Hepsi Silindi!!" });
             }
-            return RedirectToAction("login", "account");
+            return Json(new {success = false , message = "Silinecek urun Bulunamadi"});
+        }
+        
+        [Authorize]
+        [HttpPost]
+        public JsonResult DeleteById(int cartID)
+        {
+            var user = context.Users.FirstOrDefault(U => U.Email == User.Identity.Name);
+            var cartToDelete = user.Carts.FirstOrDefault(C => C.CartID == cartID);
+
+            if (cartToDelete != null)
+            {
+                context.Carts.Remove(cartToDelete);
+                context.SaveChanges();
+                return Json(new { success = true, message = "Urun Basarili Bir Sekilde Silindi!" });
+            }
+            return Json(new { success = false, message = "Urun Bulunamadi!" });
         }
         #endregion
 
-        #region JsonResult
+        #region QuantityMethodss
         [HttpPost]
         public JsonResult IncreaseQuantity(int cartID)
         {
