@@ -1,0 +1,61 @@
+﻿@model DMYTest.Data.Models.Customer
+@{
+    ViewBag.Title = "Update";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "btn btn-danger" })
+                <br />
+                <div class="form-group">
+                    <label>Sirket Adi</label>
+                    <input type="text" class="form-control" name="CompanyName" value="@Model.CompanyName" />
+                    @Html.ValidationMessageFor(x => x.CompanyName, "", new { @style = "color:red" })
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <label>Adres</label>
+                    <input type="text" class="form-control" name="Address" value="@Model.Address" />
+                    @Html.ValidationMessageFor(x => x.Address, "", new { @style = "color:red" })
+                </div>
+                <br />
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" class="form-control" name="Email" value="@Model.Email" />
+                    @Html.ValidationMessageFor(x => x.Email, "", new { @style = "color:red" })
+                </div>
+                <br />
+                <div class="form-group">
+                    <label>Telefon Numarasi</label>
+                    <input type="text" class="form-control" name="Phone" value="@Model.Phone" />
+                    @Html.ValidationMessageFor(x => x.Phone, "", new { @style = "color:red" })
+                </div>
+                <br />
+                <div class="form-group">
+                    <label>Ulke</label>
+                    <input type="text" class="form-control" name="Country" value="@Model.Country" />
+                    @Html.ValidationMessageFor(x => x.Country, "", new { @style = "color:red" })
+                </div>
+                <br />
+                <div class="form-group">
+                    <label>Posta Kodu</label>
+                    <input type="text" class="form-control" name="PostCode" value="@Model.PostCode" />
+                    @Html.ValidationMessageFor(x => x.PostCode, "", new { @style = "color:red" })
+                </div>
+
+                <div class="form-group" style="display:none;">
+                    @Html.LabelFor(model => model.CustomerID)
+                    @Html.EditorFor(model => model.CustomerID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CustomerID, "", new { @class = "text-danger" })
+                </div>
+                <button class="btn btn-warning" type="submit">Bilgilerimi Guncelle</button>
+            </form>
+        </div>
+    </div>
+</div>
+

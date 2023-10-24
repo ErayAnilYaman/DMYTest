@@ -1,0 +1,68 @@
+﻿@model DMYTest.Data.Models.Customer
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 hidden>Create</h2>
+
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .select-dropdown {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        padding: 12px 16px;
+        z-index: 1;
+    }
+
+    .dropdown:hover .select-dropdown {
+        display: block;
+    }
+</style>
+
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "btn btn-danger" })
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" class="form-control" name="CompanyName" />
+                    @Html.ValidationMessageFor(x => x.CompanyName, "", new { @style = "color:red" })
+                </div>
+                <br />
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" class="form-control" name="Address" />
+                    @Html.ValidationMessageFor(x => x.Address, "", new { @style = "color:red" })
+                </div>
+                <br />
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" class="form-control" name="Email" />
+                    @Html.ValidationMessageFor(x => x.Email, "", new { @style = "color:red" })
+                </div>
+                <br />
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" class="form-control" name="Phone" />
+                    @Html.ValidationMessageFor(x => x.Phone, "", new { @style = "color:red" })
+                </div>
+                
+
+                <button class="btn btn-success" type="submit">Add</button>
+            </form>
+        </div>
+    </div>
+</div>

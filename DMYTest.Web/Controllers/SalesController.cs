@@ -16,11 +16,12 @@ namespace DMYTest.Web.Controllers
     using System.Data.Entity.Core;
     using System.Security.Cryptography.X509Certificates;
     using Microsoft.Ajax.Utilities;
+    using DMYTest.Data.Concrete;
     #endregion
     public class SalesController : Controller
     {
         // GET: Sales
-        InternDBContext context = new InternDBContext();
+        DMYDBContext context = new DMYDBContext();
         public ActionResult Index(int page = 1)
         {
             if (User.Identity.IsAuthenticated)
@@ -39,15 +40,19 @@ namespace DMYTest.Web.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                var model = context.Carts.FirstOrDefault(C => C.CartID == id);
-                return View(model);
+                var user = context.Users.First(U=>U.Email == User.Identity.Name);
+                if (user.Customer != null)
+                {
+                    var model = context.Carts.FirstOrDefault(C => C.CartID == id);
+                    return View(model);
+                }
+                return RedirectToAction("create","profile");
             }
             return HttpNotFound();
-
         }
         [Authorize]
         [HttpPost]
-        public ActionResult BuyPost(Cart cart)
+        public ActionResult Buy(Cart cart)
         {
             try
             {
@@ -87,13 +92,19 @@ namespace DMYTest.Web.Controllers
 
         }
         [Authorize]
-        public ActionResult BuyAll(int id)
+        public ActionResult BuyAll()
         {
             if (User.Identity.IsAuthenticated)
             {
-                var model = context.Carts.Where(C => C.UserID == id);
-                ViewBag.Cost = model.Sum(C => C.Price);
-                return View(model.ToList());
+                var user = context.Users.First(U => U.Email == User.Identity.Name);
+                if (user.Customer != null)
+                {
+
+                    var model = context.Carts.Where(C => C.User.ID == user.ID).ToList();
+                    ViewBag.Cost = model.Sum(C => C.Price);
+                    return View(model);
+                }
+                
             }
             return HttpNotFound();
 
@@ -106,13 +117,24 @@ namespace DMYTest.Web.Controllers
             {
                 return HttpNotFound();
             }
-            if (ModelState.IsValid)
+            if (ModelState.IsValid )
             {
                 var username = User.Identity.Name;
                 var user = context.Users.FirstOrDefault(U => U.Email == username);
                 var model = context.Carts.Where(X => X.UserID == user.ID).ToList();
-                if (model != null)
+
+                if (model != null && user.Customer != null)
                 {
+                    var order = new Order
+                    {
+                        Address = user.Customer.Address,
+                        OrderDate = DateTime.Now,
+                        OrderReceived = false,
+                        Phone = user.Customer.Phone,
+                        User = user,
+                        UserID = user.ID,
+                    };
+                    var saleList = new List<Sales>();
                     foreach (var item in model)
                     {
                         var sale = new Sales
@@ -121,26 +143,33 @@ namespace DMYTest.Web.Controllers
                             Image = item.Image,
                             Price = item.Price,
                             ProductID = item.ProductID,
+                            Product = item.Product,
                             Quantity = item.Quantity,
                             UserID = user.ID,
-
                         };
+                        order.ProductOrderCrossModels.Add(new ProductOrderCrossModel {
+                            Order = order,
+                            OrderID = order.OrderID,
+                            Product = item.Product,
+                            ProductID = item.Product.ProductID
+                        });
                         context.Carts.Remove(item);
-                        context.Sales.Add(sale);
+                        saleList.Add(sale);
                         context.SaveChanges();
                     }
+                    order.Sales = saleList;
+                    context.Orders.Add(order);
+                    context.SaveChanges();
                     ViewBag.progress = "Islem Basarili";
                     return RedirectToAction("index", "home");
                 }
-
+                ModelState.AddModelError("", "Musteri Bilgilerinizi Doldurmaniz gerekiyor");
+                return RedirectToAction("create","profile");
             }
             ModelState.AddModelError("", "Islem basarisiz");
             return View();
         }
         #endregion
-
-
-
-
+        
     }
 }

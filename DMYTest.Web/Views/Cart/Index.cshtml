@@ -15,14 +15,14 @@
     <table class="table table-bordered cart-table" id="cart-table">
         <thead>
             <tr>
-                <th>Ürün Bilgisi</th>
-                <th>Adet</th>
-                <th>Birim Fiyatı</th>
-                <th>Tarih</th>
-                <th>Resim</th>
-                <th>Sil</th>
-                <th>Toplam Tutar</th>
-                <th>Satın Al</th>
+                <th>Product</th>
+                <th>Stock</th>
+                <th>Unit Price</th>
+                <th>Date</th>
+                <th>Image</th>
+                <th>Delete</th>
+                <th>Total Price</th>
+                <th>Buy</th>
             </tr>
         </thead>
         <tbody>
@@ -45,29 +45,29 @@
                             <img src="~/Content/Image/@i" width="90" height="90" />
                         }
                     </td>
-                    <td><span class="btn btn-danger btnDelete" id="btnDeleteById" data-cartid="@item.CartID">Sil</span></td>
+                    <td><span class="btn btn-danger btnDelete" id="btnDeleteById" data-cartid="@item.CartID">Delete</span></td>
                     <td>    <span id="item-price" data-cartid="@item.CartID">@item.Price</span> TL</td>
-                    <td><a href="/customer/create/@item.CartID" class="btn btn-success">Satın Al</a></td>
+                    <td><a href="/sales/buy/@item.CartID" class="btn btn-success">Buy</a></td>
                 </tr>
             }
-            <p id="total-price-element">Toplam Tutar :<span id="item-total-price">@Model.Sum(m => m.Quantity * m.Product.UnitPrice)</span> TL</p>
+            <p id="total-price-element">Total Cost :<span id="item-total-price">@Model.Sum(m => m.Quantity * m.Product.UnitPrice)</span> TL</p>
             <h2 id="cart-message"></h2>
         </tbody>
     </table>
 
     <div id="action-methods">
         <div class="container form-group">
-            <a href="/sales/buyall" class="btn btn-success form-control">Tümünü Satın Al</a>
+            <a href="/sales/buyall" class="btn btn-success form-control">Buy All</a>
         </div>
         <div class="container form-group">
-            <span class="btn btn-danger form-control btnDeleteAll">Hepsini Sil</span>
+            <span class="btn btn-danger form-control btnDeleteAll">Delete All</span>
         </div>
     </div>
     
 }
 else
 {
-    <h2>Sepetinizde urun bulunamadi.</h2>
+    <h2>There is no product here</h2>
 }
 
 
@@ -107,7 +107,6 @@ else
         })
         $('.btnDecrease').on('click', function () {
             var cartID = $(this).data('cartid');
-
             decreaseQuantity(cartID);
         })
 
@@ -200,7 +199,7 @@ else
                     tableElement.remove();
                     totalPriceElement.remove();
                     actionMethodsElement.remove();
-                    cartMessageElement.innerText = "Sepetinizde Urun Bulunamamistir!";
+                    cartMessageElement.innerText = "Product couldn't find";
                     toastr.info(data.message);
 
                 }

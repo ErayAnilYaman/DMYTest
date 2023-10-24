@@ -14,7 +14,7 @@ using System.Linq;
         where TEntity : class , IEntity , new()
     {
         DbSet<TEntity> _data;
-        InternDBContext context = new InternDBContext();
+        DMYDBContext context = new DMYDBContext();
         public EfEntityRepositoryBase()
         {
             _data = context.Set<TEntity>();
@@ -28,7 +28,6 @@ using System.Linq;
 
         public void Delete(TEntity entity)
         {
-
             _data.Remove(entity);
             context.SaveChanges();
         }
@@ -45,8 +44,9 @@ using System.Linq;
 
         public void Update(TEntity entity)
         {
-            
-            context.Entry(entity).State = EntityState.Modified;
+
+            var updatedEntity = context.Entry(entity);
+            updatedEntity.State = EntityState.Modified;
             context.SaveChanges();
             
         }

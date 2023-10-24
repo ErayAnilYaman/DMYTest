@@ -21,7 +21,7 @@ namespace DMYTest.Web.Controllers
     public class CartController : Controller
     {
         // GET: Cart
-        InternDBContext context = new InternDBContext();
+        DMYDBContext context = new DMYDBContext();
 
         public ActionResult Index(decimal? price)
         {
@@ -37,7 +37,7 @@ namespace DMYTest.Web.Controllers
                 {
                     if (kid == null)
                     {
-                        ViewBag.Cost = "Sepetinizde Urun Bulunmamaktadir";
+                        ViewBag.Cost = "You don't have any product at the cart";
                     }
                     else if (kid != null)
                     {
@@ -89,11 +89,11 @@ namespace DMYTest.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Urun ekleme yetkiniz bulunmamaktadir lutfen dogru hesaba giris  yapiniz");
+                    ModelState.AddModelError("", "Please register");
                     return View("login", "account");
                 }
             }
-            ModelState.AddModelError("", "Urun Eklemek icin once giris yapmalisiniz");
+            ModelState.AddModelError("", "Please register");
             return RedirectToAction("login", "account");
         }
         #endregion
@@ -129,9 +129,9 @@ namespace DMYTest.Web.Controllers
                     context.Carts.Remove(cart);
                     context.SaveChanges();
                 }
-                return Json(new { success = true , message = "Urunlerin Hepsi Silindi!!" });
+                return Json(new { success = true , message = "All of the products are deleted" });
             }
-            return Json(new {success = false , message = "Silinecek urun Bulunamadi"});
+            return Json(new {success = false , message = "Couldn't find product to delete"});
         }
         
         [Authorize]
@@ -145,9 +145,9 @@ namespace DMYTest.Web.Controllers
             {
                 context.Carts.Remove(cartToDelete);
                 context.SaveChanges();
-                return Json(new { success = true, message = "Urun Basarili Bir Sekilde Silindi!" });
+                return Json(new { success = true, message = "Product has been deleted" });
             }
-            return Json(new { success = false, message = "Urun Bulunamadi!" });
+            return Json(new { success = false, message = "Couldn't find the product" });
         }
         #endregion
 
@@ -173,23 +173,23 @@ namespace DMYTest.Web.Controllers
                         context.SaveChanges();
                         totalPrice = TotalPriceCalculator(carts);
 
-                        return Json(new { success = true, message = "Sepet Guncellendi", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price, totalPrice = totalPrice });
+                        return Json(new { success = true, message = "Cart Updated", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price, totalPrice = totalPrice });
                     }
                     cartToUpdate.Quantity = product.Stock;
                     cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
                     context.SaveChanges();
                     totalPrice = TotalPriceCalculator(carts);
 
-                    return Json(new { success = true, message = "Maksimum stok Adedi kadar urunu sepete ekleyebilirsiniz !!", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price, totalPrice = totalPrice });
+                    return Json(new { success = true, message = "You can just add product to stock", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price, totalPrice = totalPrice });
 
                 }
                 catch (Exception e)
                 {
-                    return Json(new { success = false, message = "Hata" });
+                    return Json(new { success = false, message = "Error" });
 
                 }
             }
-            return Json(new { success = false, message = "Oturumunuz kapali lutfen oturum aciniz" });
+            return Json(new { success = false, message = "Please login" });
 
 
         }
@@ -211,7 +211,7 @@ namespace DMYTest.Web.Controllers
                         cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
                         context.SaveChanges();
                         totalPrice = TotalPriceCalculator(carts);
-                        return Json(new { success = true, message = "Sepet Guncellendi", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price, totalPrice = totalPrice });
+                        return Json(new { success = true, message = "Cart Updated", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price, totalPrice = totalPrice });
                     }
                     else
                     {
@@ -219,7 +219,7 @@ namespace DMYTest.Web.Controllers
                         cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
                         context.SaveChanges();
                         totalPrice = TotalPriceCalculator(carts);
-                        return Json(new { success = true, message = "Urunun sepetteki adedi 0 olamaz!!", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price, totalPrice = totalPrice });
+                        return Json(new { success = true, message = "Product count can not be 0", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price, totalPrice = totalPrice });
 
                     }
                 }
@@ -229,7 +229,7 @@ namespace DMYTest.Web.Controllers
 
                 }
             }
-            return Json(new { success = false, message = "Oturumunuz kapali lutfen giris yap kismindan oturumunuzu aciniz" });
+            return Json(new { success = false, message = "Please register" });
 
 
         }

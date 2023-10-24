@@ -17,14 +17,14 @@
 
                 <br />
                 <div class="form-group" hidden>
-                    <label>Urun Adi</label>
+                    <label>Product Name</label>
                     <input type="text" class="form-control" name="ProductName" value="@Model.Product.ProductName" />
                     @Html.HiddenFor(x => x.ProductID)
                 </div>
                 <br />
 
                 <div class="form-group">
-                    <label>Satis Adedi</label>
+                    <label>Sale Count</label>
                     <input type="number" class="form-control" name="Description" value="@Model.Quantity" />
                     @Html.ValidationMessageFor(x => x.Quantity, "", new { @style = "color:red" })
                 </div>
@@ -33,7 +33,7 @@
                 
                 <br />
                 <div class="form-group" hidden>
-                    <label>Resim</label>
+                    <label>Image</label>
                     <input type="file" class="form-control" name="File" />
                     @Html.HiddenFor(m => m.Image)
                 </div>
@@ -44,7 +44,7 @@
                     @Html.EditorFor(model => model.SalesID, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.SalesID, "", new { @class = "text-danger" })
                 </div>
-                <button class="btn btn-warning" type="submit">Guncelle</button>
+                <button class="btn btn-warning" type="submit">Update</button>
             </form>
         </div>
     </div>

@@ -15,10 +15,15 @@
         // GET: Home
         
         ProductRepository productRepository = new ProductRepository();
-        
+        DMYDBContext db = new DMYDBContext();
         public ActionResult Index(int pageNumber = 1)
         {
-            return View(productRepository.List().ToPagedList(pageNumber ,3));
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewBag.IsAuthenticated = "true";
+            }
+            var listedResults = db.Products.ToList();
+            return View(listedResults.ToPagedList(pageNumber ,3));
         }
     }
 }

@@ -22,7 +22,7 @@
 
         ProductRepository productRepository = new ProductRepository();
         ImageRepository imageRepository = new ImageRepository();
-        InternDBContext context = new InternDBContext();
+        DMYDBContext context = new DMYDBContext();
         // GET: AdminProduct
         [Authorize(Roles = "admin")]
         public ActionResult Index(int pageNumber = 1)
@@ -35,20 +35,18 @@
         {
             
             var user = context.Users.FirstOrDefault(U=>U.Email == User.Identity.Name);
-            if (true)
-            {
-                List<SelectListItem> items;
-                items = (from i in context.Categories.ToList()
+            
+            List<SelectListItem> items;
+            items = (from i in context.Categories.ToList()
                          select new SelectListItem
                          {
                              Text = i.CategoryName,
                              Value = i.CategoryID.ToString()
                          }).ToList();
 
-                ViewBag.ctgr = items;
-                return View();
-            }
-            
+            ViewBag.ctgr = items;
+            return View();
+
         }
         [Authorize(Roles = "admin")]
         [HttpPost]

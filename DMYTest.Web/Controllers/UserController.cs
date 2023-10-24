@@ -12,7 +12,7 @@ using System.Web.Mvc;
     #endregion
     public class UserController : Controller
     {
-        InternDBContext db = new InternDBContext();
+        DMYDBContext db = new DMYDBContext();
         public ActionResult Update()
         {
             if (User.Identity.IsAuthenticated)

@@ -5,9 +5,11 @@ namespace DMYTest.Data.Models
     #region Usings
     using System;
 using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     #endregion
     public class Cart : IEntity
     {
+        [Key]
         public int CartID { get; set; }
 
 
@@ -39,6 +41,7 @@ using System.ComponentModel.DataAnnotations;
 
         [Required(ErrorMessage = "Lutfen user Doldurunuz")]
         [Display(Name = "Kullanici")]
+
         public int UserID { get; set; }
 
 

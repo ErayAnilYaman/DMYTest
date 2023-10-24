@@ -43,9 +43,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SqlClient, Version=4.6.1.5, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SqlClient.4.8.5\lib\net461\System.Data.SqlClient.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,6 +54,7 @@
     <Compile Include="Abstract\Base\IEntityRepositoryBase.cs" />
     <Compile Include="Abstract\ICartDal.cs" />
     <Compile Include="Abstract\ICategoryDal.cs" />
+    <Compile Include="Abstract\ICustomerDal.cs" />
     <Compile Include="Abstract\IImageDal.cs" />
     <Compile Include="Abstract\IOrderDal.cs" />
     <Compile Include="Abstract\IProductDal.cs" />
@@ -65,17 +63,14 @@
     <Compile Include="Concrete\Base\EfEntityRepositoryBase.cs" />
     <Compile Include="Concrete\CartRepository.cs" />
     <Compile Include="Concrete\CategoryRepository.cs" />
+    <Compile Include="Concrete\CustomerRepository.cs" />
     <Compile Include="Concrete\ImageRepository.cs" />
     <Compile Include="Concrete\OrderRepository.cs" />
     <Compile Include="Concrete\ProductRepository.cs" />
     <Compile Include="Concrete\SaleRepository.cs" />
     <Compile Include="Concrete\UserRepository.cs" />
-    <Compile Include="Context\InternDBContext.cs" />
+    <Compile Include="Context\DMYDBContext.cs" />
     <Compile Include="Encryption\HashingHelper.cs" />
-    <Compile Include="Migrations\202309110600382_Initial.cs" />
-    <Compile Include="Migrations\202309110600382_Initial.Designer.cs">
-      <DependentUpon>202309110600382_Initial.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Abstract\IEntity.cs" />
     <Compile Include="Models\Cart.cs" />
@@ -86,6 +81,7 @@
     <Compile Include="Models\Image.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductOrderCrossModel.cs" />
     <Compile Include="Models\Sales.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\User.cs" />
@@ -93,18 +89,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202309110600382_Initial.resx">
-      <DependentUpon>202309110600382_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

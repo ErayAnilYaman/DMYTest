@@ -65,17 +65,17 @@
 
                                     <a class="btn btn-fefault cart" style="margin-top:15px" href="/Cart/AddCart/@Model.ProductID">
                                         <i class="fa fa-shopping-cart"></i>
-                                        Sepete Ekle
+                                        Add To Cart
                                     </a>
                                 </span>
-                                <p><b>Kategori:</b> @Model.Category.CategoryName</p>
-                                <p><b>Stok:</b> @Model.Stock</p>
-                                <p><b>Popüler:</b> @Model.Popular</p>
-                                <p><b>Açıklama:</b> @Model.Description</p>
+                                <p><b>Category Name:</b> @Model.Category.CategoryName</p>
+                                <p><b>Stock:</b> @Model.Stock</p>
+                                <p><b>Is Popular:</b> @Model.Popular</p>
+                                <p><b>Description:</b> @Model.Description</p>
                             </div><!--/product-information-->
                         </div>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            Yorum Yap
+                            Comment
                         </button>
 
                         <!-- Modal -->
@@ -84,18 +84,18 @@
                                 <div class="modal-content">
                                     <form>
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Yorum Yazınız</h5>
+                                            <h5 class="modal-title" id="exampleModalLabel">Write Any Comment</h5>
 
                                         </div>
                                         <div class="modal-body">
-                                            <textarea id="comment" class="form-control" name="Contents" placeholder="Yorum Yazınız"></textarea>
+                                            <textarea id="comment" class="form-control" name="Contents" placeholder="Write comment"></textarea>
                                             <input type="hidden" name="ProductId" value="@Model.ProductID" id="productIDModal" />
                                             <input type="hidden" name="UserId" value="@Session["userid"]" id="userIDModal" />
                                             <input type="hidden" name="Date" value="@DateTime.Now" id="DateModal" />
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                                            <button type="button" class="btn btn-primary submitComment" data-id="@Model.ProductID" data-dismiss="modal">Gönder</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary submitComment" data-id="@Model.ProductID" data-dismiss="modal">Send</button>
                                         </div>
                                     </form>
                                 </div>
@@ -215,7 +215,7 @@
 
                 },
                 error: function () {
-                    toastr.error("Hata");
+                    toastr.error("Error");
                 }
 
             });

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
     #endregion
     public class Sales : IEntity
     {
+        [Key]
         public int SalesID { get; set; }
 
         [Required(ErrorMessage = "Lutfen p Doldurunuz")]
@@ -45,7 +46,7 @@ using System.Threading.Tasks;
         [Display(Name = "Kullanici")]
         public int UserID { get; set; }
 
-
+        public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }
         public virtual User User { get; set; }
     }

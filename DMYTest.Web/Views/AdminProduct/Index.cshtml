@@ -10,20 +10,20 @@
 
 <link href="~/Content/toastr.css" rel="stylesheet" />
 
-<a class="btn btn-success" href="/adminproduct/create">Urun Ekle</a>
+<a class="btn btn-success" href="/adminproduct/create">Add Product</a>
 <br />
 <br />
 
 <table class="table table-bordered" id="table">
     <tr>
-        <th>Urun Adi</th>
-        <th>Aciklama</th>
-        <th>Fiyat</th>
-        <th>Stok Adedi</th>
-        <th>Kategorisi</th>
-        <th>Resim</th>
-        <th>Sil</th>
-        <th>Guncelle</th>
+        <th>Product Name</th>
+        <th>Description</th>
+        <th>Unit Price</th>
+        <th>Stock Count</th>
+        <th>Category</th>
+        <th>Image</th>
+        <th>Delete</th>
+        <th>Update</th>
 
     </tr>
     @foreach (var item in Model)
@@ -55,8 +55,8 @@
                 }
 
             </td>
-            <td><a class="btn btn-danger btnDelete" data-id="@item.ProductID">Sil</a></td>
-            <td><a class="btn btn-warning" href="/adminproduct/update/@item.ProductID">Guncelle</a></td>
+            <td><a class="btn btn-danger btnDelete" data-id="@item.ProductID">Delete</a></td>
+            <td><a class="btn btn-warning" href="/adminproduct/update/@item.ProductID">Update</a></td>
 
         </tr>
     }
@@ -148,7 +148,7 @@
         $("#table").on("click", ".btnDelete", function () {
 
             var btn = $(this);
-            bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
+            bootbox.confirm("Are you sure want to delete ?", function (result) {
 
                 if (result) {
                     var id = btn.data("id");
@@ -158,13 +158,13 @@
                             url: "/adminproduct/delete/" + id,
                             success: function () {
                                 btn.parent().parent().remove();
-                                toastr.info("Urun silindi !");
+                                toastr.info("Product Removed!");
                             }
                         });
                 } else if (result === false) {
-                    bootbox.alert("Urun Silinmedi");
+                    bootbox.alert("Product couldn't remove");
                 } else {
-                    bootbox.alert("Hata Oluştu");
+                    bootbox.alert("Error");
                 }
             });
 

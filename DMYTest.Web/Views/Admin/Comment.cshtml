@@ -8,11 +8,11 @@
 
 <table class="table table-bordered" id="table">
     <tr>
-        <th>Icerik</th>
-        <th>Urun Bilgisi</th>
-        <th>Kullanici</th>
-        <th>Tarih</th>
-        <th>Sil</th>
+        <th>Content</th>
+        <th>Product</th>
+        <th>User</th>
+        <th>Date</th>
+        <th>Delete</th>
     </tr>
     @foreach (var item in Model)
     {
@@ -21,7 +21,7 @@
             <td>@item.Product.ProductName</td>
             <td>@item.User.FirstName @item.User.LastName</td>
             <td>@item.Date</td>
-            <td><span class="btnDelete" data-id="@item.ID"><a class="btn btn-danger">Sil</a></span></td>
+            <td><span class="btnDelete" data-id="@item.ID"><a class="btn btn-danger">Delete</a></span></td>
         </tr>
     }
 </table>
@@ -44,51 +44,27 @@
     function deleteById(btn) {
         var id = btn.data('id');
 
-        bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
+        bootbox.confirm("Are you sure want to delete?", function (result) {
             if (result) {
                 $.ajax({
                     type: "GET",
                     url: "/admin/delete/" + id,
                     success: () => {
                         btn.parent().parent().remove();
-                        bootbox.success("Yorum Silindi!!");
+                        bootbox.success("Comment deleted!");
                     }
                 })
             }
             else if (result === false) {
-                bootbox.alert("Silinemedi");
+                bootbox.alert("Comment couldn't delete");
             }
             else {
-                bootbox.alert("Silinmedi");
+                bootbox.alert("Comment not deleted");
             }
         })
     }
 
-    //$(function () {
-    //    $("#table").on("click", ".btnDelete", function () {
-
-
-    //        bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
-
-    //            if (result) {
-    //                $.ajax(
-    //                    {
-    //                        type: "GET",
-    //                        url: "/admin/delete/" + id,
-    //                        success: function () {
-    //                            btn.parent().parent().remove();
-    //                        }
-    //                    });
-    //            } else if (result === false) {
-    //                bootbox.alert("Urun Silinmedi");
-    //            } else {
-    //                bootbox.alert("Hata Oluştu");
-    //            }
-    //        });
-
-
-    //    });
-    //});
+   
 
 </script>
 @Html.PagedListPager(Model, pageNumber => Url.Action("Comment", new { pageNumber }), PagedListRenderOptions.Classic)

@@ -18,7 +18,7 @@
         {
             products = new HashSet<Product>();
         }
-        
+        [Key]
         public int CategoryID { get; set; }
 
 

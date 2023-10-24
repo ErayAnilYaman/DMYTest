@@ -5,11 +5,13 @@ namespace DMYTest.Web.Controllers
     using DMYTest.Data.Concrete;
     using System.Web.Mvc;
     using PagedList;
+    using DMYTest.Data.Context;
+    using System.Linq;
     #endregion
     public class AdminOrderController : Controller
     {
         OrderRepository repository = new OrderRepository();
-
+        DMYDBContext db = new DMYDBContext();
 
         [Authorize(Roles = "admin")]
         public ActionResult Index(int pageNumber = 1)
@@ -17,13 +19,33 @@ namespace DMYTest.Web.Controllers
             return View(repository.List().ToPagedList(pageNumber ,4));
         }
 
-
-        [Authorize(Roles = "admin")]
-        public ActionResult Delete(int id)
+        [Authorize(Roles="admin")]
+        public JsonResult DeleteById(int orderID)
         {
-            var orderToDelete = repository.GetById(id);
-            repository.Delete(orderToDelete);
-            return View("Index");
+            try
+            {
+                var orderToDelete = db.Orders.Find(orderID);
+                var salesToDelete = db.Sales.Where(S => S.Order.OrderID == orderID);
+                if (orderToDelete != null)
+                {
+                    foreach (var item in orderToDelete.Sales)
+                    {
+                        db.Sales.Remove(item);
+                        db.SaveChanges();
+                    }
+                    db.Orders.Remove(orderToDelete);
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Product Deleted!" });
+
+                }
+                return Json(new { success = false, message = "Can't find the product to delete" });
+                
+            }
+            catch (System.Exception e)
+            {
+                return Json(new { success = false , message = e.Message});
+            }
         }
+        
     }
 }

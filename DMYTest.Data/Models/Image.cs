@@ -10,6 +10,7 @@ namespace DMYTest.Data.Models
 {
     public class Image : IEntity
     {
+        [Key]
         public int ImageID { get; set; }
 
 

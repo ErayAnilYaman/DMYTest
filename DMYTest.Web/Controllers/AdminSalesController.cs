@@ -15,7 +15,7 @@ namespace DMYTest.Web.Controllers
     #endregion
     public class AdminSalesController : Controller
     {
-        InternDBContext db = new InternDBContext();
+        DMYDBContext db = new DMYDBContext();
 
         SaleRepository srepository = new SaleRepository();
 

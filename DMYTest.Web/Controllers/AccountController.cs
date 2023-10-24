@@ -15,7 +15,7 @@ namespace DMYTest.Web.Controllers
     public class AccountController : Controller
     {
         // GET: Account
-        InternDBContext db = new InternDBContext();
+        DMYDBContext db = new DMYDBContext();
 
         #region Authorization/Authentication
 
@@ -92,7 +92,18 @@ namespace DMYTest.Web.Controllers
             {
                 db.Users.Add(data);
                 db.SaveChanges();
-                return RedirectToActionPermanent("login");
+                var user = db.Users.First(U => U.Email == data.Email);
+
+                FormsAuthentication.SetAuthCookie(user.Email, false);
+                var cookie = FormsAuthentication.GetAuthCookie(user.Email, false);
+
+                Session["Mail"] = user.Email.ToString();
+                Session["Ad"] = user.FirstName.ToString();
+                Session["Soyad"] = user.LastName.ToString();
+                Session["UserName"] = user.UserName.ToString();
+                Session["userid"] = user.ID.ToString();
+
+                return RedirectToAction("index","home");
             }
 
             var errors = ModelState.Values.SelectMany(v => v.Errors);

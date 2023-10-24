@@ -14,13 +14,13 @@
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "btn btn-danger" })
                 <div class="form-group">
-                    <label>Kategori Adi</label>
+                    <label>Category Name</label>
                     <input type="text" class="form-control" name="CategoryName" value="@Model.CategoryName" />
                     @Html.ValidationMessageFor(x => x.CategoryName, "", new { @style = "color:red" })
                 </div>
                 <br />
                 <div class="form-group">
-                    <label>Aciklamasi</label>
+                    <label>Description</label>
                     <input type="text" class="form-control" name="Description" value="@Model.Description" />
                     @Html.ValidationMessageFor(x => x.Description, "", new { @style = "color:red" })
                 </div>
@@ -30,7 +30,7 @@
                     @Html.EditorFor(model => model.CategoryID, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
                 </div>
-                <button class="btn btn-warning" type="submit">Guncelle</button>
+                <button class="btn btn-warning" type="submit">Update</button>
             </form>
         </div>
     </div>

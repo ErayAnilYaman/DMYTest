@@ -6,6 +6,7 @@ namespace DMYTest.Data.Models
 using DMYTest.Data.Models.Abstract;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     #endregion
 
@@ -27,8 +28,10 @@ using DMYTest.Data.Models.Abstract;
             _employees = new HashSet<Employee>();
             _orders = new HashSet<Order>();
         }
+            
+        [Key]
         public int ID { get; set; }
-
+        
 
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Adinizi Giriniz")]
@@ -77,7 +80,6 @@ using DMYTest.Data.Models.Abstract;
 
         public virtual Customer Customer { get; set; }
 
-        
         public virtual ICollection<Supplier> Suppliers 
         {
             get 
@@ -96,7 +98,7 @@ using DMYTest.Data.Models.Abstract;
             {
                 return this._employees;
             }
-            set 
+            set
             {
                 this._employees = value;
             }

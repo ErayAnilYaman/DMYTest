@@ -136,13 +136,16 @@
     <Compile Include="Controllers\AdminCartController.cs" />
     <Compile Include="Controllers\AdminCategoryController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminCustomerController.cs" />
     <Compile Include="Controllers\AdminOrderController.cs" />
     <Compile Include="Controllers\AdminProductController.cs" />
     <Compile Include="Controllers\AdminSalesController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -172,6 +175,7 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fullcalendar.css" />
     <Content Include="Content\Image\0c373326-7c64-43ce-b041-761f5f0316c0_size780x780_quality60_cropCenter.jpg" />
+    <Content Include="Content\Image\140597-1_large.png" />
     <Content Include="Content\Image\61bK6PMOC3L._AC_UF1000,1000_QL80_.jpg" />
     <Content Include="Content\Image\Basket\cart.png" />
     <Content Include="Content\Image\d793b350d7ed4635870e1b8bbce08dd2.png" />
@@ -180,6 +184,7 @@
     <Content Include="Content\Image\indir %282%29.jfif" />
     <Content Include="Content\Image\indir.jfif" />
     <Content Include="Content\Image\Interface\image0.jpeg" />
+    <Content Include="Content\Image\LENOVO-IP-3-Core-i5-1155G7-İşlemci-8GB-RAM-256GB-SSD-15.png" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
     <Content Include="eshop\images\home\logout.png" />
@@ -913,6 +918,8 @@
     <Content Include="Scripts\toastr.js" />
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\xcharts.min.js" />
+    <Content Include="Views\Profile\css\addForm.css" />
+    <Content Include="Views\Profile\css\profileCSS.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -953,10 +960,17 @@
     <Content Include="Views\AdminSales\Index.cshtml" />
     <Content Include="Views\AdminProduct\StockCount.cshtml" />
     <Content Include="Views\User\Update.cshtml" />
+    <Content Include="Views\AdminCustomer\Create.cshtml" />
+    <Content Include="Views\AdminCustomer\Index.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Profile\Update.cshtml" />
+    <Content Include="Views\Profile\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Image\Default\" />
+    <Folder Include="Views\Customer\" />
+    <Folder Include="Views\Order\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

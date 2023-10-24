@@ -7,9 +7,9 @@ using DMYTest.Data.Models;
 
     #endregion
 
-    public class InternDBContext : DbContext
+    public class DMYDBContext : DbContext
     {
-        public InternDBContext() :base("InternDBContext")
+        public DMYDBContext() :base("ESHOPDB")
         { }
         public IDbSet<Product> Products { get; set; }
         public IDbSet<Image> Images { get; set; }
@@ -22,5 +22,13 @@ using DMYTest.Data.Models;
         public IDbSet<Sales> Sales { get; set; }
         public IDbSet<Cart> Carts { get; set; }
         public IDbSet<Comment> Comments { get; set; }
+        public IDbSet<ProductOrderCrossModel> ProductOrderCrossModels { get; set; }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasOptional(u => u.Customer)
+                .WithRequired(c => c.User);
+        }
+
     }
 }

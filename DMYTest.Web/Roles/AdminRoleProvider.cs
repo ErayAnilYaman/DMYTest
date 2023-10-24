@@ -38,12 +38,12 @@ namespace DMYTest.Web.Roles
 
         public override string[] GetRolesForUser(string username)
         {
-            InternDBContext context = new InternDBContext();
+            DMYDBContext context = new DMYDBContext();
 
             var user = context.Users.FirstOrDefault(x => x.Email == username);
             return new string[] { user.Role };
         }
-
+        
         public override string[] GetUsersInRole(string roleName)
         {
             throw new NotImplementedException();

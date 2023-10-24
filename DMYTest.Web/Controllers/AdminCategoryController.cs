@@ -12,7 +12,7 @@ using System.Web.Mvc;
     {
         // GET: AdminCategory
         CategoryRepository categoryRepository = new CategoryRepository();
-        InternDBContext db = new InternDBContext();
+        DMYDBContext db = new DMYDBContext();
 
         [Authorize(Roles = "admin")]
         public ActionResult Index()

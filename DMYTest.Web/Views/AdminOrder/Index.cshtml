@@ -22,8 +22,16 @@
     </tr>
     @foreach (var item in Model)
     {
-        <tr>
-            <td>@item.Product.ProductName</td>
+        <tr data-orderid="@item.OrderID" class="table-order">
+            <td>
+                @foreach (var i in item.Sales)
+                {
+
+                    @i.Product.ProductName <t/> @i.Quantity <t/>
+                     <br/>
+                    
+                }
+            </td>
             <td>@item.User.UserName</td>
             <td>@item.Address</td>
             <td>@item.OrderDate</td>
@@ -31,20 +39,24 @@
             <td>@item.OrderReceived</td>
 
             <td>
-                @if (item.Product.Images.Where(i => i.ProductID == item.ProductID).Any())
+                @foreach (var i in item.ProductOrderCrossModels.ToList())
                 {
-                    foreach (var image in item.Product.Images.Where(i => i.ProductID == item.ProductID).ToList())
+                    if (i.Product.Images.Where(a => a.ProductID == i.ProductID).Any())
                     {
-                        <img src="~/Content/Image/@image.ImagePath" width="80" height="60" />
+                        foreach (var image in i.Product.Images.Where(a => a.ProductID == i.ProductID).ToList())
+                        {
+                            <img src="~/Content/Image/@image.ImagePath" width="80" height="60" />
+                        }
+                    }
+                    else
+                    {
+                        <img src="~/Content/Image/Default/default-image_1080.png" width="80" height="60">
                     }
                 }
-                else
-                {
-                    <img src="~/Content/Image/Default/default-image_1080.png" width="80" height="60">
-                }
+
 
             </td>
-            <td><a class="btn btn-danger btnDelete" data-id="@item.OrderID">Sil</a></td>
+            <td><a class="btn btn-danger btnDelete" data-orderid="@item.OrderID">Sil</a></td>
             <td><a class="btn btn-warning" href="/adminproduct/update/@item.OrderID">Guncelle</a></td>
 
         </tr>
@@ -55,31 +67,31 @@
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 
 <script type="text/javascript">
-    $(function () {
-        $("#table").on("click", ".btnDelete", function () {
+    $(document).ready(function () {
 
-            var btn = $(this);
-            bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
+        $('.btnDelete').on('click', function () {
+            var orderID = $(this).data('orderID');
+            deleteById(orderID);
+        })
+        
 
-                if (result) {
-                    var id = btn.data("id");
-                    $.ajax(
-                        {
-                            type: "GET",
-                            url: "/adminorder/delete/" + id,
-                            success: function () {
-                                btn.parent().parent().remove();
-                            }
-                        });
-                } else if (result === false) {
-                    bootbox.alert("Urun Silinmedi");
-                } else {
-                    bootbox.alert("Hata Oluştu");
-                }
-            });
-
-
-        });
     });
-
+    function deleteById(orderID) {
+        var elementToDelete = document.querySelector('#table-order[data-orderid="'+orderID +'"]');
+        $.ajax({
+            url: "/adminorder/DeleteById",
+            type: "POST",
+            data: { orderID: orderID },
+            success: (data) => {
+                if (data.success) {
+                    elementToDelete.remove();
+                    toastr.info(data.message);
+                }
+                else {
+                    toastr.info(data.message);
+                }
+            }
+            
+        })
+    }
 </script>

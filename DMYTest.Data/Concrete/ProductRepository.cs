@@ -13,8 +13,8 @@ using DMYTest.Data.Models;
     #endregion
     public  class ProductRepository : EfEntityRepositoryBase<Product> , IProductDal
     {
-        
-        InternDBContext context = new InternDBContext();
+
+        DMYDBContext context = new DMYDBContext();
         public List<Product> GetPopularList()
         {
             return context.Products.Where(p => p.Popular == true).Take(3).ToList();

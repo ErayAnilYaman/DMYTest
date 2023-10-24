@@ -12,7 +12,7 @@ using DMYTest.Data.Models;
     #endregion
     public class CategoryRepository  :EfEntityRepositoryBase<Category>, ICategoryDal
     {
-        InternDBContext context = new InternDBContext();
+        DMYDBContext context = new DMYDBContext();
         public List<Product> CategoryDetails(int id)
         {
             return context.Products.Where(p => p.CategoryID == id).ToList();

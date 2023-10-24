@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace DMYTest.Data.Models
 {
     public class Comment : IEntity
     {
+        [Key]
         public int ID { get; set; }
 
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
@@ -22,6 +24,7 @@ namespace DMYTest.Data.Models
         public int ProductID { get; set; }
         
         [Display(Name = "Kullanici ID")]
+
         public int UserID { get; set; }
 
         

@@ -9,14 +9,14 @@
 
 <table class="table table-bordered" id="table">
     <tr>
-        <th>Urun Adi</th>
-        <th>Musteri</th>
-        <th>Satin alim tarihi</th>
-        <th>Ucret</th>
-        <th>Satis Adedi</th>
-        <th>Resim</th>
-        <th>Sil</th>
-        <th>Guncelle</th>  
+        <th>Product</th>
+        <th>Customer</th>
+        <th>Date of buy</th>
+        <th>Price</th>
+        <th>Sale Count</th>
+        <th>Image</th>
+        <th>Delete</th>
+        <th>Update</th>  
 
     </tr>
     @foreach (var item in Model)
@@ -51,8 +51,8 @@
                 }
 
             </td>
-            <td><span class="btn btn-danger btnDelete" id="btnDelete" data-id="@item.SalesID">Sil</span></td>
-            <td><a class="btn btn-warning btnAddOrder" href="/adminorder/add/@item.SalesID" data-saleid="@item.SalesID">Siparisi Ver</a></td>
+            <td><span class="btn btn-danger btnDelete" id="btnDelete" data-id="@item.SalesID">Delete</span></td>
+            <td><a class="btn btn-warning btnAddOrder" href="/adminsales/edit/@item.SalesID" data-saleid="@item.SalesID">Update</a></td>
 
         </tr>
     }
@@ -130,7 +130,7 @@
         $("#table").on("click", ".btnDelete", function () {
 
             var btn = $(this);
-            bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
+            bootbox.confirm("Are u sure to delete?", function (result) {
 
                 if (result) {
                     var id = btn.data("id");
@@ -149,9 +149,9 @@
                             }
                         });
                 } else if (result === false) {
-                    bootbox.alert("Urun Silinmedi");
+                    bootbox.alert("Product couldn't remove");
                 } else {
-                    bootbox.alert("Hata Oluştu");
+                    bootbox.alert("Error");
                 }
             });
 

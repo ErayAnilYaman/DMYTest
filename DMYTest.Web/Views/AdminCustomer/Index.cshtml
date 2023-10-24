@@ -1,0 +1,72 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<DMYTest.Data.Models.Customer>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<link href="~/Content/toastr.css" rel="stylesheet" />
+
+<a class="btn btn-success" href="/admincustomer/create">Add Customer</a>
+<br />
+<br />
+
+<table class="table table-bordered" id="table">
+    <tr>
+        <th>User</th>
+        <th>Company Name</th>
+        <th>Address</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Delete</th>
+        <th>Update</th>
+
+    </tr>
+    @foreach (var item in Model)
+    {
+    <tr id="sale-table" data-customerid="@item.CustomerID">
+        <td>@item.User.UserName</td>
+        <td>@item.CompanyName</td>
+        <td>@item.Address</td>
+        <td>@item.Email</td>
+        <td>@item.Phone </td>
+        <td><span class="btn btn-danger btnDelete" id="btnDelete" data-customerid="@item.CustomerID">Delete</span></td>
+        <td><a class="btn btn-warning btnAddOrder" href="/admincustomer/update/@item.CustomerID" data-customerid="@item.CustomerID">Update</a></td>
+
+    </tr>
+    }
+</table>
+@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber }), PagedListRenderOptions.Classic)
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+
+<!-- #region script -->
+<script type="text/javascript">
+    $(document).ready(function () {
+       
+        $('.btnDelete').on('click', function () {
+            var customerID = $(this).data('customerid');
+            deleteCustomer(customerID);
+        })
+    });
+    function deleteCustomer(customerID) {
+        var elementToDelete = document.querySelector('#sale-table[data-customerid="' + customerID + '"]');
+        $.ajax({
+            type: "POST",
+            url: "/admincustomer/delete",
+            data: { customerID : customerID },
+            success: function(data) {
+                if (data.success === true) {
+                    elementToDelete.remove();
+                    toastr.info(data.message);
+                }
+                else {
+                    toastr.error(data.message);
+                }
+            },
+
+        })
+    }
+
+</script>

@@ -4,16 +4,16 @@
 }
 <link href="~/Content/toastr.css" rel="stylesheet" />
 
-<a class="btn btn-success" href="/admincategory/create">Kategori Ekle</a>
+<a class="btn btn-success" href="/admincategory/create">Add Category</a>
 <br />
 <br />
 
 <table class="table table-bordered" id="table">
     <tr>
-        <th>Ad</th>
-        <th>Aciklama</th>
-        <th>Sil</th>
-        <th>Guncelle</th>
+        <th>Category Name</th>
+        <th>Description</th>
+        <th>Delete</th>
+        <th>Update</th>
 
     </tr>
     @foreach (var item in Model)
@@ -22,8 +22,8 @@
             <td>@item.CategoryName</td>
             <td>@item.Description</td>
             @*<td><a href="/admincategory/delete/@item.CategoryID" class="btn btn-danger" onclick="return ('Emin misiniz')">Sil</a></td>*@
-            <td><a class="btn btn-danger btnDelete" data-id="@item.CategoryID">Sil</a></td>
-            <td><a class="btn btn-warning" href="/admincategory/update/@item.CategoryID">Guncelle</a></td>
+            <td><a class="btn btn-danger btnDelete" data-id="@item.CategoryID">Delete</a></td>
+            <td><a class="btn btn-warning" href="/admincategory/update/@item.CategoryID">Update</a></td>
         </tr>
 
     }
@@ -36,7 +36,7 @@
         $("#table").on("click", ".btnDelete", function () {
 
             var btn = $(this);
-            bootbox.confirm("Silmek istediginize emin misiniz?", function (result) {
+            bootbox.confirm("Are you sure want to delete?", function (result) {
 
                 if (result) {
                     var id = btn.data("id");
@@ -46,13 +46,13 @@
                             url: "/admincategory/delete/" + id,
                             success: function () {
                                 btn.parent().parent().remove(); // btn.parent().parent() yerine btn.closest("tr") kullanımı
-                                toastr.info("Kategori   Silindi");
+                                toastr.info("Category has been removed!");
                             }
                         });
                 } else if (result === false) {
-                    bootbox.alert("Kategori Silinmedi");
+                    bootbox.alert("Category couldn't remove");
                 } else {
-                    bootbox.alert("Hata Oluştu");
+                    bootbox.alert("Error!");
                 }
             });
 

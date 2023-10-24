@@ -11,7 +11,7 @@
     public class ProductController : Controller
     {
         ProductRepository repository = new ProductRepository();
-        InternDBContext context = new InternDBContext();
+        DMYDBContext context = new DMYDBContext();
         // GET: Product
         public PartialViewResult Popular(int pageNumber = 1)
         {
@@ -43,9 +43,9 @@
                 };
                 context.Comments.Add(comment);
                 context.SaveChanges();
-                return Json(new { success = true, message = "Yorumunuz Eklendi", productID = comment.ProductID, content = comment.Contents, username = user.UserName, date = DateTime.Now.ToString(), commentID = comment.ID});
+                return Json(new { success = true, message = "Comment added.", productID = comment.ProductID, content = comment.Contents, username = user.UserName, date = DateTime.Now.ToString(), commentID = comment.ID});
             }
-            return Json(new { success = false, message = "Yorum yapabilmek icin giris yapmalisiniz!" });
+            return Json(new { success = false, message = "You need to login if u want to do comment" });
             
         }
     }

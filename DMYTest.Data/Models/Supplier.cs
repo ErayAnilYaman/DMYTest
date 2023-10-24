@@ -5,14 +5,16 @@ namespace DMYTest.Data.Models
 
 using DMYTest.Data.Models.Abstract;
 using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     #endregion
     public class Supplier : IEntity
     {
-
+        [Key]
         public int SupplierID { get; set; }
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Kullanici")]
+
         public int UserID { get; set; }
         [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Sirket Adi")]

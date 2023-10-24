@@ -9,7 +9,7 @@ namespace DMYTest.Web.Controllers
 {
     public class AdminController : Controller
     {
-        InternDBContext db = new InternDBContext();
+        DMYDBContext db = new DMYDBContext();
         [Authorize(Roles="admin")]
         public ActionResult Index()
         {

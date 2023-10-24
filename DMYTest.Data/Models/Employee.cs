@@ -6,10 +6,12 @@ namespace DMYTest.Data.Models
     #region Usings
 using DMYTest.Data.Models.Abstract;
 using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     #endregion
     public class Employee : IEntity
     {
+        [Key]
         public int EmployeeID { get; set; }
 
 

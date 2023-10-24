@@ -6,8 +6,8 @@
 
 <div class="container">
     <div class="container">
-        <h2>Merhaba @Session["Ad"]  @Session["Soyad"]</h2>
-        <h2>Satin Alma Sayfamiza Hos Geldiniz.</h2>
+        
+        
     </div>
 
 </div>
@@ -26,32 +26,30 @@
 
 
                 <div class="form-group">
-                    Urun Bilgisi :@Html.DisplayFor(c => c[i].Product.ProductName, new { @class = "form-control" })
+                    Product :@Html.DisplayFor(c => c[i].Product.ProductName, new { @class = "form-control" })
                 </div>
                 <div class="form-group">
-                    Adet :@Html.DisplayFor(c => c[i].Quantity, new { @class = "form-control" })
+                    Count :@Html.DisplayFor(c => c[i].Quantity, new { @class = "form-control" })
                 </div>
                 <div class="form-group">
                     <h5>
-                        Resim :
+                        Image :
                         <img src="~/Content/Image/@Model[i].Image" width="80" height="80" />
                     </h5>
                 </div>
                 <div class="form-group">
-                    Fiyat :@Html.DisplayFor(c => c[i].Price, new { @class = "form-control" }) TL
+                    Price :@Html.DisplayFor(c => c[i].Price, new { @class = "form-control" }) TL
                 </div>
 
             </div>
 
         }
-        <p style="color:red;text-align :center;">Tutar : @ViewBag.Cost TL</p>
+        
 
         <div class="container">
             <div class="form-group">
-                <button id="submit" class="btn btn-success">Satin Al</button>
-            </div>
-            <div style="float:right">
-                <a href="/Cart/Index" class="btn btn-danger">Iptal Et</a>
+                <button id="submit" class="btn btn-success">Buy</button>
+                <a href="/Cart/Index" class="btn btn-danger">Cancel</a>
             </div>
         </div>
 
