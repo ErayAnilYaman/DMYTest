@@ -37,16 +37,7 @@ namespace DMYTest.Web.Controllers
             }
             if (HashingHelper.VerifyPassword(userToLogin.Password, user.PasswordHash, user.PasswordSalt))
             {
-
-                //if(true)
-                //{
-                //    FormsAuthentication.SetAuthCookie(user.Email, false);
-                //    var authenticationType = User.Identity.AuthenticationType;
-                //    User.IsInRole(authenticationType);
-                //    var value = FormsAuthentication.Authenticate(user.UserName, userToLogin.Password);
-                //    var awesome = FormsAuthentication.Decrypt(userToLogin.Password);
-                //    var awesomee = FormsAuthentication.Encrypt(awesome);
-                //}
+                
                 FormsAuthentication.SetAuthCookie(user.Email, false);
                 var cookie = FormsAuthentication.GetAuthCookie(user.Email, false);
 
@@ -57,7 +48,6 @@ namespace DMYTest.Web.Controllers
                 Session["userid"] = user.ID.ToString();
 
                 return RedirectToActionPermanent("index", "home");
-
             }
 
             ModelState.AddModelError("", "Parola Hatasi");

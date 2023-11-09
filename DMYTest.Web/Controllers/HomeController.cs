@@ -18,9 +18,15 @@
         DMYDBContext db = new DMYDBContext();
         public ActionResult Index(int pageNumber = 1)
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity.Name != "")
             {
-                ViewBag.IsAuthenticated = "true";
+                var user = db.Users.First(U => U.Email == User.Identity.Name);
+                Session["Ad"] = user.FirstName;
+                Session["Soyad"] = user.LastName;
+                Session["UserName"] = user.UserName.ToString();
+                Session["userid"] = user.ID.ToString();
+                Session["Mail"] = user.Email.ToString();
+                ViewBag.isAuthenticated = true;
             }
             var listedResults = db.Products.ToList();
             return View(listedResults.ToPagedList(pageNumber ,3));

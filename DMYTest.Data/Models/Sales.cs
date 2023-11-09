@@ -31,7 +31,7 @@ using System.Threading.Tasks;
         public decimal Price { get; set; }
 
 
-        [Required(ErrorMessage = "Lutfen d Doldurunuz")]
+        [Required(ErrorMessage = "Lutfen Doldurunuz")]
         [Display(Name = "Tarih")]
         public DateTime Date { get; set; }
 

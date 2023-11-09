@@ -4,33 +4,23 @@
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Product Detay | E-Shopper</title>
-    <link href="~/eshop/css/bootstrap.min.css" rel="stylesheet">
-    <link href="~/eshop/css/font-awesome.min.css" rel="stylesheet">
-    <link href="~/eshop/css/prettyPhoto.css" rel="stylesheet">
-    <link href="~/eshop/css/price-range.css" rel="stylesheet">
-    <link href="~/eshop/css/animate.css" rel="stylesheet">
-    <link href="~/eshop/css/main.css" rel="stylesheet">
-    <link href="~/eshop/css/responsive.css" rel="stylesheet">
-    <!--[if lt IE 9]>
-    <script src="js/html5shiv.js"></script>
-    <script src="js/respond.min.js"></script>
-    <![endif]-->
-    <link rel="shortcut icon" href="images/ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/eshop/images/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/eshop/images/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/eshop/images/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="~/eshop/mages/ico/apple-touch-icon-57-precomposed.png">
-    <link href="~/Content/toastr.css" rel="stylesheet" />
+<style>
 
-</head><!--/head-->
+    
+    .liked {
+        width: 30px;
+        color: blue;
+    }
+    .unliked {
+        width: 30px;
+        color: grey;
+    }
+    .like-button{
+        width:30px;
+        
+    }
+    
+</style>
 
 <body>
 
@@ -96,58 +86,37 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                             <button type="button" class="btn btn-primary submitComment" data-id="@Model.ProductID" data-dismiss="modal">Send</button>
+
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <!-- Button trigger modal -->
-                        @*<div class="row">
-                                <div class="col-sm-8">
-                                    <h3>Yorum Yap</h3>
-
-                                    <div>
-                                   <input type="text" placeholder="Adınız Soyadınız" class="form-control col-md-4 col-sm-4" id="userName"/>
-                                        <br /> <br />
-                                        <textarea id="icerikgir" placeholder="Yorum yazınız" required></textarea>
-                                        <br />
-                                        <br />
-
-                                        <button type="submit" class="btn btn-warning" value="Yorum Yap" id="gonder">Yorum Yap</button>
-
-                                    </div>
-
-
-
-
-                                </div>
-                            </div>*@
-
 
                         <hr />
                         <div class="row">
 
                             <div id="commentDivField" class="col-md-4 col-sm-4">
 
-                                @foreach (var item in ViewBag.Comment)
+                                @foreach (var item in ViewBag.Comments)
                                 {
                                     <div data-id="@item.ID">
-                                        <h4 style="color:coral" data-id="@item.ID">
-                                            <span id="username" data-id="@item.ID">@item.User.UserName</span>
+                                        <h4 style="color:coral">
+                                            <span id="username">@item.User.UserName</span>
                                         </h4>
-                                        <p data-id="@item.ID">
-                                            <span id="contents" data-id="@item.ID">@item.Contents </span>
+                                        <p>
+                                            <span id="contents">@item.Contents </span>
                                         </p>
-                                        <br />
-                                        <span id="date" data-id="@item.ID">@item.Date</span>
+                                        <button class="btn btn-block btn-primary like-button" data-id="@item.ID"><span id="like-icon" data-id="@item.ID"><i class="fa fa-thumbs-up @ViewBag.CommentLikes[item.ID]"></i></span> </button>
 
+                                        <div><span id="likes-count" data-id="@item.ID">@item.Likes.Count</span> kişi beğendi</div>
+                                        <br />
+                                        <span id="date">@item.Date</span>
+                                        <hr />
                                         <hr />
                                     </div>
 
-
-
                                 }
-
                             </div>
 
                         </div>
@@ -171,58 +140,118 @@
     <script src="~/eshop/js/bootstrap.min.js"></script>
     <script src="~/eshop/js/jquery.prettyPhoto.js"></script>
     <script src="~/eshop/js/main.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <!-- Diğer bağımlılıklarınızı ekleyin -->
 
     <script type="text/javascript">
+
         $(document).ready(function () {
             $('.submitComment').on('click', function () {
+                console.log("Submit button clicked!!");
                 var productID = $(this).data('id');
                 addComment(productID);
             });
+
+            $('.like-button').on('click', function () {
+                var commentID = $(this).data('id');
+                like(commentID);
+            });
+
+            $('.list-likers').on('click', function () {
+                var commentID = $(this).data('id');
+                listLikers(commentID);
+            });
         });
         function addComment(productID) {
-
             // content degeri
             var contentModalValue = document.querySelector('#comment').value;
-
             $.ajax({
-
                 url: "/product/addcomment",
                 type: "POST",
                 data: { productID: productID, content: contentModalValue },
                 success: function (data) {
                     if (data.success) {
                         var newCommentDiv = document.createElement("div");
-                        
                         newCommentDiv.innerHTML = `
-                                        <h4 style="color:coral">
-                                            <span id="username" data-id="${data.commentID}">${data.username}</span>
+                                            <h4 style="color:coral">
+                                            <span id="username">${data.username}</span>
                                         </h4>
-                                        <p data-id="${data.commentID}">
-                                            <span id="contents" data-id="${data.commentID}">${data.content}</span>
+                                        <p>
+                                            <span id="contents">${data.content}</span>
                                         </p>
-                                        <br />
-                                        <span id="date" data-id="${data.commentID}">${data.date}</span>
-                                        <hr />
-                                    `;
+                                        <button class="btn btn-block btn-primary like-button" data-id="${data.commentID}">
+<span id="like-icon" data-id="${data.commentID}"><i class="fa fa-thumbs-up unliked"></i></span></button>
 
-                        var commentDivField = document.getElementById('commentDivField');
+                                        <div><span id="likes-count" data-id="${data.commentID}">0</span> kişi beğendi</div>
+                                        <br />
+                                        <span id="date">${data.date}</span>
+                                        <hr />
+                                        <hr />
+                                        `;
+                        newCommentDiv.setAttribute("data-id", data.commentID);
                         commentDivField.appendChild(newCommentDiv);
                         toastr.success(data.message);
                     }
                     else {
                         toastr.error(data.message);
                     }
-
                 },
                 error: function () {
                     toastr.error("Error");
                 }
-
             });
-
         }
 
+        function like(commentID) {
+            var likeCountElement = document.querySelector('#likes-count[data-id="' + commentID + '"]');
+            var buttonIconElement = document.querySelector('#like-button-icon[data-id="' + commentID + '"]');
 
+            $.ajax({
+                type: "POST",
+                url: "/product/likecomment",
+                data: { commentID: commentID },
+                success: (data) => {
+                    console.log(data);
+                    if (data.success) {
+                        likeCountElement.textContent = data.likeCount;
+                        buttonIconElement.innerHTML = `<i class="fa fa-thumbs-up ${data.progress}"></i>`;
+                        toastr.info(data.message);
+                    }
+                    else {
+                        toastr.error(data.message);
+                    }
+                },
+                error: () => {
+                    console.log("Error!!");
+                    toastr.error("error");
+                }
+            })
+        }
+
+        function listLikers(commentID) {
+            var likeListElement = document.createElement('div').className('.like-list-element[data-id="' + commentID + '"]');
+            $.ajax({
+                type: "GET",
+                url: "/products/listlikers",
+                data: { commentID: commentID },
+                success: (data) => {
+                    if (data.success) {
+
+                        likeListElement.innerHTML(`
+                                    <div class="liked-users">
+                                        Liked by: <span class="user"></span
+                                    </div>
+                                `)
+                    }
+                    else {
+
+                    }
+                },
+                error: () => {
+                    toastr.error("Error!!");
+                }
+            })
+        }
     </script>
 </body>
-</html>

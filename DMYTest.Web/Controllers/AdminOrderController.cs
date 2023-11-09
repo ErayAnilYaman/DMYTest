@@ -1,5 +1,4 @@
-﻿
-namespace DMYTest.Web.Controllers
+﻿namespace DMYTest.Web.Controllers
 {
     #region Using 
     using DMYTest.Data.Concrete;
@@ -7,6 +6,7 @@ namespace DMYTest.Web.Controllers
     using PagedList;
     using DMYTest.Data.Context;
     using System.Linq;
+    using System;
     #endregion
     public class AdminOrderController : Controller
     {
@@ -46,6 +46,27 @@ namespace DMYTest.Web.Controllers
                 return Json(new { success = false , message = e.Message});
             }
         }
-        
+        [HttpPost]
+        [Authorize(Roles ="admin")]
+        public JsonResult SelectReceived(int orderID)
+        {
+            try
+            {
+                var orderToDelete = db.Orders.Find(orderID);
+                if (orderToDelete != null)
+                {
+                    orderToDelete.OrderReceived = true;
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Selected as received!" });
+                }
+                return Json(new { success = false, message = "Order not found!" });
+            }
+            catch (Exception e)
+            {
+
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+
     }
 }

@@ -36,31 +36,31 @@
                 @Html.ValidationSummary(true, "", new { @class = "btn btn-danger" })
                 <div class="form-group">
                     <label>Product Name</label>
-                    <input type="text" class="form-control" name="ProductName" />
+                    <input type="text" class="form-control" name="ProductName" placeholder="Ürün Adı"/>
                     @Html.ValidationMessageFor(x => x.ProductName, "", new { @style = "color:red" })
                 </div>
                 <br />
                 <div class="form-group">
                     <label>Description</label>
-                    <input type="text" class="form-control" name="Description" />
+                    <input type="text" class="form-control" name="Description" placeholder="Ürün Açıklaması" />
                     @Html.ValidationMessageFor(x => x.Description, "", new { @style = "color:red" })
                 </div>
                 <br />
                 <div class="form-group">
                     <label>Stock Count</label>
-                    <input type="number" class="form-control" name="Stock" />
+                    <input type="number" class="form-control" name="Stock" placeholder="Ürün Stoğu"/>
                     @Html.ValidationMessageFor(x => x.Stock, "", new { @style = "color:red" })
                 </div>
                 <br />
                 <div class="form-group">
                     <label>Unit Price</label>
-                    <input type="number" class="form-control" name="UnitPrice" />
+                    <input type="number" class="form-control" name="UnitPrice" placeholder="Ürün Fiyatı"/>
                     @Html.ValidationMessageFor(x => x.UnitPrice, "", new { @style = "color:red" })
                 </div>
                 <br />
                 <div class="form-group">
                     <label>Image</label>
-                    <input type="file" class="form-control" name="File" />
+                    <input type="file" class="form-control" name="File" placeholder="Ürün Resmi"/>
                     @ViewBag.img
                 </div>
                 

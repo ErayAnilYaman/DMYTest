@@ -22,6 +22,7 @@ using DMYTest.Data.Models;
         public IDbSet<Sales> Sales { get; set; }
         public IDbSet<Cart> Carts { get; set; }
         public IDbSet<Comment> Comments { get; set; }
+        public IDbSet<CommentLikeModel> CommentLikes { get; set; }
         public IDbSet<ProductOrderCrossModel> ProductOrderCrossModels { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

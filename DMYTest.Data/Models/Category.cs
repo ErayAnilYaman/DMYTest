@@ -21,31 +21,16 @@
         [Key]
         public int CategoryID { get; set; }
 
-
         [Required(ErrorMessage ="Lutfen Doldurunuz")]
         [Display(Name ="Kategori Adi")]
         [StringLength(200,ErrorMessage ="karakter sinirini gectiniz")]
         public string CategoryName { get; set; }
-
-
+        
         [Required(ErrorMessage ="Lutfen Doldurunuz")]
         [Display(Name ="Aciklama")]
         [StringLength(200,ErrorMessage ="Karakter sinirini gectiniz")]
         public string Description { get; set; }
-
-
-
-        public virtual ICollection<Product> Products
-        {
-            get
-            {
-                return products;
-            }
-
-            set
-            {
-                products = value;
-            }
+        public virtual ICollection<Product> Products{get{ return products; }set{products = value;}
         }
     }
 }

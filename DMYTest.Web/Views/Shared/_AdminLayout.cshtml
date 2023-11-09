@@ -122,10 +122,8 @@
                     <!-- user login dropdown start-->
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="profile-ava">
-                                <img alt="" src="~/NiceAdmin/img/avatar1_small.jpg">
-                            </span>
-                            <span class="username">Jenifer Smith</span>
+                            
+                            <span class="username">@Session["Ad"] @Session["Soyad"]</span>
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu extended logout">

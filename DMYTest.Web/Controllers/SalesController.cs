@@ -58,20 +58,34 @@ namespace DMYTest.Web.Controllers
             {
                 if (ModelState.IsValid && User.Identity.IsAuthenticated)
                 {
-
+                    var user = context.Users.First(U => U.Email == User.Identity.Name);
                     var model = context.Carts.FirstOrDefault(x => x.CartID == cart.CartID);
-                    var sale = new Sales
+                    List<Sales> sales = new List<Sales>
                     {
-                        Date = DateTime.Now,
-                        Image = model.Image,
-                        Price = model.Price,
-                        ProductID = model.ProductID,
-                        Quantity = model.Quantity,
-                        UserID = model.User.ID,
-
+                        new Sales
+                        {
+                            Date = DateTime.Now,
+                            Image = model.Image,
+                            Price = model.Price,
+                            ProductID = model.ProductID,
+                            Quantity = model.Quantity,
+                            UserID = model.User.ID,
+                        }
+                    };
+                    var order = new Order
+                    {
+                        Address = user.Customer.Address,
+                        OrderDate = DateTime.Now,
+                        User = user,
+                        Phone = user.Customer.Phone,
+                        ProductOrderCrossModels = model.Product.ProductOrderCrossModels,
+                        OrderReceived = false,
+                        Sales = sales.ToList(),
+                        UserID = user.ID
                     };
                     context.Carts.Remove(model);
-                    context.Sales.Add(sale);
+                    context.Sales.Add(sales[0]);
+                    context.Orders.Add(order);
                     context.SaveChanges();
 
                     ViewBag.progress = "Satin alma islemi basarili bir sekilde gerceklesmistir";

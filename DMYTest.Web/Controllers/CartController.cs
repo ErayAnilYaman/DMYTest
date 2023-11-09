@@ -140,12 +140,13 @@ namespace DMYTest.Web.Controllers
         {
             var user = context.Users.FirstOrDefault(U => U.Email == User.Identity.Name);
             var cartToDelete = user.Carts.FirstOrDefault(C => C.CartID == cartID);
-
+            
             if (cartToDelete != null)
             {
                 context.Carts.Remove(cartToDelete);
                 context.SaveChanges();
-                return Json(new { success = true, message = "Product has been deleted" });
+                decimal totalPrice = context.Carts.Where(C => C.User.ID == user.ID).Select(c => c.Price).Sum();
+                return Json(new { success = true, message = "Product has been deleted" , totalPrice = totalPrice });
             }
             return Json(new { success = false, message = "Couldn't find the product" });
         }
@@ -164,34 +165,26 @@ namespace DMYTest.Web.Controllers
                     var cartToUpdate = context.Carts.Find(cartID);
                     var product = context.Products.FirstOrDefault(P => P.ProductID == cartToUpdate.ProductID);
                     var carts = context.Carts.Where(C => C.UserID == user.ID).ToList();
-
                     if (cartToUpdate.Quantity < product.Stock)
                     {
                         cartToUpdate.Quantity++;
                         cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
-
                         context.SaveChanges();
                         totalPrice = TotalPriceCalculator(carts);
-
                         return Json(new { success = true, message = "Cart Updated", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price, totalPrice = totalPrice });
                     }
                     cartToUpdate.Quantity = product.Stock;
                     cartToUpdate.Price = cartToUpdate.Quantity * product.UnitPrice;
                     context.SaveChanges();
                     totalPrice = TotalPriceCalculator(carts);
-
                     return Json(new { success = true, message = "You can just add product to stock", currentQuantity = cartToUpdate.Quantity, currentPrice = cartToUpdate.Price, totalPrice = totalPrice });
-
                 }
                 catch (Exception e)
                 {
                     return Json(new { success = false, message = "Error" });
-
                 }
             }
             return Json(new { success = false, message = "Please login" });
-
-
         }
         [HttpPost]
         public JsonResult DecreaseQuantity(int cartID)

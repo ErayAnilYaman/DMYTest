@@ -24,7 +24,7 @@
                         <div class="item active">
                             <div class="col-sm-6">
                                 <h1><span>E</span>-SHOPPER</h1>
-                                <h2>Free E-Commerce Template</h2>
+                                <h2>Everything Is Here!</h2>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
                                 <button type="button" class="btn btn-default get">Get it now</button>
                             </div>
@@ -36,7 +36,7 @@
                         <div class="item">
                             <div class="col-sm-6">
                                 <h1><span>E</span>-SHOPPER</h1>
-                                <h2>100% Responsive Design</h2>
+                                <h2>Every Devices Cheaper</h2>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
                                 <button type="button" class="btn btn-default get">Get it now</button>
                             </div>
@@ -49,7 +49,7 @@
                         <div class="item">
                             <div class="col-sm-6">
                                 <h1><span>E</span>-SHOPPER</h1>
-                                <h2>Free Ecommerce Template</h2>
+                                <h2>Fast Order - Cheap Product</h2>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
                                 <button type="button" class="btn btn-default get">Get it now</button>
                             </div>
@@ -89,7 +89,6 @@
                             <div class="product-image-wrapper">
                                 <div class="single-products">
                                     <div class="productinfo text-center">
-
                                         @foreach (var i in item.Images.Where(i => i.ProductID == item.ProductID))
                                         {
                                             <img src="~/Content/Image/@i.ImagePath" width="80" height="200">
@@ -104,11 +103,6 @@
                             </div>
                         </div>
                     }
-
-
-
-
-
                 </div><!--features_items-->
                 @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber }), PagedListRenderOptions.Classic)
                 @Html.Action("Popular", "Product")

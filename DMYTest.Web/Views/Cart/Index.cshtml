@@ -169,7 +169,7 @@ else
     }
     function deleteById(cartID) {
         var tableElement = document.querySelector('#tableChild[data-cartid="' + cartID + '"]');
-
+        var totalPriceElement = document.getElementById('item-total-price');
         $.ajax({
             url: "/cart/deletebyid",
             type: "POST",
@@ -177,6 +177,7 @@ else
             success: function (data) {
                 if (data.success) {
                     tableElement.remove();
+                    totalPriceElement.textContent = data.totalPrice;
                     toastr.info(data.message);
                 }
                 else {

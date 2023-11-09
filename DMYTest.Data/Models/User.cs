@@ -19,6 +19,7 @@ using DMYTest.Data.Models.Abstract;
         private ICollection<Sales> _sales;
         private ICollection<Comment> _comments;
         private ICollection<Order> _orders;
+        private ICollection<CommentLikeModel> _likes;
         public User()
         {
             _sales = new HashSet<Sales>();
@@ -27,6 +28,7 @@ using DMYTest.Data.Models.Abstract;
             _suppliers = new HashSet<Supplier>();
             _employees = new HashSet<Employee>();
             _orders = new HashSet<Order>();
+            _likes = new HashSet<CommentLikeModel>();
         }
             
         [Key]
@@ -126,5 +128,7 @@ using DMYTest.Data.Models.Abstract;
             }
         }
         public virtual ICollection<Order> Orders{ get { return _orders;  } set { _orders = value; } }
+        public virtual ICollection<CommentLikeModel> Likes { get { return _likes; } set { value = _likes; } }
+
     }
 }

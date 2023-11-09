@@ -1,4 +1,42 @@
-﻿
-@{ 
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<DMYTest.Data.Models.Product>
+@{
     ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
 }
+<table class="table table-bordered" id="table">
+    <tr>
+        <th>Urun Resmi</th>
+        <th>Urun Adi</th>
+        <th>Urun Fiyati</th>
+        <th>Urun Stogu</th>
+        <th>Aciklama</th>
+        <th>Sil</th>
+        <th>Guncelle</th>
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr data-orderid="@item." class="table-order">
+            <td>
+                @foreach (var i in item.Images)
+                {   
+
+                    <img src="~/Content/Image/@i.ImagePath" width="200" height="150">
+                    <br />
+
+                }
+            </td>
+            <td>@item.ProductName</td>
+            <td>@item.UnitPrice</td>
+            <td>@item.Stock</td>
+            <td>@item.Description</td>
+            <td><a class="btn btn-danger btnDelete" id="btnDelete" data-orderid="@item.ProductID">Sil</a></td>
+            <td><a class="btn btn-warning btnReceived" id="btnReceived" data-orderid="@item.ProductID">Guncelle</a></td>
+
+        </tr>
+    }
+</table>
+@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber }), PagedListRenderOptions.Classic)

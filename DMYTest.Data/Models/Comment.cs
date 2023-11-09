@@ -1,4 +1,5 @@
-﻿using DMYTest.Data.Models.Abstract;
+﻿using DMYTest.Data.Context;
+using DMYTest.Data.Models.Abstract;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,6 +12,11 @@ namespace DMYTest.Data.Models
 {
     public class Comment : IEntity
     {
+        private ICollection<CommentLikeModel> _likes;
+        public Comment()
+        {
+            _likes = new HashSet<CommentLikeModel>();
+        }
         [Key]
         public int ID { get; set; }
 
@@ -24,16 +30,14 @@ namespace DMYTest.Data.Models
         public int ProductID { get; set; }
         
         [Display(Name = "Kullanici ID")]
-
         public int UserID { get; set; }
-
         
         [Display(Name = "Tarih")]
         public DateTime Date { get; set; }
 
-
-
         public virtual Product Product { get; set; }
         public virtual User User { get; set; }
+        public virtual ICollection<CommentLikeModel> Likes { get { return this._likes; } set {value = this._likes; } }
+
     }
 }

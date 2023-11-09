@@ -6,7 +6,6 @@ namespace DMYTest.Data.Encryption
 {
     public class HashingHelper
     {
-
         public static void HashPassword(string password , out byte[] passwordHash ,out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
@@ -29,9 +28,7 @@ namespace DMYTest.Data.Encryption
                     }
                 }
                 return true;
-
             }
         }
-        
     }
 }

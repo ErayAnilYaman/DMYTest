@@ -17,7 +17,7 @@
         <th>Siparis Durumu</th>
         <th>Resim</th>
         <th>Sil</th>
-        <th>Guncelle</th>
+        <th>Siparis Teslim Edildi</th>
 
     </tr>
     @foreach (var item in Model)
@@ -36,7 +36,7 @@
             <td>@item.Address</td>
             <td>@item.OrderDate</td>
             <td>@item.Phone</td>
-            <td>@item.OrderReceived</td>
+            <td class="item-received" data-orderid="@item.OrderID">@item.OrderReceived</td>
 
             <td>
                 @foreach (var i in item.ProductOrderCrossModels.ToList())
@@ -56,8 +56,8 @@
 
 
             </td>
-            <td><a class="btn btn-danger btnDelete" data-orderid="@item.OrderID">Sil</a></td>
-            <td><a class="btn btn-warning" href="/adminproduct/update/@item.OrderID">Guncelle</a></td>
+            <td><a class="btn btn-danger btnDelete" id="btnDelete" data-orderid="@item.OrderID">Sil</a></td>
+            <td><a class="btn btn-warning btnReceived" id="btnReceived" data-orderid="@item.OrderID">Teslim Edildi</a></td>
 
         </tr>
     }
@@ -70,8 +70,12 @@
     $(document).ready(function () {
 
         $('.btnDelete').on('click', function () {
-            var orderID = $(this).data('orderID');
+            var orderID = $(this).data('orderid');
             deleteById(orderID);
+        })
+        $('.btnReceived').on('click', function () {
+            var orderID = $(this).data('orderid');
+            selectReceived(orderID);
         })
         
 
@@ -79,8 +83,8 @@
     function deleteById(orderID) {
         var elementToDelete = document.querySelector('#table-order[data-orderid="'+orderID +'"]');
         $.ajax({
-            url: "/adminorder/DeleteById",
-            type: "POST",
+            url: "/adminorder/deletebyid/" + orderID,
+            type: "GET",
             data: { orderID: orderID },
             success: (data) => {
                 if (data.success) {
@@ -92,6 +96,25 @@
                 }
             }
             
+        })
+    }
+    function selectReceived(orderID) {
+        var elementToOperate = document.querySelector('#item-received[data-orderid="' + orderID + '"]');
+
+        $.ajax({
+            url: "/adminorder/SelectReceived",
+            type: "POST",
+            data: { orderID: orderID },
+            success: (data) => {
+                if (data.success) {
+                    elementToOperate.innerHTML = "True";
+                    toastr.success(data.message);
+                }
+                else {
+                    toastr.warning(data.message);
+                }
+
+            }
         })
     }
 </script>
