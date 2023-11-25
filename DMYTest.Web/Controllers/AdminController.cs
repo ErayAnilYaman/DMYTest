@@ -8,6 +8,8 @@
     using System.Web;
     using System.Web.Mvc;
     using PagedList;
+    using Microsoft.Ajax.Utilities;
+    using System.Web.Services.Description;
     #endregion
     public class AdminController : Controller
     {
@@ -25,14 +27,28 @@
         {
             return View(db.Comments.ToList().ToPagedList(page, 5));
         }
-        
+        [HttpPost]  
         [Authorize(Roles = "admin")]
-        public ActionResult Delete(int id)
+        public JsonResult DeleteComment(int id)
         {
-            var commentToDelete = db.Comments.Where(x => x.ID == id).FirstOrDefault();
-            db.Comments.Remove(commentToDelete);
-            db.SaveChanges();
-            return RedirectToAction("Comment");
+            // Burada Kaldin
+            try
+            {
+                var commentToDelete = db.Comments.Find(id);
+                if (commentToDelete != null)
+                {
+                    db.Comments.Remove(commentToDelete);
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Comment Deleted !" });
+                }
+                return Json(new { success = false, message = "Comment Not Found" });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new {  success = false  , message = ex.Message });
+                
+            }
             
         }
 

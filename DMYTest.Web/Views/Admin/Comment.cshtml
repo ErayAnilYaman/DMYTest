@@ -47,11 +47,16 @@
         bootbox.confirm("Are you sure want to delete?", function (result) {
             if (result) {
                 $.ajax({
-                    type: "GET",
-                    url: "/admin/delete/" + id,
-                    success: () => {
+                    type: "POST",
+                    url: "/admin/deletecomment/" + id,
+                    data: {id : id},
+                    success: (data) => {
                         btn.parent().parent().remove();
                         bootbox.success("Comment deleted!");
+                    }
+                    ,
+                    error: ()=>{
+                        bootbox.error(data.message);
                     }
                 })
             }

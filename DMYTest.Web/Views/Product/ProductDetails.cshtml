@@ -109,10 +109,12 @@
                                         </p>
                                         <button class="btn btn-block btn-primary like-button" data-id="@item.ID"><span id="like-icon" data-id="@item.ID"><i class="fa fa-thumbs-up @ViewBag.CommentLikes[item.ID]"></i></span> </button>
 
-                                        <div><span id="likes-count" data-id="@item.ID">@item.Likes.Count</span> kişi beğendi</div>
+                                        <span id="likes-count" class="likes-count" data-id="@item.ID">@item.Likes.Count</span> kişi beğendi
+                                        <div id="grid">
+                                        </div>
+                                        <div id="window" class="commentModal" data-id="@item.ID" hidden></div>
                                         <br />
                                         <span id="date">@item.Date</span>
-                                        <hr />
                                         <hr />
                                     </div>
 
@@ -130,18 +132,24 @@
             </div>
         </div>
     </section>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
+    <!-- Bootstrap -->
+    <script src="~/eshop/js/bootstrap.min.js"></script>
 
-    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-    <script src="~/Scripts/toastr.js"></script>
+    <!-- Toastr -->
+    <!-- Bootbox -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
+
+    <!-- Diğer özel bağımlılıklar -->
     <script src="~/eshop/js/price-range.js"></script>
     <script src="~/eshop/js/jquery.scrollUp.min.js"></script>
-    <script src="~/eshop/js/bootstrap.min.js"></script>
     <script src="~/eshop/js/jquery.prettyPhoto.js"></script>
-    <script src="~/eshop/js/main.js"></script>
-    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
     <script src="~/Scripts/toastr.js"></script>
+
+    <script src="~/eshop/js/main.js"></script>
+
     <!-- Diğer bağımlılıklarınızı ekleyin -->
 
     <script type="text/javascript">
@@ -157,11 +165,14 @@
                 var commentID = $(this).data('id');
                 like(commentID);
             });
-
-            $('.list-likers').on('click', function () {
+            
+            $('#modal').kendoWindow({
+                modal: true
+            })
+            $('.likes-count').on('click', function () {
                 var commentID = $(this).data('id');
                 listLikers(commentID);
-            });
+            })
         });
         function addComment(productID) {
             // content degeri
@@ -174,21 +185,21 @@
                     if (data.success) {
                         var newCommentDiv = document.createElement("div");
                         newCommentDiv.innerHTML = `
-                                            <h4 style="color:coral">
-                                            <span id="username">${data.username}</span>
-                                        </h4>
-                                        <p>
-                                            <span id="contents">${data.content}</span>
-                                        </p>
-                                        <button class="btn btn-block btn-primary like-button" data-id="${data.commentID}">
+                                                                <h4 style="color:coral">
+                                                                <span id="username">${data.username}</span>
+                                                            </h4>
+                                                            <p>
+                                                                <span id="contents">${data.content}</span>
+                                                            </p>
+                                                            <button class="btn btn-block btn-primary like-button" data-id="${data.commentID}">
 <span id="like-icon" data-id="${data.commentID}"><i class="fa fa-thumbs-up unliked"></i></span></button>
 
-                                        <div><span id="likes-count" data-id="${data.commentID}">0</span> kişi beğendi</div>
-                                        <br />
-                                        <span id="date">${data.date}</span>
-                                        <hr />
-                                        <hr />
-                                        `;
+                                                            <div><span id="likes-count" data-id="${data.commentID}">0</span> kişi beğendi</div>
+                                                            <br />
+                                                            <span id="date">${data.date}</span>
+                                                            <hr />
+                                                            <hr />
+                                                            `;
                         newCommentDiv.setAttribute("data-id", data.commentID);
                         commentDivField.appendChild(newCommentDiv);
                         toastr.success(data.message);
@@ -205,7 +216,7 @@
 
         function like(commentID) {
             var likeCountElement = document.querySelector('#likes-count[data-id="' + commentID + '"]');
-            var buttonIconElement = document.querySelector('#like-button-icon[data-id="' + commentID + '"]');
+            var buttonIconElement = document.querySelector('#like-icon[data-id="' + commentID + '"]');
 
             $.ajax({
                 type: "POST",
@@ -219,7 +230,8 @@
                         toastr.info(data.message);
                     }
                     else {
-                        toastr.error(data.message);
+                        toastr.info(data.message);
+                        
                     }
                 },
                 error: () => {
@@ -229,29 +241,66 @@
             })
         }
 
-        function listLikers(commentID) {
-            var likeListElement = document.createElement('div').className('.like-list-element[data-id="' + commentID + '"]');
+        function listLikers(commentID)  {
+            var commentElement = document.querySelector('#commentModal[data-id="' + commentID + '"]');
             $.ajax({
                 type: "GET",
-                url: "/products/listlikers",
+                url: "/Products/GetUserList/",
                 data: { commentID: commentID },
                 success: (data) => {
                     if (data.success) {
+                        users = data.users;
+                        console.log(data);
+                        var window = $("#window").kendoWindow({
+                            visible: false,
+                            title: "Kendo Window",
+                            width: "400px",
+                            height: "200px",
+                            actions: ["Close"],
+                            dataSource: {
+                                transport: {
+                                    read: {
+                                        users: data.users,
+                                    }
+                                },
 
-                        likeListElement.innerHTML(`
-                                    <div class="liked-users">
-                                        Liked by: <span class="user"></span
-                                    </div>
-                                `)
+                            },
+
+                            visible: false,
+                            schema: {
+                                model: {
+                                    fields: {
+                                        UserName: { type: "string" },
+                                        Email: { type: "string" },
+                                    }
+                                }
+                            },
+                            columns: [
+                                { field: "UserName", title: "Kullanici Adi" },
+                                { field: "Email", title: "Mail Adresi" }
+                            ],
+                            pageSize: 10
+                        }).data("id");
+                        window.center().open();
+
+                        // Open Window Button Click Event
+
                     }
                     else {
-
+                        console.log(data + "Hata");
                     }
                 },
                 error: () => {
-                    toastr.error("Error!!");
+                    console.log(data);
                 }
-            })
+            }
+            )
         }
+        $("#grid").kendoGrid({
+
+        });
+
+            
     </script>
+
 </body>

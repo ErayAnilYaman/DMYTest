@@ -9,9 +9,14 @@
     <link href="~/eshop/css/font-awesome.min.css" rel="stylesheet">
     <link href="~/eshop/css/prettyPhoto.css" rel="stylesheet">
     <link href="~/eshop/css/price-range.css" rel="stylesheet">
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
     <link href="~/eshop/css/animate.css" rel="stylesheet">
     <link href="~/eshop/css/main.css" rel="stylesheet">
     <link href="~/eshop/css/responsive.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2022.1.301/styles/kendo.default-v2.min.css" />
+
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
@@ -68,8 +73,8 @@
                             <ul class="nav navbar-nav">
                                 @if (User.Identity.IsAuthenticated)
                                 {
-                                    <li><a href="/profile/index"><img src="~/eshop/images/home/user.png" width="22" height="22"/> @Session["Ad"] @Session["Soyad"] </a></li>
-                                    <li><a href="/account/logout"><img src="~/eshop/images/home/logout.png" width="15" height="15"/> Log Out</a></li>
+                                    <li><a href="/profile/index"><img src="~/eshop/images/home/user.png" width="22" height="22" /> @Session["Ad"] @Session["Soyad"] </a></li>
+                                    <li><a href="/account/logout"><img src="~/eshop/images/home/logout.png" width="15" height="15" /> Log Out</a></li>
                                     <li><a href="/Cart/Index"><img src="~/eshop/images/home/shopping-cart.png" width="22" height="22" /><label style="color:red"></label> Cart</a></li>
                                     <li><a href="/Sales/Index"><i class="fa fa-dollar"></i> Sales</a></li>
 
@@ -85,8 +90,8 @@
                                 {
                                     <li><a href="/Admin/Index"><i class="fa fa-lock"></i>Admin Page</a></li>
                                 }
-                                
-                                <li><a href="/Home/Index"><i class="fa fa-home"  aria-hidden="true"></i></a></li>
+
+                                <li><a href="/Home/Index"><i class="fa fa-home" aria-hidden="true"></i></a></li>
 
                             </ul>
                         </div>
@@ -179,11 +184,11 @@
             </div>
         </div>
 
-    
 
-        
-    
-    <div class="footer-bottom">
+
+
+
+        <div class="footer-bottom">
             <div class="container">
                 <div class="row">
                     <p class="pull-left">Copyright © 2021. Tüm Hakları Sakldır.</p>
@@ -195,8 +200,6 @@
     </footer><!--/Footer-->
     <style>
         footer {
-            
-
             bottom: 0;
             left: 0;
             width: 100%;
@@ -204,22 +207,34 @@
             color: #fff; /* Footer metin rengi */
             padding: 10px; /* Footer içeriği için boşluklar */
         }
+
         .container {
             flex: 1;
         }
+
         body {
             display: flex;
             flex-direction: column;
             min-height: 100vh; /* Ekran yüksekliği kadar minimum yükseklik ayarlar */
             margin: 0;
-        }      
-
+        }
     </style>
+    <!-- Kendo UI Styles -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Kendo UI Scripts -->
+
+
     <script src="~/eshop/js/jquery.js"></script>
+
     <script src="~/eshop/js/bootstrap.min.js"></script>
     <script src="~/eshop/js/jquery.scrollUp.min.js"></script>
     <script src="~/eshop/js/price-range.js"></script>
     <script src="~/eshop/js/jquery.prettyPhoto.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2022.1.301/js/kendo.all.min.js"></script>
+
     <script src="~/eshop/js/main.js"></script>
+
 </body>
 </html>
